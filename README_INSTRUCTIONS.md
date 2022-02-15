@@ -1,4 +1,4 @@
-# ECE585_Team3
+# ECE586_Team3
 Team 3's final project for ECE 486/586
 Portland State University, Winter 2022
 
