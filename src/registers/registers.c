@@ -13,8 +13,7 @@ registers_t *registers_init()
 {
 
     //he doesnt want the other registers initilaized so this is a quick fix
-    registers_t temp; 
-    registers_t *init_reg = &temp; //= Malloc(sizeof(registers_t)); 
+    registers_t *init_reg = Malloc(sizeof(registers_t)); 
     extern int stackAddress; 
     extern int initAddress; 
 

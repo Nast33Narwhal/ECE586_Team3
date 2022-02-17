@@ -7,7 +7,7 @@
 #include "./registers/registers.h"
 
 #define max_array 16384
-
+#define UINT32_MAX (0xffffffff)
 
 // global variables
 unsigned int stackAddress = 0;
@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 	Printf("PC = %d, SP = %d, RA = %d\n", registers->pc, registers->sp, registers->ra); 
 	#endif
 
-
+	free(registers);
     return 0;
 }
 
