@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include "./parser/parser.h"
 #include "./wrappers/wrappers.h"
 #include "./registers/registers.h"
 
@@ -10,13 +11,14 @@
 #define UINT32_MAX (0xffffffff)
 
 // global variables
-unsigned int stackAddress = 0;
-unsigned int initAddress = 0;
-int memory[max_array]; 
-registers_t *registers; 
+unsigned int stackAddress = 0; //fix (unneccesary global)
+int *memory; 				//dynamically allocated memory space
+extern int memory_size; 	//how many values in dynamically allocated memory array. fix
+int PC = 0; 
+//registers_t *registers; 
+int32_t *REG;  //global array of registers
 
 char *parseArgs(int argc, char **argv);
-void parser(char *fileName); 
 void printRegisters(); 
 
 
@@ -26,16 +28,17 @@ int main(int argc, char **argv)
     char *fileName = parseArgs(argc, argv);
 	
 	//load program 
-    parser(fileName); 
-
+   	memory =  parser(fileName); 
+	
 	//set initial values
-	registers = registers_init(); 
+	 REG = registers_init(); 
 
 
 	/*main loop
 
 	while(!done)
 		get instruction from memory[PC/4]
+		if PC/4 > memory_size, exit; 
 		decode instruction
 		execute instruction
 
@@ -48,7 +51,7 @@ int main(int argc, char **argv)
 
 	#ifdef DEBUG
 	//temporay checking result
-    Printf("Filename: %s \nStarting Adress: %d \nStack Address: %d\n", fileName, initAddress, stackAddress); 
+    Printf("Filename: %s \nStarting Adress: %d \nStack Address: %d\n", fileName, PC, stackAddress); 
 	#endif
 
 	#ifdef DEBUG
@@ -56,7 +59,9 @@ int main(int argc, char **argv)
 	Printf("PC = %d, SP = %d, RA = %d\n", registers->pc, registers->sp, registers->ra); 
 	#endif
 
-	free(registers);
+	//free(registers);
+	free(memory); 
+	free(REG); 
     return 0;
 }
 
@@ -69,7 +74,7 @@ char *parseArgs(int argc, char **argv)
     //char *outFile = NULL;
    // bool out_flag = false;
     stackAddress = 65536;
-    initAddress = 0;
+    int initAddress = 0;
 
     for (int i = 1; i < argc; i++)
     {
@@ -122,6 +127,7 @@ char *parseArgs(int argc, char **argv)
 					Fprintf(stderr, "Invalid argument for -pc. Must be a multiple of 4. Defaulting to 0\n");
 				else
 					initAddress = (unsigned int)convert;	
+					PC = initAddress; 
 			}
 		}
         
@@ -136,40 +142,11 @@ char *parseArgs(int argc, char **argv)
 }
 
 
-void parser(char *fileName){ 
 
-	FILE *fp; 
-	fp = Fopen(fileName, "r"); 
-	char *line = Malloc(128 * sizeof(char)); 
-
-
-	int i = 0; 
-	unsigned int address ; 
-	unsigned int address_contents; 
-	
-	while ((fgets(line, 128, fp) != NULL))
-	{
-		sscanf(line, " %u: %x", &address, &address_contents); 
-		memory[i] = address_contents; 
-		i++; 
-		if (i > max_array)
-			Printf("Error. Memory file bigger than 64KB\n"); 
-	}
-
-	
-	#ifdef DEBUG
-	int array_size = i; 
-	for (i = 0; i < array_size; i++)
-	{
-		printf("Mem %02x :%08x\n", i*4, memory[i]); 
-	}
-	#endif
-
-}
 
 void printRegisters(){
 
-	Printf(" X0: 0x%08x\n", registers->zero);
+	/*Printf(" X0: 0x%08x\n", registers->zero);
 	Printf(" PC: 0x%08x\n", registers->pc);
 	Printf(" RA: 0x%08x\n", registers->ra);
 	Printf(" SP: 0x%08x\n", registers->sp);
@@ -202,5 +179,44 @@ void printRegisters(){
 	Printf(" A5: 0x%08x\n", registers->a5);
 	Printf(" A6: 0x%08x\n", registers->a6);
 	Printf(" A7: 0x%08x\n", registers->a7);
+	*/
+
+	Printf("  PC: 0x%08x\n", PC);
+	Printf("  X0: 0x%08x\n", REG[0]);
+	Printf("  X1: 0x%08x\n", REG[1]);
+	Printf("  X2: 0x%08x\n", REG[2]);
+	Printf("  X3: 0x%08x\n", REG[3]);
+	Printf("  X4: 0x%08x\n", REG[4]);
+	Printf("  X5: 0x%08x\n", REG[5]);
+	Printf("  X6: 0x%08x\n", REG[6]);
+	Printf("  X7: 0x%08x\n", REG[7]);
+	Printf("  X8: 0x%08x\n", REG[8]);
+	Printf("  X9: 0x%08x\n", REG[9]);
+	Printf(" X10: 0x%08x\n", REG[10]);
+	Printf(" X11: 0x%08x\n", REG[11]);
+	Printf(" X12: 0x%08x\n", REG[12]);
+	Printf(" X13: 0x%08x\n", REG[13]);
+	Printf(" X14: 0x%08x\n", REG[14]);
+	Printf(" X15: 0x%08x\n", REG[15]);
+	Printf(" X16: 0x%08x\n", REG[16]);
+	Printf(" X17: 0x%08x\n", REG[17]);
+	Printf(" X18: 0x%08x\n", REG[18]);
+	Printf(" X19: 0x%08x\n", REG[19]);
+	Printf(" X20: 0x%08x\n", REG[20]);
+	Printf(" X21: 0x%08x\n", REG[21]);
+	Printf(" X22: 0x%08x\n", REG[22]);
+	Printf(" X23: 0x%08x\n", REG[23]);
+	Printf(" X24: 0x%08x\n", REG[24]);
+	Printf(" X25: 0x%08x\n", REG[25]);
+	Printf(" X26: 0x%08x\n", REG[26]);
+	Printf(" X27: 0x%08x\n", REG[27]);
+	Printf(" X28: 0x%08x\n", REG[28]);
+	Printf(" X29: 0x%08x\n", REG[29]);
+	Printf(" X30: 0x%08x\n", REG[30]);
+	Printf(" X31: 0x%08x\n", REG[31]);
+	
+	
+	
+
 
 }

@@ -24,7 +24,7 @@
 #include <string.h>
 
 
-
+/*
 typedef struct {
         
  
@@ -63,7 +63,7 @@ typedef struct {
      int t6;                        //x31
         
 } registers_t, *registersPtr_t;
-
+*/
 
 /**
  * @fn		registers_init()
@@ -72,7 +72,10 @@ typedef struct {
  * @param 
  * @return	If sucsessful, SP, PC, and JR, are initialized to 0.
  */
-registers_t *registers_init(); 
+
+//registers_t *registers_init(); 
+
+int32_t* registers_init(); 
 
 
 #endif
