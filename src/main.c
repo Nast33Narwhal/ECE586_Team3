@@ -132,8 +132,10 @@ char *parseArgs(int argc, char **argv)
 				else if (convert % 4 != 0)
 					Fprintf(stderr, "Invalid argument for -pc. Must be a multiple of 4. Defaulting to 0\n");
 				else
+				{
 					initAddress = (unsigned int)convert;	
 					PC = initAddress; 
+				}
 			}
 		}
         
