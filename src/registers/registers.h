@@ -24,7 +24,9 @@
 #include <string.h>
 
 
-/*
+
+//not currently being used 
+/* 
 typedef struct {
         
  
@@ -67,13 +69,11 @@ typedef struct {
 
 /**
  * @fn		registers_init()
- * @brief	Initilizes the SP, PC, JR
+ * @brief	     Initilizes the SP, ZERO register, RA
  *
  * @param 
- * @return	If sucsessful, SP, PC, and JR, are initialized to 0.
+ * @return	If sucsessful, SP, ZERO, and RA are initilized to zero
  */
-
-//registers_t *registers_init(); 
 
 int32_t* registers_init(); 
 

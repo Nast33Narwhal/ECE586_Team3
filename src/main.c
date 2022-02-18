@@ -50,13 +50,19 @@ int main(int argc, char **argv)
 	
 
 	#ifdef DEBUG
-	//temporay checking result
-    Printf("Filename: %s \nStarting Adress: %d \nStack Address: %d\n", fileName, PC, stackAddress); 
-	#endif
-
-	#ifdef DEBUG
-	//temporary checking result
-	Printf("PC = %d, SP = %d, RA = %d\n", registers->pc, registers->sp, registers->ra); 
+	//temporay checking result, parsing
+	Printf("\n\nDEBUG RESULTS\n"); 
+    Printf("Filename: %s \nStarting Adress: %d \nStack Address: %d\n\n", fileName, PC, stackAddress); 
+	
+	//temporary checking result, PC, SP, RA
+	Printf("PC=%d, SP=%d, RA=%d\n\n", PC, REG[2], REG[1]); 
+	
+	//memory array
+	Printf("Number of array elements is: %d\n", memory_size); 
+	for (int i = 0; i < memory_size; i++)
+	{
+		printf("Mem %02x :%08x\n", i*4, memory[i]); 
+	}
 	#endif
 
 	//free(registers);

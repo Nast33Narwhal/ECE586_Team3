@@ -8,19 +8,22 @@
 #include "../wrappers/wrappers.h"
 
 
+//TO DO, map registers to english names in enum, etc. 
 
-
+//initilize registers
 int32_t* registers_init(){
     
     extern int stackAddress; 
     int32_t *REG = Malloc (sizeof(int32_t) * 32);  
-    REG[0] = 0x00000000; 
-    REG[1] = 0x00000000; 
-    REG[2] = stackAddress; 
+    REG[0] = 0x00000000;    //zero registers
+    REG[1] = 0x00000000;    //Return address 
+    REG[2] = stackAddress;  //SP
 
     return REG; 
 
 }
+
+
 /*
 registers_t *registers_init()
 {

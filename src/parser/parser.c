@@ -58,13 +58,7 @@ int* parser(char *fileName){
         memory = realloc(memory, sizeof(int) * memory_size); //resize to size of actual memory
 
 	
-	#ifdef DEBUG
-	Printf("Number of array elements is: %d\n", memory_size); 
-	for (i = 0; i < memory_size; i++)
-	{
-		printf("Mem %02x :%08x\n", i*4, memory[i]); 
-	}
-	#endif
+	
 
     return memory; 
 }
