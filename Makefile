@@ -4,9 +4,9 @@
 
 CC = gcc
 CFLAGS = -Wall -std=c99 -g
-OBJS = main.o wrappers.o registers.o decode.o
-SRC = src/main.c src/wrappers/wrappers.c src/registers/registers.c src/decode/decode.c
-HDRS = src/wrappers/wrappers.h	src/registers/registers.h src/decode/decode.h
+OBJS = main.o wrappers.o registers.o decode.o parser.o
+SRC = src/main.c src/wrappers/wrappers.c src/registers/registers.c src/decode/decode.c src/parser/parser.c
+HDRS = src/wrappers/wrappers.h	src/registers/registers.h src/decode/decode.h src/parser/parser.h
 EXE  = sim.exe
 
 
@@ -22,6 +22,9 @@ main.o : src/main.c
 
 wrappers.o : src/wrappers/wrappers.c src/wrappers/wrappers.h
 	$(CC) $(CFLAGS) -c src/wrappers/wrappers.c
+
+parser.o : src/parser/parser.c src/parser/parser.h
+	$(CC) $(CFLAGS) -c src/parser/parser.c
 
 registers.o : src/registers/registers.c src/registers/registers.h
 	$(CC) $(CFLAGS) -c src/registers/registers.c
