@@ -4,9 +4,9 @@
 
 CC = gcc
 CFLAGS = -Wall -std=c99 -g
-OBJS = main.o wrappers.o registers.o
-SRC = src/main.c src/wrappers/wrappers.c src/registers/registers.c 
-HDRS = src/wrappers/wrappers.h	src/registers/registers.h
+OBJS = main.o wrappers.o registers.o decode.o
+SRC = src/main.c src/wrappers/wrappers.c src/registers/registers.c src/decode/decode.c
+HDRS = src/wrappers/wrappers.h	src/registers/registers.h src/decode/decode.h
 EXE  = sim.exe
 
 
@@ -25,6 +25,9 @@ wrappers.o : src/wrappers/wrappers.c src/wrappers/wrappers.h
 
 registers.o : src/registers/registers.c src/registers/registers.h
 	$(CC) $(CFLAGS) -c src/registers/registers.c
+
+decode.o : src/decode/decode.c src/decode/decode.c
+	$(CC) $(CFLAGS) -c src/decode/decode.c
 
 # -DDEBUG will define DEBUG and recompile everything with DEBUG symbols enabled
 debug : $(OBJS)
