@@ -33,9 +33,37 @@ typedef struct _instruction_s
 	uint8_t  rs1;
 	uint8_t  rs2;
 	uint8_t  funct7;
-	uint32_t immediate; // Store shamt here, too
+	 int32_t immediate; // Store shamt here, too
 
 } instruction_t, *instructionPtr_t;
+
+/**
+ * @fn decodeInstruction
+ * @brief function to decode the instruction, determines the type and corresponding values
+ *
+ * @detail Finds instruction type, opcode, registers, any function codes, and any immediates.
+ *
+ * @param rawInstruction - 32 bit integer
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
+ *
+ */
+ void decodeInstruction(int32_t rawInstruction, instructionPtr_t decInstruction);
+
+
+
+/**
+ * @fn itypeDecode
+ * @brief Decodes opcode and returns the instruction encoding type
+ *
+ * @detail outputs instruction type based on the opcode
+ *
+ * @param opcode - 7 bit opcode stored in uint8_t
+ * @returns decode_t enumeration holding the different encoding types
+ *
+ */
+decode_t itypeDecode(uint8_t opcode);
+
 
 /**
  * @fn TODO
