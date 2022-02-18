@@ -190,8 +190,8 @@ void printRegisters(){
 	*/
 
 	Printf("  PC: 0x%08x\n", PC);
-	Printf("  X0: 0x%08x\n", REG[0]);
-	Printf("  X1: 0x%08x\n", REG[1]);
+	Printf("RAX0: 0x%08x\n", REG[0]);
+	Printf("SPX1: 0x%08x\n", REG[1]);
 	Printf("  X2: 0x%08x\n", REG[2]);
 	Printf("  X3: 0x%08x\n", REG[3]);
 	Printf("  X4: 0x%08x\n", REG[4]);
