@@ -45,7 +45,7 @@ int32_t main(int32_t argc, char **argv)
 	int32_t nextInstruction;
 
 	//main loop
-
+    /*
 	while(1)
 	{
 		nextInstruction = readMemory(PC/4);//get instruction from memory[PC/4]
@@ -65,7 +65,7 @@ int32_t main(int32_t argc, char **argv)
 		//execute instruction
 		PC += 4; // Should update PC when executing the instruction.
 	}
-
+	*/
 	//print registers
 	printRegisters(); 
 
@@ -212,9 +212,9 @@ void printRegisters(){
 	*/
 
 	Printf("  PC: 0x%08x\n", PC);
-	Printf("RAX0: 0x%08x\n", REG[0]);
-	Printf("SPX1: 0x%08x\n", REG[1]);
-	Printf("  X2: 0x%08x\n", REG[2]);
+	Printf("  X0: 0x%08x\n", REG[0]);
+	Printf("RAX1: 0x%08x\n", REG[1]);
+	Printf("SPX2: 0x%08x\n", REG[2]);
 	Printf("  X3: 0x%08x\n", REG[3]);
 	Printf("  X4: 0x%08x\n", REG[4]);
 	Printf("  X5: 0x%08x\n", REG[5]);
