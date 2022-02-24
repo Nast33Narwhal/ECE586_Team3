@@ -19,7 +19,7 @@
 #include "decode.h"
 #include "../wrappers/wrappers.h"
 
-void decodeInstruction(int32_t rawInstruction, instructionPtr_t decInstruction)
+void decodeInstruction(int32_t rawInstruction, instruction_t *decInstruction)
 {
 	uint8_t opcodeVal = rawInstruction & 0x7F;
 	decode_t instructionType = iTypeDecode(opcodeVal);
@@ -83,6 +83,23 @@ void decodeInstruction(int32_t rawInstruction, instructionPtr_t decInstruction)
 		default:
 			Fprintf(stderr, "Error: Invalid iType, unable to decode the rest of the instructions.\n");
 			exit(1);
+	}
+	
+	// Check that the register reference isn't invalud
+	if (decInstruction->rd > 31)
+	{
+		Fprintf(stderr, "Error in decoded instruction. Invalid rd register = x%d.\n", decInstruction->rd);
+		exit(1);
+	}
+	if (decInstruction->rs1 > 31)
+	{
+		Fprintf(stderr, "Error in decoded instruction. Invalid rs1 register = x%d.\n", decInstruction->rs1);
+		exit(1);
+	}
+	if (decInstruction->rd > 31)
+	{
+		Fprintf(stderr, "Error in decoded instruction. Invalid rs2 register = x%d.\n", decInstruction->rs2);
+		exit(1);
 	}
 
 	decInstruction->itype = instructionType;
@@ -344,4 +361,223 @@ void errorTypeDecode(void)
 	//TODO Update this error function
 	//garbageCollection();
 	exit(1);
+}
+
+void printInstruction(int32_t nextInstruction, instruction_t *decInstruction)
+{
+	switch(decInstruction->itype)
+	{
+		case R:
+			Printf("Encoding Type	: R\n");
+			Printf("Instruction  	: %s\n", instructionEnumToStr(decInstruction->instruction));
+			Printf("Opcode       	: 0b%s\n", intto7Bin(decInstruction->opcode));
+			Printf("rd Register  	: %u\n", decInstruction->rd);
+			Printf("funct3		: 0b%s\n", intto3Bin(decInstruction->funct3));
+			Printf("rs1 Register	: %u\n", decInstruction->rs1);
+			Printf("rs2 Register	: %u\n", decInstruction->rs2);
+			Printf("funct7			: 0b%s\n", intto7Bin(decInstruction->funct7));
+			break;
+		case I:
+			Printf("Encoding Type	: I\n");
+			Printf("Instruction  	: %s\n", instructionEnumToStr(decInstruction->instruction));
+			Printf("Opcode       	: 0b%s\n", intto7Bin(decInstruction->opcode));
+			Printf("rd Register  	: %u\n", decInstruction->rd);
+			Printf("funct3		: 0b%s\n", intto3Bin(decInstruction->funct3));
+			Printf("rs1 Register	: %u\n", decInstruction->rs1);
+			Printf("immediate (hex)	: 0x%08x = %d\n", decInstruction->immediate, decInstruction->immediate);
+			break;
+		case S:
+			Printf("Encoding Type	: S\n");
+			Printf("Instruction  	: %s\n", instructionEnumToStr(decInstruction->instruction));
+			Printf("Opcode       	: 0b%s\n", intto7Bin(decInstruction->opcode));
+			Printf("funct3		: 0b%s\n", intto3Bin(decInstruction->funct3));
+			Printf("rs1 Register	: %u\n", decInstruction->rs1);
+			Printf("rs2 Register	: %u\n", decInstruction->rs2);
+			Printf("immediate (hex)	: 0x%08x = %d\n", decInstruction->immediate, decInstruction->immediate);
+			break;
+		case U:
+			Printf("Encoding Type	: U\n");
+			Printf("Instruction  	: %s\n", instructionEnumToStr(decInstruction->instruction));
+			Printf("Opcode       	: 0b%s\n", intto7Bin(decInstruction->opcode));
+			Printf("rd Register  	: %u\n", decInstruction->rd);
+			Printf("immediate (hex)	: 0x%08x = %d\n", decInstruction->immediate, decInstruction->immediate);
+			break;
+		case B:
+			Printf("Encoding Type	: B\n");
+			Printf("Instruction  	: %s\n", instructionEnumToStr(decInstruction->instruction));
+			Printf("Opcode       	: 0b%s\n", intto7Bin(decInstruction->opcode));
+			Printf("funct3		: 0b%s\n", intto3Bin(decInstruction->funct3));
+			Printf("rs1 Register	: %u\n", decInstruction->rs1);
+			Printf("rs2 Register	: %u\n", decInstruction->rs2);
+			Printf("immediate (hex)	: 0x%08x = %d\n", decInstruction->immediate, decInstruction->immediate);
+			break;
+		case J:
+			Printf("Encoding Type	: J\n");
+			Printf("Instruction  	: %s\n", instructionEnumToStr(decInstruction->instruction));
+			Printf("Opcode       	: 0b%s\n", intto7Bin(decInstruction->opcode));
+			Printf("rd Register  	: %u\n", decInstruction->rd);
+			Printf("immediate (hex)	: 0x%08x = %d\n", decInstruction->immediate, decInstruction->immediate);
+			break;
+	}
+	Printf("\n");
+}
+
+const char *instructionEnumToStr(instruction_e_t instruction)
+{
+	switch(instruction)
+	{
+		case LUI:
+			return "LUI";
+			break;
+		case AUIPC:
+			return "AUIPC";
+			break;
+		case JAL:
+			return "JAL";
+			break;
+		case JALR:
+			return "JALR";
+			break;
+		case BEQ:
+			return "BEQ";
+			break;
+		case BNE:
+			return "BNE";
+			break;
+		case BLT:
+			return "BLT";
+			break;
+		case BGE:
+			return "BGE";
+			break;
+		case BLTU:
+			return "BLTU";
+			break;
+		case BGEU:
+			return "BGEU";
+			break;
+		case LB:
+			return "LB";
+			break;
+		case LH:
+			return "LH";
+			break;
+		case LW:
+			return "LW";
+			break;
+		case LBU:
+			return "LBU";
+			break;
+		case LHU:
+			return "LHU";
+			break;
+		case SB:
+			return "SB";
+			break;
+		case SH:
+			return "SH";
+			break;
+		case SW:
+			return "SW";
+			break;
+		case ADDI:
+			return "ADDI";
+			break;
+		case SLTI:
+			return "SLTI";
+			break;
+		case SLTIU:
+			return "SLTIU";
+			break;
+		case XORI:
+			return "XORI";
+			break;
+		case ORI:
+			return "ORI";
+			break;
+		case ANDI:
+			return "ANDI";
+			break;
+		case SLLI:
+			return "SLLI";
+			break;
+		case SRLI:
+			return "SRLI";
+			break;
+		case SRAI:
+			return "SRAI";
+			break;
+		case ADD:
+			return "ADD";
+			break;
+		case SUB:
+			return "SUB";
+			break;
+		case SLL:
+			return "SLL";
+			break;
+		case SLT:
+			return "SLT";
+			break;
+		case SLTU:
+			return "SLTU";
+			break;
+		case XOR:
+			return "XOR";
+			break;
+		case SRL:
+			return "SRL";
+			break;
+		case SRA:
+			return "SRA";
+			break;
+		case OR:
+			return "OR";
+			break;
+		case AND:
+			return "AND";
+			break;
+		case ECALL:
+			return "ECALL";
+			break;
+		case EBREAK:
+			return "EBREAK";
+			break;
+		default:
+			return "INVALID ERROR";
+			break;
+	}
+	return "ERROR";
+}
+
+char *intto7Bin(uint8_t value)
+{	
+	char immediateString[8] = "0000000\0";
+	uint32_t mask = 0x40;
+	for (uint32_t i = 0; i != 7; i++)
+	{
+		if ((value & mask) > 0)
+		{
+			immediateString[i] = '1';
+		}
+		mask = mask >> 1;
+	}
+	char *binaryString = immediateString;
+	return binaryString;
+}
+
+char *intto3Bin(uint8_t value)
+{	
+	char immediateString[4] = "000\0";
+	uint32_t mask = 0x4;
+	for (uint32_t i = 0; i != 3; i++)
+	{
+		if ((value & mask) > 0)
+		{
+			immediateString[i] = '1';
+		}
+		mask = mask >> 1;
+	}
+	char *binaryString = immediateString;
+	return binaryString;
 }

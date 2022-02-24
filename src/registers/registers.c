@@ -13,7 +13,7 @@
 //initilize registers
 int32_t* registers_init(){
     
-    extern int stackAddress; 
+    extern int32_t stackAddress; 
     int32_t *REG = Malloc (sizeof(int32_t) * 32);  
     REG[0] = 0x00000000;    //zero registers
     REG[1] = 0x00000000;    //Return address 
@@ -30,8 +30,8 @@ registers_t *registers_init()
 
     //he doesnt want the other registers initilaized so this is a quick fix
     registers_t *init_reg = Malloc(sizeof(registers_t)); 
-    extern int stackAddress; 
-    extern int initAddress; 
+    extern int32_t stackAddress; 
+    extern int32_t initAddress; 
 
     init_reg->zero = 0x00000000; //fix to make constant
     init_reg->sp = stackAddress; 

@@ -162,6 +162,54 @@ instruction_e_t decodeInstruction_J(uint8_t opcode);
 void errorTypeDecode(void);
 
 
+/**
+ * @fn printInstruction
+ * @brief prints the current instruction in hex from memory and the decoded instruction values 
+ *
+ * @detail Prints all of the information about the decoded instruction based on type
+ *
+ * @param int32_t nextInstruction raw instruction
+ * @param instructionPtr_t decInstruction holds all of the instruction information
+ * @returns void
+ *
+ */
+void printInstruction(int32_t nextInstruction, instructionPtr_t decInstruction);
+
+/**
+ * @fn instructionEnumToStr
+ * @brief Takes in the enumerated instruction and returns a char* string for printing
+ *
+ * @detail Prints out the instruction
+ *
+ * @param instruction_e_t enumerated instruction
+ * @returns char * string
+ *
+ */
+const char *instructionEnumToStr(instruction_e_t instruction);
+
+/**
+ * @fn intto7Bin
+ * @brief Converts integer into 7 bit binary string
+ *
+ * @detail Allows user to signify the number of bits to return as a string
+ *
+ * @param int32_t value to convert
+ * @returns char * string
+ *
+ */
+char *intto7Bin(uint8_t value);
+
+/**
+ * @fn intto3Bin
+ * @brief Converts integer into 3 bit binary string
+ *
+ * @detail Allows user to signify the number of bits to return as a string
+ *
+ * @param int32_t value to convert
+ * @returns char * string
+ *
+ */
+char *intto3Bin(uint8_t value);
 
 
 /**

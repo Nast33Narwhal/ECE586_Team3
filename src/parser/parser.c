@@ -26,36 +26,37 @@
 #include "parser.h"
 #include "../wrappers/wrappers.h"
 
-#define max_array 16384
+#define MAX_LINE_SIZE 128
 
-int memory_size; 
+int32_t memory_size;  
 
-int* parser(char *fileName){ 
+int* parseMemFile(char *fileName){ 
 
 	FILE *fp; 
 	fp = Fopen(fileName, "r"); 
-	char *line = Malloc(128 * sizeof(char)); 
+	char *line = Malloc(MAX_LINE_SIZE * sizeof(char)); 
 
 
-	int i = 0; 
-	unsigned int address ; 
-	unsigned int address_contents; 
-    int *memory = Malloc(sizeof(int) * max_array); //initially allocate 64KiB
+	int32_t i = 0; 
+	uint32_t address ; 
+	uint32_t address_contents; 
+    int32_t *memory = Malloc(sizeof(int) * MAX_ARRAY); //initially allocate 64KiB
 
 	
-	while ((fgets(line, 128, fp) != NULL))
+	while ((fgets(line, MAX_LINE_SIZE, fp) != NULL))
 	{
 		sscanf(line, " %u: %x", &address, &address_contents); 
 		memory[i] = address_contents; 
 		i++; 
-		if (i > max_array)
+		if (i > MAX_ARRAY)
 		{
 			Printf("Error. Memory file bigger than 64KB\n"); 
 			exit(-1);
 		}
 	}
-		memory_size = i; 
-        memory = realloc(memory, sizeof(int) * memory_size); //resize to size of actual memory
+	
+	memory_size = i; 
+        //memory = realloc(memory, sizeof(int) * memory_size); //resize to size of actual memory // We shouldn't resize as stack goes to the top
 
 	
 	

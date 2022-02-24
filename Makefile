@@ -4,9 +4,9 @@
 
 CC = gcc
 CFLAGS = -Wall -std=c99 -g
-OBJS = main.o wrappers.o registers.o decode.o parser.o
-SRC = src/main.c src/wrappers/wrappers.c src/registers/registers.c src/decode/decode.c src/parser/parser.c
-HDRS = src/wrappers/wrappers.h	src/registers/registers.h src/decode/decode.h src/parser/parser.h
+OBJS = main.o wrappers.o registers.o decode.o parser.o memory.o
+SRC = src/main.c src/wrappers/wrappers.c src/registers/registers.c src/decode/decode.c src/parser/parser.c src/memory/memory.c
+HDRS = src/wrappers/wrappers.h	src/registers/registers.h src/decode/decode.h src/parser/parser.h src/memory/memory.h
 EXE  = sim.exe
 
 
@@ -29,8 +29,11 @@ parser.o : src/parser/parser.c src/parser/parser.h
 registers.o : src/registers/registers.c src/registers/registers.h
 	$(CC) $(CFLAGS) -c src/registers/registers.c
 
-decode.o : src/decode/decode.c src/decode/decode.c
+decode.o : src/decode/decode.c src/decode/decode.h
 	$(CC) $(CFLAGS) -c src/decode/decode.c
+
+memory.o : src/memory/memory.c src/memory/memory.h
+	$(CC) $(CFLAGS) -c src/memory/memory.c
 
 # -DDEBUG will define DEBUG and recompile everything with DEBUG symbols enabled
 debug : $(OBJS)

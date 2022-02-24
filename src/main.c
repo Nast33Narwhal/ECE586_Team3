@@ -3,46 +3,68 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdint.h>
+
 #include "./parser/parser.h"
 #include "./wrappers/wrappers.h"
 #include "./registers/registers.h"
+#include "./decode/decode.h"
+#include "./memory/memory.h"
 
-#define max_array 16384
-#define UINT32_MAX (0xffffffff)
+#define MAX_ARRAY 16384
 
 // global variables
-unsigned int stackAddress = 0; //fix (unneccesary global)
-int *memory; 				//dynamically allocated memory space
-extern int memory_size; 	//how many values in dynamically allocated memory array. fix
-int PC = 0; 
+uint32_t stackAddress = 0; //fix (unneccesary global)
+int32_t *memory; 				//dynamically allocated memory space
+extern int32_t memory_size; 	//how many values in dynamically allocated memory array. fix
+int32_t PC = 0; 
 //registers_t *registers; 
 int32_t *REG;  //global array of registers
 
-char *parseArgs(int argc, char **argv);
+char *parseArgs(int32_t argc, char **argv);
 void printRegisters(); 
+void printMemory();
 
 
-int main(int argc, char **argv)
+int32_t main(int32_t argc, char **argv)
 {
 	//parse args
-    char *fileName = parseArgs(argc, argv);
+	char *fileName = parseArgs(argc, argv);
 	
 	//load program 
-   	memory =  parser(fileName); 
+   	memory = parseMemFile(fileName); 
+	#ifdef DEBUG
+		printMemory();
+	#endif
 	
 	//set initial values
-	 REG = registers_init(); 
+	REG = registers_init();
 
+	//initialize decodedInstruction type
+	instruction_t decInstruction;
+	int32_t nextInstruction;
 
-	/*main loop
+	//main loop
 
-	while(!done)
-		get instruction from memory[PC/4]
-		if PC/4 > memory_size, exit; 
-		decode instruction
-		execute instruction
-
-	*/
+	for (int32_t i = 0; i != 14; i++)
+	{
+		nextInstruction = readMemory(PC/4);//get instruction from memory[PC/4]
+		Printf("nextInstruction = 0x%08x\n\n", nextInstruction);
+		
+		decodeInstruction(nextInstruction, &decInstruction);
+		#ifdef DEBUG
+			printInstruction(nextInstruction, &decInstruction);
+		#endif
+		if ((nextInstruction == 0x8067) && (REG[1] == 0))
+		{
+			Printf("JR RA, where value in RA = 0, meaning end program should be triggered.\n");
+			break;
+		}
+		//if PC/4 > memory_size, exit; 
+		//decode instruction
+		//execute instruction
+		PC += 4; // Should update PC when executing the instruction.
+	}
 
 	//print registers
 	printRegisters(); 
@@ -59,7 +81,7 @@ int main(int argc, char **argv)
 	
 	//memory array
 	Printf("Number of array elements is: %d\n", memory_size); 
-	for (int i = 0; i < memory_size; i++)
+	for (int32_t i = 0; i < memory_size; i++)
 	{
 		printf("Mem %02x :%08x\n", i*4, memory[i]); 
 	}
@@ -72,7 +94,7 @@ int main(int argc, char **argv)
 }
 
 
-char *parseArgs(int argc, char **argv)
+char *parseArgs(int32_t argc, char **argv)
 {
 
     char *fileName = NULL;
@@ -80,9 +102,9 @@ char *parseArgs(int argc, char **argv)
     //char *outFile = NULL;
    // bool out_flag = false;
     stackAddress = 65536;
-    int initAddress = 0;
+    int32_t initAddress = 0;
 
-    for (int i = 1; i < argc; i++)
+    for (int32_t i = 1; i < argc; i++)
     {
         if (argv[i][0] != '-')
         {
@@ -107,7 +129,7 @@ char *parseArgs(int argc, char **argv)
 			else
 			{
 				i++;
-				long int convert = atol(argv[i]);
+				uint64_t convert = atol(argv[i]);
 				if (convert < 0 || convert > UINT32_MAX)
 				{
 					Fprintf(stderr, "Invalid argument for -sp. Must be between 0 and %u. Defaulting to 65536\n", UINT32_MAX);
@@ -126,7 +148,7 @@ char *parseArgs(int argc, char **argv)
 			else
 			{
 				i++;
-				long int convert = atol(argv[i]);
+				uint64_t convert = atol(argv[i]);
 				if (convert < 0 || convert > UINT32_MAX)
 					Fprintf(stderr, "Invalid argument for -pc. Must be between 0 and %u. Defaulting to 0\n", UINT32_MAX);
 				else if (convert % 4 != 0)
@@ -222,9 +244,13 @@ void printRegisters(){
 	Printf(" X29: 0x%08x\n", REG[29]);
 	Printf(" X30: 0x%08x\n", REG[30]);
 	Printf(" X31: 0x%08x\n", REG[31]);
-	
-	
-	
-
-
 }
+
+void printMemory()
+{
+	for(int32_t i = 0; i != memory_size; i++)
+	{
+		Printf("memory[%2d] = 0x%08x\n", i, memory[i]);
+	}
+}
+
