@@ -45,7 +45,7 @@ int32_t main(int32_t argc, char **argv)
 	int32_t nextInstruction;
 
 	//main loop
-    /*
+    
 	while(1)
 	{
 		nextInstruction = readMemory(PC/4);//get instruction from memory[PC/4]
@@ -65,7 +65,7 @@ int32_t main(int32_t argc, char **argv)
 		//execute instruction
 		PC += 4; // Should update PC when executing the instruction.
 	}
-	*/
+
 	//print registers
 	printRegisters(); 
 
