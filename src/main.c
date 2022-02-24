@@ -46,7 +46,7 @@ int32_t main(int32_t argc, char **argv)
 
 	//main loop
 
-	for (int32_t i = 0; i != 14; i++)
+	while(1)
 	{
 		nextInstruction = readMemory(PC/4);//get instruction from memory[PC/4]
 		Printf("nextInstruction = 0x%08x\n\n", nextInstruction);
