@@ -25,6 +25,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 #define MAX_ARRAY 16384
 
