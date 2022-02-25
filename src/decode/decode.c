@@ -187,6 +187,9 @@ instruction_e_t decodeInstruction_R(uint8_t func3, uint8_t func7)
 		case 0b111:
 			determinedInstruction = AND;
 			break;
+		default:
+			Fprintf(stderr, "Error determining instruction of type R.\n");
+			determinedInstruction = ERROR;
 	}
 	return determinedInstruction;
 }
@@ -261,8 +264,8 @@ instruction_e_t decodeInstruction_I(uint8_t opcode, uint8_t func3, int32_t imm)
 			}
 			break;
 		default:
-			Fprintf(stderr, "Error: Invalid opcode for I-type instruction.\n");
-			exit(1);	
+			Fprintf(stderr, "Error determining instruction of type I.\n");
+			determinedInstruction = ERROR;
 	}
 	return determinedInstruction;
 }
@@ -283,8 +286,8 @@ instruction_e_t decodeInstruction_S(uint8_t func3)
 			determinedInstruction = SW;
 			break;
 		default:
-			Fprintf(stderr, "Error: invalid funct3 field for S-type instruction.\n");
-			exit(1);
+			Fprintf(stderr, "Error determining instruction of type S.\n");
+			determinedInstruction = ERROR;
 	}
 	return determinedInstruction;
 }
@@ -302,8 +305,8 @@ instruction_e_t decodeInstruction_U(uint8_t opcode)
 			determinedInstruction = LUI;
 			break;
 		default:
-			Fprintf(stderr, "Error: invalid opcode field for U-type instruction.\n");
-			exit(1);
+			Fprintf(stderr, "Error determining instruction of type U.\n");
+			determinedInstruction = ERROR;
 	}
 	return determinedInstruction;
 }
@@ -333,8 +336,8 @@ instruction_e_t decodeInstruction_B(uint8_t func3)
 			determinedInstruction = BGEU;
 			break;
 		default:
-			Fprintf(stderr, "Error: invalid funct3 field for B-type instruction.\n");
-			exit(1);
+			Fprintf(stderr, "Error determining instruction of type B.\n");
+			determinedInstruction = ERROR;
 	}
 	return determinedInstruction;
 }
@@ -349,8 +352,8 @@ instruction_e_t decodeInstruction_J(uint8_t opcode)
 			determinedInstruction = JAL;
 			break;
 		default:
-			Fprintf(stderr, "Error: invalid opcode field for J-type instruction.\n");
-			exit(1);
+			Fprintf(stderr, "Error determining instruction of type J.\n");
+			determinedInstruction = ERROR;
 	}
 	return determinedInstruction;
 }
@@ -426,6 +429,9 @@ const char *instructionEnumToStr(instruction_e_t instruction)
 {
 	switch(instruction)
 	{
+		case ERROR:
+			return "ERROR";
+			break;
 		case LUI:
 			return "LUI";
 			break;
