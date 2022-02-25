@@ -49,7 +49,7 @@ int32_t main(int32_t argc, char **argv)
 	while(1)
 	{
 		nextInstruction = readMemory(PC/4);//get instruction from memory[PC/4]
-		Printf("nextInstruction = 0x%08x\n\n", nextInstruction);
+		Printf("nextInstruction = 0x%08X\n\n", nextInstruction);
 		
 		decodeInstruction(nextInstruction, &decInstruction);
 		#ifdef DEBUG
@@ -83,7 +83,7 @@ int32_t main(int32_t argc, char **argv)
 	Printf("Number of array elements is: %d\n", memory_size); 
 	for (int32_t i = 0; i < memory_size; i++)
 	{
-		printf("Mem %02x :%08x\n", i*4, memory[i]); 
+		printf("Mem %02X :0x%08X\n", i*4, memory[i]); 
 	}
 	#endif
 

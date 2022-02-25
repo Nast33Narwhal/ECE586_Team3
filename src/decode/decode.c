@@ -387,7 +387,7 @@ void printInstruction(int32_t nextInstruction, instruction_t *decInstruction)
 			Printf("rd Register  	: %u\n", decInstruction->rd);
 			Printf("funct3		: 0b%s\n", intto3Bin(decInstruction->funct3));
 			Printf("rs1 Register	: %u\n", decInstruction->rs1);
-			Printf("immediate (hex)	: 0x%08x = %d\n", decInstruction->immediate, decInstruction->immediate);
+			Printf("immediate (hex)	: 0x%08X = %d\n", decInstruction->immediate, decInstruction->immediate);
 			break;
 		case S:
 			Printf("Encoding Type	: S\n");
@@ -396,14 +396,14 @@ void printInstruction(int32_t nextInstruction, instruction_t *decInstruction)
 			Printf("funct3		: 0b%s\n", intto3Bin(decInstruction->funct3));
 			Printf("rs1 Register	: %u\n", decInstruction->rs1);
 			Printf("rs2 Register	: %u\n", decInstruction->rs2);
-			Printf("immediate (hex)	: 0x%08x = %d\n", decInstruction->immediate, decInstruction->immediate);
+			Printf("immediate (hex)	: 0x%08X = %d\n", decInstruction->immediate, decInstruction->immediate);
 			break;
 		case U:
 			Printf("Encoding Type	: U\n");
 			Printf("Instruction  	: %s\n", instructionEnumToStr(decInstruction->instruction));
 			Printf("Opcode       	: 0b%s\n", intto7Bin(decInstruction->opcode));
 			Printf("rd Register  	: %u\n", decInstruction->rd);
-			Printf("immediate (hex)	: 0x%08x = %d\n", decInstruction->immediate, decInstruction->immediate);
+			Printf("immediate (hex)	: 0x%08X = %d\n", decInstruction->immediate, decInstruction->immediate);
 			break;
 		case B:
 			Printf("Encoding Type	: B\n");
@@ -412,14 +412,14 @@ void printInstruction(int32_t nextInstruction, instruction_t *decInstruction)
 			Printf("funct3		: 0b%s\n", intto3Bin(decInstruction->funct3));
 			Printf("rs1 Register	: %u\n", decInstruction->rs1);
 			Printf("rs2 Register	: %u\n", decInstruction->rs2);
-			Printf("immediate (hex)	: 0x%08x = %d\n", decInstruction->immediate, decInstruction->immediate);
+			Printf("immediate (hex)	: 0x%08X = %d\n", decInstruction->immediate, decInstruction->immediate);
 			break;
 		case J:
 			Printf("Encoding Type	: J\n");
 			Printf("Instruction  	: %s\n", instructionEnumToStr(decInstruction->instruction));
 			Printf("Opcode       	: 0b%s\n", intto7Bin(decInstruction->opcode));
 			Printf("rd Register  	: %u\n", decInstruction->rd);
-			Printf("immediate (hex)	: 0x%08x = %d\n", decInstruction->immediate, decInstruction->immediate);
+			Printf("immediate (hex)	: 0x%08X = %d\n", decInstruction->immediate, decInstruction->immediate);
 			break;
 	}
 	Printf("\n");
