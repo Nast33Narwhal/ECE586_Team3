@@ -44,8 +44,9 @@ _start:	# Clear out two registers
         lw	x3, 0(x7)
  
         #Create a new test value 0x89ABCDEF
-        lui     x2, 0x89ABD
-        addi    x2, x2, 0xFFFFFDEF
+	li x2, 0x89ABCDEF
+	#lui     x2, 0x89ABD
+        #addi    x2, x2, 0xDEF
 
         # Store it into RAM  
         sw      x2, 0(x7)
@@ -77,8 +78,9 @@ _start:	# Clear out two registers
        	lui	x2, 0x66666
         addi	x2, x2, 0x666
 
-       	lui	x3, 0xCCCCD
-        addi	x3, x3, 0xFFFFFCCC
+       	li	x3, 0xCCCCCCCC
+	#lui	x3, 0xCCCCD
+        #addi	x3, x3, 0xCCC
 
         # reg <= reg op reg instructions
         add	x4, x2, x3
@@ -155,7 +157,7 @@ tmp16:
  
         # Set up for next pass of conditionals 
 	xor	x2, x2, x2
-        addi    x4, x2, 0xFFFFFFE0
+        addi    x4, x2, 0x7E0
 	beq	x3, x4, tmp21
         ori     x2, x2, 0x01
 tmp21:	bne	x3, x4, tmp22
@@ -169,11 +171,6 @@ tmp24:	bltu	x3, x4, tmp25
 tmp25:	bgeu	x3, x4,	tmp26
         ori     x2, x2, 0x20
 tmp26:
-	# Now testing the CRS instructions
-	csrrs	x5, mvendorid, x0
-	csrrs	x5, marchid, x0
-	csrrs	x5, mimpid, x0
-	csrrs	x5, mhartid, x0
 
 	# Set up the trap vector
 	lui	x2, 0xF0000
@@ -181,21 +178,7 @@ tmp26:
 	csrrw	x2, mtvec, x2
 
         ori	x2, x2, 0x200   # Allow the testing of last instruction
-        .word	0xFFF0007E	# An invalid instruction
-        .word	0
-        .word	0
-traptarget:
-        # Target for the "illegal opcode" vector
-        csrrw	x5, mcause, x0
-        csrrw	x5, mepc, x0
-        # Padding
-	addi	x1, x1, 1 
-	addi	x1, x1, 1 
-	addi	x1, x1, 1 
-	addi	x1, x1, 1 
-	addi	x1, x1, 1 
-	addi	x1, x1, 1 
-	addi	x1, x1, 1 
+	jr	ra	
 	.data
 	.word 0
 	.end
