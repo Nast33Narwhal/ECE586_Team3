@@ -53,6 +53,7 @@ int32_t main(int32_t argc, char **argv)
 		
 		decodeInstruction(nextInstruction, &decInstruction);
 		#ifdef DEBUG
+			Printf("PC = %d\n", PC);
 			printInstruction(nextInstruction, &decInstruction);
 		#endif
 		if ((nextInstruction == 0x8067) && (REG[1] == 0))
