@@ -44,9 +44,8 @@ _start:	# Clear out two registers
         lw	x3, 0(x7)
  
         #Create a new test value 0x89ABCDEF
-	li x2, 0x89ABCDEF
-	#lui     x2, 0x89ABD
-        #addi    x2, x2, 0xDEF
+	lui     x2, 0x89ABD
+        addi    x2, x2, -529
 
         # Store it into RAM  
         sw      x2, 0(x7)
@@ -78,9 +77,8 @@ _start:	# Clear out two registers
        	lui	x2, 0x66666
         addi	x2, x2, 0x666
 
-       	li	x3, 0xCCCCCCCC
-	#lui	x3, 0xCCCCD
-        #addi	x3, x3, 0xCCC
+	lui	x3, 0xCCCCD
+        addi	x3, x3, -820
 
         # reg <= reg op reg instructions
         add	x4, x2, x3
