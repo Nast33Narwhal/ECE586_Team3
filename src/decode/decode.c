@@ -83,6 +83,7 @@ void decodeInstruction(int32_t rawInstruction, instruction_t *decInstruction)
 		default:
 			Fprintf(stderr, "Error: Invalid iType, unable to decode the rest of the instructions.\n");
 			exit(1);
+			break;
 	}
 	
 	// Check that the register reference isn't invalud
@@ -137,6 +138,7 @@ decode_t iTypeDecode(uint8_t opcode)
 		default:
 			// Error
 			errorTypeDecode();
+			break;
 	}
 	return iType;
 }
@@ -190,6 +192,7 @@ instruction_e_t decodeInstruction_R(uint8_t func3, uint8_t func7)
 		default:
 			Fprintf(stderr, "Error determining instruction of type R.\n");
 			determinedInstruction = ERROR;
+			break;
 	}
 	return determinedInstruction;
 }
@@ -266,6 +269,7 @@ instruction_e_t decodeInstruction_I(uint8_t opcode, uint8_t func3, int32_t imm)
 		default:
 			Fprintf(stderr, "Error determining instruction of type I.\n");
 			determinedInstruction = ERROR;
+			break;
 	}
 	return determinedInstruction;
 }
@@ -288,6 +292,7 @@ instruction_e_t decodeInstruction_S(uint8_t func3)
 		default:
 			Fprintf(stderr, "Error determining instruction of type S.\n");
 			determinedInstruction = ERROR;
+			break;
 	}
 	return determinedInstruction;
 }
@@ -307,6 +312,7 @@ instruction_e_t decodeInstruction_U(uint8_t opcode)
 		default:
 			Fprintf(stderr, "Error determining instruction of type U.\n");
 			determinedInstruction = ERROR;
+			break;
 	}
 	return determinedInstruction;
 }
@@ -338,6 +344,7 @@ instruction_e_t decodeInstruction_B(uint8_t func3)
 		default:
 			Fprintf(stderr, "Error determining instruction of type B.\n");
 			determinedInstruction = ERROR;
+			break;
 	}
 	return determinedInstruction;
 }
@@ -420,6 +427,9 @@ void printInstruction(int32_t nextInstruction, instruction_t *decInstruction)
 			Printf("Opcode       	: 0b%s\n", intto7Bin(decInstruction->opcode));
 			Printf("rd Register  	: %u\n", decInstruction->rd);
 			Printf("immediate (hex)	: 0x%.8X = %d\n", decInstruction->immediate, decInstruction->immediate);
+			break;
+		default:
+			Printf("Invalid Instruction Encoding Type\n");
 			break;
 	}
 	Printf("\n");
