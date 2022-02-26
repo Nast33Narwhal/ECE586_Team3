@@ -60,7 +60,7 @@ void decodeInstruction(int32_t rawInstruction, instruction_t *decInstruction)
 			decInstruction->rs2       = (uint8_t)   0; // Unused
 			decInstruction->funct7    = (uint8_t)   0; // Unused
 			decInstruction->immediate = (uint32_t) (rawInstruction & 0xFFFFF000);
-			decInstruction->instruction = decodeInstruction_U(decInstruction->opcode);
+			decInstruction->instruction = decodeInstruction_U(opcodeVal);
 			break;
 		case B:
 			decInstruction->rd        = (uint8_t)   0; // Unused
@@ -78,7 +78,7 @@ void decodeInstruction(int32_t rawInstruction, instruction_t *decInstruction)
 			decInstruction->rs2       = (uint8_t)   0; // Unused
 			decInstruction->funct7    = (uint8_t)   0; // Unused
 			decInstruction->immediate = (uint32_t)  ( ((rawInstruction & 0x80000000) >> 11) + (rawInstruction & 0xFF000) + ((rawInstruction & 0x100000) >> 9) + ((rawInstruction & 0x7FE00000) >> 20) );
-			decInstruction->instruction = decodeInstruction_J(decInstruction->opcode);
+			decInstruction->instruction = decodeInstruction_J(opcodeVal);
 			break;
 		default:
 			Fprintf(stderr, "Error: Invalid iType, unable to decode the rest of the instructions.\n");
@@ -354,7 +354,6 @@ instruction_e_t decodeInstruction_J(uint8_t opcode)
 	instruction_e_t determinedInstruction;
 	switch(opcode)
 	{
-
 		case 0b1101111:
 			determinedInstruction = JAL;
 			break;
