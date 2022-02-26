@@ -23,8 +23,11 @@ void decodeInstruction(int32_t rawInstruction, instruction_t *decInstruction)
 {
 	uint8_t opcodeVal = rawInstruction & 0x7F;
 	decode_t instructionType = iTypeDecode(opcodeVal);
+	
+	decInstruction->itype = instructionType;
+	decInstruction->opcode = opcodeVal;
 
-	switch(instructionType)
+	switch(decInstruction->itype)
 	{
 		case R:
 			decInstruction->rd        = (uint8_t)  (rawInstruction & 0xF80)      >>  7; 
@@ -42,7 +45,7 @@ void decodeInstruction(int32_t rawInstruction, instruction_t *decInstruction)
 			decInstruction->rs2       = (uint8_t)   0; // Unused
 			decInstruction->funct7    = (uint8_t)   0; // Unused
 			decInstruction->immediate = (uint32_t) (rawInstruction & 0xFFF00000) >> 20;
-			decInstruction->instruction = decodeInstruction_I(opcodeVal, decInstruction->funct3, decInstruction->immediate);
+			decInstruction->instruction = decodeInstruction_I(decInstruction->opcode, decInstruction->funct3, decInstruction->immediate);
 			break;
 		case S:
 			decInstruction->rd        = (uint8_t)   0; // Unused 
@@ -60,7 +63,7 @@ void decodeInstruction(int32_t rawInstruction, instruction_t *decInstruction)
 			decInstruction->rs2       = (uint8_t)   0; // Unused
 			decInstruction->funct7    = (uint8_t)   0; // Unused
 			decInstruction->immediate = (uint32_t) (rawInstruction & 0xFFFFF000);
-			decInstruction->instruction = decodeInstruction_U(opcodeVal);
+			decInstruction->instruction = decodeInstruction_U(decInstruction->opcode);
 			break;
 		case B:
 			decInstruction->rd        = (uint8_t)   0; // Unused
@@ -78,7 +81,7 @@ void decodeInstruction(int32_t rawInstruction, instruction_t *decInstruction)
 			decInstruction->rs2       = (uint8_t)   0; // Unused
 			decInstruction->funct7    = (uint8_t)   0; // Unused
 			decInstruction->immediate = (uint32_t)  ( ((rawInstruction & 0x80000000) >> 11) + (rawInstruction & 0xFF000) + ((rawInstruction & 0x100000) >> 9) + ((rawInstruction & 0x7FE00000) >> 20) );
-			decInstruction->instruction = decodeInstruction_J(opcodeVal);
+			decInstruction->instruction = decodeInstruction_J(decInstruction->opcode);
 			break;
 		default:
 			Fprintf(stderr, "Error: Invalid iType, unable to decode the rest of the instructions.\n");
@@ -103,8 +106,6 @@ void decodeInstruction(int32_t rawInstruction, instruction_t *decInstruction)
 		exit(1);
 	}
 
-	decInstruction->itype = instructionType;
-	decInstruction->opcode = opcodeVal;
 
 }
 
