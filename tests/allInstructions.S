@@ -170,11 +170,6 @@ tmp25:	bgeu	x3, x4,	tmp26
         ori     x2, x2, 0x20
 tmp26:
 
-	# Set up the trap vector
-	lui	x2, 0xF0000
-        ori	x2, x2, 0x200
-	csrrw	x2, mtvec, x2
-
         ori	x2, x2, 0x200   # Allow the testing of last instruction
 	
 	# set ra = 0, to end program
