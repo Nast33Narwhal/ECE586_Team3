@@ -49,11 +49,13 @@ int32_t main(int32_t argc, char **argv)
 	while(1)
 	{
 		nextInstruction = readMemory(PC/4);//get instruction from memory[PC/4]
-		Printf("nextInstruction = 0x%08X\n\n", nextInstruction);
+		#ifdef DEBUG	
+			Printf("PC = %d = 0x%.8x\n", PC, PC);
+			Printf("nextInstruction = 0x%08X\n\n", nextInstruction);
+		#endif
 		
 		decodeInstruction(nextInstruction, &decInstruction);
 		#ifdef DEBUG
-			Printf("PC = %d\n", PC);
 			printInstruction(nextInstruction, &decInstruction);
 		#endif
 		if ((nextInstruction == 0x8067) && (REG[1] == 0))
