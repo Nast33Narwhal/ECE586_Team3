@@ -176,6 +176,9 @@ tmp26:
 	csrrw	x2, mtvec, x2
 
         ori	x2, x2, 0x200   # Allow the testing of last instruction
+	
+	# set ra = 0, to end program
+	add ra, x0, x0
 	jr	ra	
 	.data
 	.word 0
