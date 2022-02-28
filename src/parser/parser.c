@@ -52,7 +52,7 @@ int* parseMemFile(char *fileName){
 		memory[address/4] = address_contents; 
 		
 		#ifdef DEBUG
-			Fprintf(outFile, "%s", line);
+			Fprintf(outFile, "%4x:    %08x\n", address, address_contents);
 		#endif
 		
 		i++; 
