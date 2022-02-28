@@ -35,18 +35,26 @@ int* parseMemFile(char *fileName){
 	FILE *fp; 
 	fp = Fopen(fileName, "r"); 
 	char *line = Malloc(MAX_LINE_SIZE * sizeof(char)); 
+	#ifdef DEBUG
+		FILE *outFile = Fopen("outfile.mem", "w+"); // Create output file and empty it.
+	#endif
 
 
 	int32_t i = 0; 
-	uint32_t address ; 
+	uint32_t address; 
 	uint32_t address_contents; 
     int32_t *memory = Malloc(sizeof(int) * MAX_ARRAY); //initially allocate 64KiB
 
 	
 	while ((fgets(line, MAX_LINE_SIZE, fp) != NULL))
 	{
-		sscanf(line, " %u: %x", &address, &address_contents); 
-		memory[i] = address_contents; 
+		sscanf(line, " %x: %x\n", &address, &address_contents); 
+		memory[address/4] = address_contents; 
+		
+		#ifdef DEBUG
+			Fprintf(outFile, "%s", line);
+		#endif
+		
 		i++; 
 		if (i > MAX_ARRAY)
 		{
@@ -58,7 +66,11 @@ int* parseMemFile(char *fileName){
 	memory_size = i; 
         //memory = realloc(memory, sizeof(int) * memory_size); //resize to size of actual memory // We shouldn't resize as stack goes to the top
 
-	
+	// Close file
+	Fclose(fp);
+	#ifdef DEBUG
+		Fclose(outFile);
+	#endif
 	
 
     return memory; 
