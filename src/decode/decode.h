@@ -18,6 +18,7 @@
 #include <stdint.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include <string.h>
 
 // encoding type enum for RV32I, can be expanded for Multiply and Floating Point
 #ifndef DECODE_T_
@@ -197,7 +198,7 @@ const char *instructionEnumToStr(instruction_e_t instruction);
  * @returns char * string
  *
  */
-char *intto7Bin(uint8_t value);
+void intto7Bin(uint8_t value, char *binaryString);
 
 /**
  * @fn intto3Bin
@@ -209,7 +210,7 @@ char *intto7Bin(uint8_t value);
  * @returns char * string
  *
  */
-char *intto3Bin(uint8_t value);
+void intto3Bin(uint8_t value, char *binaryString);
 
 
 /**

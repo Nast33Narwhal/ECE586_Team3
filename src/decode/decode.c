@@ -375,32 +375,42 @@ void errorTypeDecode(void)
 
 void printInstruction(int32_t nextInstruction, instruction_t *decInstruction)
 {
+	// Create binary strings
+	char *binaryfunct7String = Malloc(sizeof(char) * 8);
+	intto7Bin(decInstruction->funct7, binaryfunct7String);
+	
+	char *binaryopcodeString = Malloc(sizeof(char) * 8);
+	intto7Bin(decInstruction->opcode, binaryopcodeString);
+	
+	char *binaryfunct3String = Malloc(sizeof(char) * 4);
+	intto3Bin(decInstruction->funct3, binaryfunct3String);
+	
 	switch(decInstruction->itype)
 	{
 		case R:
 			Printf("Encoding Type	: R\n");
 			Printf("Instruction  	: %s\n", instructionEnumToStr(decInstruction->instruction));
-			Printf("Opcode       	: 0b%s\n", intto7Bin(decInstruction->opcode));
+			Printf("Opcode       	: 0b%s\n", binaryopcodeString);
 			Printf("rd Register  	: %u\n", decInstruction->rd);
-			Printf("funct3		: 0b%s\n", intto3Bin(decInstruction->funct3));
+			Printf("funct3		: 0b%s\n", binaryfunct3String);
 			Printf("rs1 Register	: %u\n", decInstruction->rs1);
 			Printf("rs2 Register	: %u\n", decInstruction->rs2);
-			Printf("funct7		: 0b%s\n", intto7Bin(decInstruction->funct7));
+			Printf("funct7		: 0b%s\n", binaryfunct7String);
 			break;
 		case I:
 			Printf("Encoding Type	: I\n");
 			Printf("Instruction  	: %s\n", instructionEnumToStr(decInstruction->instruction));
-			Printf("Opcode       	: 0b%s\n", intto7Bin(decInstruction->opcode));
+			Printf("Opcode       	: 0b%s\n", binaryopcodeString);
 			Printf("rd Register  	: %u\n", decInstruction->rd);
-			Printf("funct3		: 0b%s\n", intto3Bin(decInstruction->funct3));
+			Printf("funct3		: 0b%s\n", binaryfunct3String);
 			Printf("rs1 Register	: %u\n", decInstruction->rs1);
 			Printf("immediate (hex)	: 0x%.8X = %d\n", decInstruction->immediate, decInstruction->immediate);
 			break;
 		case S:
 			Printf("Encoding Type	: S\n");
 			Printf("Instruction  	: %s\n", instructionEnumToStr(decInstruction->instruction));
-			Printf("Opcode       	: 0b%s\n", intto7Bin(decInstruction->opcode));
-			Printf("funct3		: 0b%s\n", intto3Bin(decInstruction->funct3));
+			Printf("Opcode       	: 0b%s\n", binaryopcodeString);
+			Printf("funct3		: 0b%s\n", binaryfunct3String);
 			Printf("rs1 Register	: %u\n", decInstruction->rs1);
 			Printf("rs2 Register	: %u\n", decInstruction->rs2);
 			Printf("immediate (hex)	: 0x%.8X = %d\n", decInstruction->immediate, decInstruction->immediate);
@@ -408,15 +418,15 @@ void printInstruction(int32_t nextInstruction, instruction_t *decInstruction)
 		case U:
 			Printf("Encoding Type	: U\n");
 			Printf("Instruction  	: %s\n", instructionEnumToStr(decInstruction->instruction));
-			Printf("Opcode       	: 0b%s\n", intto7Bin(decInstruction->opcode));
+			Printf("Opcode       	: 0b%s\n", binaryopcodeString);
 			Printf("rd Register  	: %u\n", decInstruction->rd);
 			Printf("immediate (hex)	: 0x%.8X = %d\n", decInstruction->immediate, decInstruction->immediate);
 			break;
 		case B:
 			Printf("Encoding Type	: B\n");
 			Printf("Instruction  	: %s\n", instructionEnumToStr(decInstruction->instruction));
-			Printf("Opcode       	: 0b%s\n", intto7Bin(decInstruction->opcode));
-			Printf("funct3		: 0b%s\n", intto3Bin(decInstruction->funct3));
+			Printf("Opcode       	: 0b%s\n", binaryopcodeString);
+			Printf("funct3		: 0b%s\n", binaryfunct3String);
 			Printf("rs1 Register	: %u\n", decInstruction->rs1);
 			Printf("rs2 Register	: %u\n", decInstruction->rs2);
 			Printf("immediate (hex)	: 0x%.8X = %d\n", decInstruction->immediate, decInstruction->immediate);
@@ -424,7 +434,7 @@ void printInstruction(int32_t nextInstruction, instruction_t *decInstruction)
 		case J:
 			Printf("Encoding Type	: J\n");
 			Printf("Instruction  	: %s\n", instructionEnumToStr(decInstruction->instruction));
-			Printf("Opcode       	: 0b%s\n", intto7Bin(decInstruction->opcode));
+			Printf("Opcode       	: 0b%s\n", binaryopcodeString);
 			Printf("rd Register  	: %u\n", decInstruction->rd);
 			Printf("immediate (hex)	: 0x%.8X = %d\n", decInstruction->immediate, decInstruction->immediate);
 			break;
@@ -433,6 +443,9 @@ void printInstruction(int32_t nextInstruction, instruction_t *decInstruction)
 			break;
 	}
 	Printf("\n");
+	free(binaryfunct7String);
+	free(binaryopcodeString);
+	free(binaryfunct3String);
 }
 
 const char *instructionEnumToStr(instruction_e_t instruction)
@@ -566,7 +579,7 @@ const char *instructionEnumToStr(instruction_e_t instruction)
 	return "ERROR";
 }
 
-char *intto7Bin(uint8_t value)
+void intto7Bin(uint8_t value, char *binaryString)
 {	
 	char immediateString[8] = "0000000\0";
 	uint32_t mask = 0x40;
@@ -578,11 +591,10 @@ char *intto7Bin(uint8_t value)
 		}
 		mask = mask >> 1;
 	}
-	char *binaryString = immediateString;
-	return binaryString;
+	strncpy(binaryString, immediateString, 8);
 }
 
-char *intto3Bin(uint8_t value)
+void intto3Bin(uint8_t value, char *binaryString)
 {	
 	char immediateString[4] = "000\0";
 	uint32_t mask = 0x4;
@@ -594,6 +606,6 @@ char *intto3Bin(uint8_t value)
 		}
 		mask = mask >> 1;
 	}
-	char *binaryString = immediateString;
-	return binaryString;
+	
+	strncpy(binaryString, immediateString, 4);
 }
