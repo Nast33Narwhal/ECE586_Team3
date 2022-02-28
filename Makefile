@@ -44,4 +44,4 @@ debug : $(OBJS)
 #.PHONY to inform Make to not associate clean with a file named clean
 .PHONY: clean
 clean:
-	@rm -f $(OBJS) sim.exe
+	@rm -f $(OBJS) sim.exe outfile.mem
