@@ -7,7 +7,7 @@
  * @date Presented TODO
  *
  * @author Braden Harwood (bharwood@pdx.edu)
- * @author TODO
+ * @author Drew Seidel (dseidel@pdx.edu)
  *
  */
 
@@ -110,31 +110,31 @@ void executeInstruction(instruction_t decInstruction)
 			addInstruction(decInstruction);
 			break;
 		case SUB:
-
+			subInstruction(decInstruction);
 			break;
 		case SLL:
-
+			sllInstruction(decInstruction);
 			break;
 		case SLT:
-
+			sltInstruction(decInstruction); 
 			break;
 		case SLTU:
-
+			sltuInstruction(decInstruction); 
 			break;
 		case XOR:
-
+			xorInstruction(decInstruction);
 			break;
 		case SRL:
-
+			srlInstruction(decInstruction);
 			break;
 		case SRA:
-
+			sraInstruction(decInstruction);
 			break;
 		case OR:
-
+			orInstruction(decInstruction); 
 			break;
 		case AND:
-
+			andInstruction(decInstruction);
 			break;
 		case ECALL:
 
@@ -156,5 +156,133 @@ void addInstruction(instruction_t decInstruction)
 	REG[decInstruction.rd] = REG[decInstruction.rs1] + REG[decInstruction.rs2];
 	#ifdef DEBUG
 		Printf("Add Instruction, rd = rs1 + rs2 = %d + %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], REG[decInstruction.rs1]+ REG[decInstruction.rs2]);
+	#endif
+}
+
+void subInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+	
+	// Overflow ignored, rd = rs1 - rs2;
+	REG[decInstruction.rd] = REG[decInstruction.rs1] - REG[decInstruction.rs2];
+	#ifdef DEBUG
+		Printf("Add Instruction, rd = rs1 - rs2 = %d + %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], REG[decInstruction.rs1]+ REG[decInstruction.rs2]);
+	#endif
+}
+
+void andInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+	
+	//rd = rs1 & rs2;
+	REG[decInstruction.rd] = REG[decInstruction.rs1] & REG[decInstruction.rs2];
+	#ifdef DEBUG
+		Printf("Add Instruction, rd = rs1 & rs2 = %d + %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], REG[decInstruction.rs1]+ REG[decInstruction.rs2]);
+	#endif
+}
+
+void orInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+	
+	// rd = rs1 | rs2;
+	REG[decInstruction.rd] = REG[decInstruction.rs1] | REG[decInstruction.rs2];
+	#ifdef DEBUG
+		Printf("Add Instruction, rd = rs1 | rs2 = %d + %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], REG[decInstruction.rs1]+ REG[decInstruction.rs2]);
+	#endif
+}
+
+void xorInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+	
+	//rd = rs1 ^ rs2;
+	REG[decInstruction.rd] = REG[decInstruction.rs1] ^ REG[decInstruction.rs2];
+	#ifdef DEBUG
+		Printf("Add Instruction, rd = rs1 ^ rs2 = %d + %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], REG[decInstruction.rs1]+ REG[decInstruction.rs2]);
+	#endif
+}
+
+void sltInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+
+	//SLT instruction	
+	 if (REG[decInstruction.rs1] < REG[decInstruction.rs2])
+	 	 REG[decInstruction.rd] = 1; 
+	 else
+	 	REG[decInstruction.rd] = 0; 
+	
+	#ifdef DEBUG
+		Printf("SLT, rd = %d, rs1 = %d, rs2 = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], REG[decInstruction.rs2]);
+	#endif
+}
+
+void sltuInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+	
+	 //SLTU instruction. NOTE TEST SLTU rd, x0, rs2 sets rd to 1 if rs2 is not equal to 0
+	 if ((unsigned int)REG[decInstruction.rs1] < (unsigned int) REG[decInstruction.rs2])
+	 	 REG[decInstruction.rd] = 1; 
+	 else
+	 	 REG[decInstruction.rd] = 0; 
+	
+	#ifdef DEBUG
+		Printf("SLT, rd = %d, rs1 = %d, rs2 = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], REG[decInstruction.rs2]);
+	#endif
+}
+
+void sllInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+	
+	//SLL instruction
+	 //or for readability
+	 //uint8_t = temp; 
+	 //temp = REG[decInstruction.rs2] & 0x1F (page 20 of spec)
+	 //because shift amount is lower 5 bits of rs2 now stored in immediate/shamt field in decode
+	
+	 REG[decInstruction.rd] = REG[decInstruction.rs1] << REG[decInstruction.immediate];
+	
+	#ifdef DEBUG
+		Printf("SLL, rd = %d, rs1 = %d, rs2 & 0x1F = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], REG[decInstruction.rs2] & 0x1F);
+	#endif
+}
+
+
+void srlInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+
+	 //srl instruction
+	 //or for readability
+	 //uint8_t = temp; 
+	 //temp = REG[decInstruction.rs2] & 0x1F (page 20 of spec)
+	 //because shift amount is lower 5 bits of rs2 now stored in immediate/shamt field in decode
+	
+	 REG[decInstruction.rd] = REG[decInstruction.rs1] >> REG[decInstruction.immediate];
+	
+	#ifdef DEBUG
+		Printf("SLT, rd = %d, rs1 = %d, rs2 = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], REG[decInstruction.rs2]);
+	#endif
+}
+
+
+//todo look into more
+void sraInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+
+     //sra instruction		
+	 //or for readability
+	 //uint8_t = temp; 
+	 //temp = REG[decInstruction.rs2] & 0x1F (page 20 of spec)
+	 //because shift amount is lower 5 bits of rs2 now stored in immediate/shamt field in decode
+	
+	 REG[decInstruction.rd] = REG[decInstruction.rs1] >>= REG[decInstruction.immediate];
+	
+	#ifdef DEBUG
+		Printf("SLT, rd = %d, rs1 = %d, rs2 = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], REG[decInstruction.rs2]);
 	#endif
 }

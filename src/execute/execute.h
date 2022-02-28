@@ -7,7 +7,7 @@
  * @date Presented TODO
  *
  * @author Braden Harwood (bharwood@pdx.edu)
- * @author TODO
+ * @author Drew Seidel    (dseidel@pdx.edu)
  *
  */
 
@@ -44,6 +44,8 @@ void executeInstruction(instruction_t decInstruction);
  * @returns void
  *
  */
+
+
 void addInstruction(instruction_t decInstruction);
 
 
@@ -57,4 +59,131 @@ void addInstruction(instruction_t decInstruction);
  * @returns TODO
  *
  */
+
+void subInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn TODO
+ * @brief TODO
+ *
+ * @detail TODO
+ *
+ * @param TODO
+ * @returns TODO
+ *
+ */
+
+void andInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn TODO
+ * @brief TODO
+ *
+ * @detail TODO
+ *
+ * @param TODO
+ * @returns TODO
+ *
+ */
+
+void orInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn TODO
+ * @brief TODO
+ *
+ * @detail TODO
+ *
+ * @param TODO
+ * @returns TODO
+ *
+ */
+
+
+void xorInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn TODO
+ * @brief TODO
+ *
+ * @detail TODO
+ *
+ * @param TODO
+ * @returns TODO
+ *
+ */
+
+void sltInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn TODO
+ * @brief TODO
+ *
+ * @detail TODO
+ *
+ * @param TODO
+ * @returns TODO
+ *
+ */
+
+void sltuInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn TODO
+ * @brief TODO
+ *
+ * @detail TODO
+ *
+ * @param TODO
+ * @returns TODO
+ *
+ */
+
+void sllInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn TODO
+ * @brief TODO
+ *
+ * @detail TODO
+ *
+ * @param TODO
+ * @returns TODO
+ *
+ */
+
+void srlInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn TODO
+ * @brief TODO
+ *
+ * @detail TODO
+ *
+ * @param TODO
+ * @returns TODO
+ *
+ */
+
+void sraInstruction(instruction_t decInstruction);
+
+/**
+ * @fn TODO
+ * @brief TODO
+ *
+ * @detail TODO
+ *
+ * @param TODO
+ * @returns TODO
+ *
+ */
+
 #endif
