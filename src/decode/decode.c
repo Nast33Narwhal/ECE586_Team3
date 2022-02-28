@@ -30,52 +30,52 @@ void decodeInstruction(int32_t rawInstruction, instruction_t *decInstruction)
 	switch(decInstruction->itype)
 	{
 		case R:
-			decInstruction->rd        = (uint8_t)  (rawInstruction & 0xF80)      >>  7; 
-			decInstruction->funct3    = (uint8_t)  (rawInstruction & 0x7000)     >> 12;
-			decInstruction->rs1       = (uint8_t)  (rawInstruction & 0xF8000)    >> 15;
-			decInstruction->rs2       = (uint8_t)  (rawInstruction & 0x1F00000)  >> 20;
-			decInstruction->funct7    = (uint8_t)  (rawInstruction & 0xFE000000) >> 25;
+			decInstruction->rd        = (uint8_t)  ((rawInstruction & 0xF80)      >>  7); 
+			decInstruction->funct3    = (uint8_t)  ((rawInstruction & 0x7000)     >> 12);
+			decInstruction->rs1       = (uint8_t)  ((rawInstruction & 0xF8000)    >> 15);
+			decInstruction->rs2       = (uint8_t)  ((rawInstruction & 0x1F00000)  >> 20);
+			decInstruction->funct7    = (uint8_t)  ((rawInstruction & 0xFE000000) >> 25);
 			decInstruction->immediate = (uint32_t)  0; // Unused
 			decInstruction->instruction = decodeInstruction_R(decInstruction->funct3, decInstruction->funct7);
 			break;
 		case I:
-			decInstruction->rd        = (uint8_t)  (rawInstruction & 0xF80)      >>  7; 
-			decInstruction->funct3    = (uint8_t)  (rawInstruction & 0x7000)     >> 12;
-			decInstruction->rs1       = (uint8_t)  (rawInstruction & 0xF8000)    >> 15;
+			decInstruction->rd        = (uint8_t)  ((rawInstruction & 0xF80)      >>  7); 
+			decInstruction->funct3    = (uint8_t)  ((rawInstruction & 0x7000)     >> 12);
+			decInstruction->rs1       = (uint8_t)  ((rawInstruction & 0xF8000)    >> 15);
 			decInstruction->rs2       = (uint8_t)   0; // Unused
 			decInstruction->funct7    = (uint8_t)   0; // Unused
-			decInstruction->immediate = (uint32_t) (rawInstruction & 0xFFF00000) >> 20;
+			decInstruction->immediate = (uint32_t) ((rawInstruction & 0xFFF00000) >> 20);
 			decInstruction->instruction = decodeInstruction_I(decInstruction->opcode, decInstruction->funct3, decInstruction->immediate);
 			break;
 		case S:
 			decInstruction->rd        = (uint8_t)   0; // Unused 
-			decInstruction->funct3    = (uint8_t)  (rawInstruction & 0x7000)     >> 12;
-			decInstruction->rs1       = (uint8_t)  (rawInstruction & 0xF8000)    >> 15;
-			decInstruction->rs2       = (uint8_t)  (rawInstruction & 0x1F00000)  >> 20;
+			decInstruction->funct3    = (uint8_t)  ((rawInstruction & 0x7000)     >> 12);
+			decInstruction->rs1       = (uint8_t)  ((rawInstruction & 0xF8000)    >> 15);
+			decInstruction->rs2       = (uint8_t)  ((rawInstruction & 0x1F00000)  >> 20);
 			decInstruction->funct7    = (uint8_t)   0; // Unused
 			decInstruction->immediate = (uint32_t) (((rawInstruction & 0xFFF00000) >> 20) + ((rawInstruction & 0xF80) >> 7));
 			decInstruction->instruction = decodeInstruction_S(decInstruction->funct3);
 			break;
 		case U:
-			decInstruction->rd        = (uint8_t)  (rawInstruction & 0xF80)      >>  7; 
+			decInstruction->rd        = (uint8_t)  ((rawInstruction & 0xF80)      >>  7); 
 			decInstruction->funct3    = (uint8_t)   0; // Unused
 			decInstruction->rs1       = (uint8_t)   0; // Unused
 			decInstruction->rs2       = (uint8_t)   0; // Unused
 			decInstruction->funct7    = (uint8_t)   0; // Unused
-			decInstruction->immediate = (uint32_t) (rawInstruction & 0xFFFFF000);
+			decInstruction->immediate = (uint32_t) ((rawInstruction & 0xFFFFF000));
 			decInstruction->instruction = decodeInstruction_U(decInstruction->opcode);
 			break;
 		case B:
 			decInstruction->rd        = (uint8_t)   0; // Unused
-			decInstruction->funct3    = (uint8_t)  (rawInstruction & 0x7000)     >> 12;
-			decInstruction->rs1       = (uint8_t)  (rawInstruction & 0xF8000)    >> 15;
-			decInstruction->rs2       = (uint8_t)  (rawInstruction & 0x1F00000)  >> 20;
+			decInstruction->funct3    = (uint8_t)  ((rawInstruction & 0x7000)     >> 12);
+			decInstruction->rs1       = (uint8_t)  ((rawInstruction & 0xF8000)    >> 15);
+			decInstruction->rs2       = (uint8_t)  ((rawInstruction & 0x1F00000)  >> 20);
 			decInstruction->funct7    = (uint8_t)   0; // Unused
 			decInstruction->immediate = (uint32_t)  ( ((rawInstruction & 0x80000000) >> 19) + ((rawInstruction & 0x80) << 4) + ((rawInstruction & 0x7E000000) >> 20) + ((rawInstruction & 0xF00) >> 7) );
 			decInstruction->instruction = decodeInstruction_B(decInstruction->funct3);
 			break;
 		case J:
-			decInstruction->rd        = (uint8_t)  (rawInstruction & 0xF80)      >>  7;
+			decInstruction->rd        = (uint8_t)  ((rawInstruction & 0xF80)      >>  7);
 			decInstruction->funct3    = (uint8_t)   0; // Unused
 			decInstruction->rs1       = (uint8_t)   0; // Unused
 			decInstruction->rs2       = (uint8_t)   0; // Unused
