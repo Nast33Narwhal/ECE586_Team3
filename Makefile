@@ -4,9 +4,9 @@
 
 CC = gcc
 CFLAGS = -Wall -std=c99 -g
-OBJS = main.o wrappers.o registers.o decode.o parser.o memory.o
-SRC = src/main.c src/wrappers/wrappers.c src/registers/registers.c src/decode/decode.c src/parser/parser.c src/memory/memory.c
-HDRS = src/wrappers/wrappers.h	src/registers/registers.h src/decode/decode.h src/parser/parser.h src/memory/memory.h
+OBJS = main.o wrappers.o registers.o decode.o parser.o memory.o execute.o
+SRC = src/main.c src/wrappers/wrappers.c src/registers/registers.c src/decode/decode.c src/parser/parser.c src/memory/memory.c src/execute/execute.c
+HDRS = src/wrappers/wrappers.h src/registers/registers.h src/decode/decode.h src/parser/parser.h src/memory/memory.h src/execute/execute.h
 EXE  = sim.exe
 
 
@@ -34,6 +34,9 @@ decode.o : src/decode/decode.c src/decode/decode.h
 
 memory.o : src/memory/memory.c src/memory/memory.h
 	$(CC) $(CFLAGS) -c src/memory/memory.c
+	
+execute.o : src/execute/execute.c src/execute/execute.h
+	$(CC) $(CFLAGS) -c src/execute/execute.c
 
 # -DDEBUG will define DEBUG and recompile everything with DEBUG symbols enabled
 debug : $(OBJS)
