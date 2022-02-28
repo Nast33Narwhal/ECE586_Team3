@@ -51,7 +51,7 @@ int32_t main(int32_t argc, char **argv)
 		nextInstruction = readMemory(PC/4);//get instruction from memory[PC/4]
 		#ifdef DEBUG	
 			Printf("PC = %d = 0x%.8x\n", PC, PC);
-			Printf("nextInstruction = 0x%08X\n\n", nextInstruction);
+			Printf("nextInstruction = 0x%08X\n", nextInstruction);
 		#endif
 		
 		decodeInstruction(nextInstruction, &decInstruction);
