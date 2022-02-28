@@ -233,9 +233,10 @@ instruction_e_t decodeInstruction_I(uint8_t opcode, uint8_t func3, int32_t imm)
 				determinedInstruction = XORI;
 			else if (func3 == 0b101)
 			{
-				if (((imm & 0x000) >> 5) == 0)
+				imm = imm >> 5;
+				if (imm == 0)
 					determinedInstruction = SRLI;
-				else if (((imm & 0x400) >> 5) == 0x20)
+				else if (imm == 0x20)
 					determinedInstruction = SRAI;
 				else
 				{
