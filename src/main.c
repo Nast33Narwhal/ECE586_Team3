@@ -17,7 +17,7 @@
 uint32_t stackAddress = 0; //fix (unneccesary global)
 int32_t *memory; 				//dynamically allocated memory space
 extern int32_t memory_size; 	//how many values in dynamically allocated memory array. fix
-int32_t PC = 0; 
+uint32_t PC = 0; 
 //registers_t *registers; 
 int32_t *REG;  //global array of registers
 
