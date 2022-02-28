@@ -238,12 +238,7 @@ void sllInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	//SLL instruction
-	 //or for readability
-	 //uint8_t = temp; 
-	 //temp = REG[decInstruction.rs2] & 0x1F (page 20 of spec)
-	 //because shift amount is lower 5 bits of rs2 now stored in immediate/shamt field in decode
-	
-	 REG[decInstruction.rd] = REG[decInstruction.rs1] << REG[decInstruction.immediate];
+	 REG[decInstruction.rd] = REG[decInstruction.rs1] << (REG[decInstruction.rs2] & 0x1F);
 	
 	#ifdef DEBUG
 		Printf("SLL, rd = %d, rs1 = %d, rs2 & 0x1F = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], REG[decInstruction.rs2] & 0x1F);
@@ -255,16 +250,11 @@ void srlInstruction(instruction_t decInstruction)
 {
 	extern int32_t *REG;
 
-	 //srl instruction
-	 //or for readability
-	 //uint8_t = temp; 
-	 //temp = REG[decInstruction.rs2] & 0x1F (page 20 of spec)
-	 //because shift amount is lower 5 bits of rs2 now stored in immediate/shamt field in decode
 	
-	 REG[decInstruction.rd] = REG[decInstruction.rs1] >> REG[decInstruction.immediate];
+	 REG[decInstruction.rd] = REG[decInstruction.rs1] >> (REG[decInstruction.rs2] & 0x1F);
 	
 	#ifdef DEBUG
-		Printf("SLT, rd = %d, rs1 = %d, rs2 = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], REG[decInstruction.rs2]);
+		Printf("SRL, rd = %d, rs1 = %d, rs2 = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], REG[decInstruction.rs2]);
 	#endif
 }
 
@@ -274,15 +264,9 @@ void sraInstruction(instruction_t decInstruction)
 {
 	extern int32_t *REG;
 
-     //sra instruction		
-	 //or for readability
-	 //uint8_t = temp; 
-	 //temp = REG[decInstruction.rs2] & 0x1F (page 20 of spec)
-	 //because shift amount is lower 5 bits of rs2 now stored in immediate/shamt field in decode
-	
-	 REG[decInstruction.rd] = REG[decInstruction.rs1] >>= REG[decInstruction.immediate];
+	REG[decInstruction.rd] = REG[decInstruction.rs1] >>= (REG[decInstruction.rs2] & 0x1F);
 	
 	#ifdef DEBUG
-		Printf("SLT, rd = %d, rs1 = %d, rs2 = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], REG[decInstruction.rs2]);
+		Printf("SRA, rd = %d, rs1 = %d, rs2 = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], REG[decInstruction.rs2]);
 	#endif
 }

@@ -34,7 +34,7 @@ void decodeInstruction(int32_t rawInstruction, instruction_t *decInstruction)
 			decInstruction->rs1       = (uint8_t)  ((rawInstruction & 0xF8000)    >> 15);
 			decInstruction->rs2       = (uint8_t)  ((rawInstruction & 0x1F00000)  >> 20);
 			decInstruction->funct7    = (uint8_t)  ((rawInstruction & 0xFE000000) >> 25);
-			decInstruction->immediate = (uint8_t)  (((rawInstruction & 0x1F00000)  >> 20) & 0x1F); // Unused
+			decInstruction->immediate = 0; // Unused
 			decInstruction->instruction = decodeInstruction_R(decInstruction->funct3, decInstruction->funct7);
 			break;
 		case I:
