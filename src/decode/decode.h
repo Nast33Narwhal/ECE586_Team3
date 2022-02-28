@@ -169,12 +169,23 @@ void errorTypeDecode(void);
  *
  * @detail Prints all of the information about the decoded instruction based on type
  *
- * @param int32_t nextInstruction raw instruction
  * @param instructionPtr_t decInstruction holds all of the instruction information
  * @returns void
  *
  */
-void printInstruction(int32_t nextInstruction, instructionPtr_t decInstruction);
+void printInstruction(instructionPtr_t decInstruction);
+
+/**
+ * @fn printInstructionSimple
+ * @brief prints the PC and Instruction Name 
+ *
+ * @detail Prints just the PC in hex and the Instruction Name
+ *
+ * @param instructionPtr_t decInstruction holds all of the instruction information
+ * @returns void
+ *
+ */
+void printInstructionSimple(instruction_t *decInstruction);
 
 /**
  * @fn instructionEnumToStr

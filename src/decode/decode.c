@@ -374,7 +374,13 @@ void errorTypeDecode(void)
 	exit(1);
 }
 
-void printInstruction(int32_t nextInstruction, instruction_t *decInstruction)
+void printInstructionSimple(instruction_t *decInstruction)
+{
+	extern uint32_t PC;
+	Printf("PC = 0x%.8X, Instruction = %s\n", PC, instructionEnumToStr(decInstruction->instruction));
+}
+
+void printInstruction(instruction_t *decInstruction)
 {
 	// Create binary strings
 	char *binaryfunct7String = Malloc(sizeof(char) * 8);

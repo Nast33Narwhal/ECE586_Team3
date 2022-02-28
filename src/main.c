@@ -56,7 +56,7 @@ int32_t main(int32_t argc, char **argv)
 		
 		decodeInstruction(nextInstruction, &decInstruction);
 		#ifdef DEBUG
-			printInstruction(nextInstruction, &decInstruction);
+			printInstruction(&decInstruction);
 		#endif
 		if ((nextInstruction == 0x8067) && (REG[1] == 0))
 		{
