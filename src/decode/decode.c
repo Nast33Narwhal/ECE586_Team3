@@ -385,7 +385,7 @@ void printInstruction(int32_t nextInstruction, instruction_t *decInstruction)
 			Printf("funct3		: 0b%s\n", intto3Bin(decInstruction->funct3));
 			Printf("rs1 Register	: %u\n", decInstruction->rs1);
 			Printf("rs2 Register	: %u\n", decInstruction->rs2);
-			Printf("funct7			: 0b%s\n", intto7Bin(decInstruction->funct7));
+			Printf("funct7		: 0b%s\n", intto7Bin(decInstruction->funct7));
 			break;
 		case I:
 			Printf("Encoding Type	: I\n");
