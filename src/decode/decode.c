@@ -17,7 +17,6 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include "decode.h"
-#include "../wrappers/wrappers.h"
 
 void decodeInstruction(int32_t rawInstruction, instruction_t *decInstruction)
 {

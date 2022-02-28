@@ -19,6 +19,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include <string.h>
+#include "../wrappers/wrappers.h"
 
 // encoding type enum for RV32I, can be expanded for Multiply and Floating Point
 #ifndef DECODE_T_
@@ -27,12 +28,13 @@ typedef enum _decode_e {R, I, S, U, B, J} decode_t;
 #endif
 
 // instruction enum for all of the possible instructions encoded in RV32I
-#ifndef INSTRUCTION_T_
-#define INSTRUCTION_T_
+#ifndef INSTRUCTION_ENUM_T_
+#define INSTRUCTION_ENUM_T_
 typedef enum _instruction_e {ERROR, LUI, AUIPC, JAL, JALR, BEQ, BNE, BLT, BGE, BLTU, BGEU, LB, LH, LW, LBU, LHU, SB, SH, SW, ADDI, SLTI, SLTIU, XORI, ORI, ANDI, SLLI, SRLI, SRAI, ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND, ECALL, EBREAK} instruction_e_t;
 #endif
 
-
+#ifndef INSTRUCTION_T_
+#define INSTRUCTION_T_
 typedef struct _instruction_s
 {
 	decode_t 	itype;
@@ -46,6 +48,7 @@ typedef struct _instruction_s
 	 int32_t 	immediate; // Store shamt here, too
 
 } instruction_t, *instructionPtr_t;
+#endif
 
 /**
  * @fn decodeInstruction
