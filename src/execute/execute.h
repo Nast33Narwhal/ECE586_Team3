@@ -57,7 +57,7 @@ void luiInstruction(instruction_t decInstruction);
  * @returns void
  *
  */
-void auipcInstruction(instructions_t decInstruction);
+void auipcInstruction(instruction_t decInstruction);
 
 
 /**
