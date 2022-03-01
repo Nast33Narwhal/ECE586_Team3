@@ -20,6 +20,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "../decode/decode.h"
+#include "../memory/memory.h"
 
 /**
  * @fn executeInstruction
