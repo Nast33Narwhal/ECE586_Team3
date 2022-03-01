@@ -25,10 +25,10 @@
 #include "memory.h"
 #include "../wrappers/wrappers.h"
 
-extern int32_t *memory;
-
 int32_t readMemory(int32_t memoryLocation)
 {
+	extern int32_t *memory;
+	
 	// Check for out of scope memory location
 	if (memoryLocation < 0)
 	{
@@ -48,6 +48,8 @@ int32_t readMemory(int32_t memoryLocation)
 
 void writeMemory(int32_t memoryLocation, int32_t valueToWrite)
 {
+	extern int32_t *memory;
+	
 	// Check for out of scope memory location
 	if (memoryLocation < 0)
 	{
