@@ -4,24 +4,24 @@ int main(){
 
 //ADD tests
 
-u_int32_t a = 5; 
-u_int32_t b = 6; 
-u_int32_t c = a + b;  //0xb
+unsigned int a = 5; 
+unsigned int b = 6; 
+unsigned int c = a + b;  //0xb
 
-u_int32_t d = -5; 
-u_int32_t e = 6; 
-u_int32_t f = d + e; //0x1
+unsigned int d = -5; 
+unsigned int e = 6; 
+unsigned int f = d + e; //0x1
 
-u_int32_t h = -10; 
-u_int32_t i = -10; 
-u_int32_t j = h + i; //0xffffffec
+unsigned int h = -10; 
+unsigned int i = -10; 
+unsigned int j = h + i; //0xffffffec
 
-u_int64_t x = 0xF000; 
-u_int64_t y = 0xFFFFFFFFF; 
-u_int64_t z = x + y;  //100000efff
-x = -65; 
+unsigned long long int x = 0xF000; 
+unsigned long long int y = 0xFFFFFFFFF; 
+unsigned long long int z = x + y;  //100000efff
+x = -65;     
 y = -120; 
-u_int64_t z1 = x + y; //ffffffffffffff47
+unsigned long long int z1 = x + y; //ffffffffffffff47
 
 //printf("c = %u, f = %u, j = %u z = %llu, z1 = %llu\n",c , f, j, z, z1); 
 

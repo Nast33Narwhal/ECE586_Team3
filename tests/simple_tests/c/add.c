@@ -4,25 +4,27 @@ int main(){
 
 //ADD tests
 
-int32_t a = 5; 
-int32_t b = 6; 
-int32_t c = a + b;  //0xb
+int a = 5; 
+int b = 6; 
+int c = a + b;  
 
-int32_t d = -5; 
-int32_t e = 6; 
-int32_t f = d + e; //0x1
+int d = -5; 
+int e = 6; 
+int f = d + e; 
 
-int32_t h = -10; 
-int32_t i = -10; 
-int32_t j = h + i; //0xffffffec
-
-int64_t x = 0xF000; 
-int64_t y = 0xFFFFFFFFF; 
-int64_t z = x + y;  //100000efff
+int h = -10; 
+int i = -10; 
+int j = h + i; 
+long long int x = 0xF000; 
+long long int y = 0xFFFFFFFFF; 
+long long int  z = x + y;  
 x = -65; 
 y = -120; 
-int64_t z1 = x + y; //ffffffffffffff47
+int z1 = x + y; //test overflow
 
 //printf("c = %u, f = %u, j = %u z = %llu, z1 = %llu\n",c , f, j, z, z1); 
 
+return 0; 
+
 }
+
