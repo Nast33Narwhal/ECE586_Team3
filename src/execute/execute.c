@@ -47,7 +47,7 @@ void executeInstruction(instruction_t decInstruction)
 			
 			break;
 		case JALR:
-			
+			jalrInstruction(decInstruction);
 			break;
 		case BEQ:
 
@@ -95,28 +95,28 @@ void executeInstruction(instruction_t decInstruction)
 			addiInstruction(decInstruction);
 			break;
 		case SLTI:
-		
+			sltiInstruction(decInstruction);
 			break;
 		case SLTIU:
-
+			sltiuInstruction(decInstruction);
 			break;
 		case XORI:
-
+			xoriInstruction(decInstruction);
 			break;
 		case ORI:
-
+			oriInstruction(decInstruction);
 			break;
 		case ANDI:
-		
+			andiInstruction(decInstruction);
 			break;
 		case SLLI:
 			slliInstruction(decInstruction);
 			break;
 		case SRLI:
-
+			srliInstruction(decInstruction);
 			break;
 		case SRAI:
-
+			sraiInstruction(decInstruction);
 			break;
 		case ADD:
 			addInstruction(decInstruction);
@@ -149,10 +149,10 @@ void executeInstruction(instruction_t decInstruction)
 			andInstruction(decInstruction);
 			break;
 		case ECALL:
-
+			Printf("ECALL instruction execution function not implemented yet\n");
 			break;
 		case EBREAK:
-
+			Printf("EBREAK instruction execution function not implemented yet\n");
 			break;
 		default:
 			Fprintf(stderr, "Error: Executing Instruction with no valid type instruction.\n");
@@ -278,10 +278,17 @@ void sltuInstruction(instruction_t decInstruction)
 	}
 	
 	//SLTU instruction. NOTE TEST SLTU rd, x0, rs2 sets rd to 1 if rs2 is not equal to 0
-	if (((uint32_t)REG[decInstruction.rs1]) < ((uint32_t) REG[decInstruction.rs2]))
-	 	REG[decInstruction.rd] = 1;
+	if ((REG[decInstruction.rs1] == 0) && (REG[decInstruction.rs2] != 0))
+	{
+		REG[decInstruction.rd] = 1;
+	}
 	else
-	 	REG[decInstruction.rd] = 0;
+	{
+		if (((uint32_t)REG[decInstruction.rs1]) < ((uint32_t) REG[decInstruction.rs2]))
+			REG[decInstruction.rd] = 1;
+		else
+			REG[decInstruction.rd] = 0;
+	}
 	
 	#ifdef DEBUG
 		Printf("SLT, rd = %d, rs1 = %u, rs2 = %u\n", REG[decInstruction.rd], (uint32_t) REG[decInstruction.rs1], (uint32_t) REG[decInstruction.rs2]);
@@ -605,7 +612,7 @@ void addiInstruction(instruction_t decInstruction)
 	}
 	
 	// Overflow ignored, rd = rs1 + rs2;
-	REG[decInstruction.rd] = REG[decInstruction.rs1] + REG[decInstruction.immediate];
+	REG[decInstruction.rd] = REG[decInstruction.rs1] + extendedImmediate;
 	#ifdef DEBUG
 		Printf("Addi Instruction, rd = rs1 + signExtended(imm) = %d + signExtended(%d) = %d + %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.immediate], REG[decInstruction.rs1], extendedImmediate, REG[decInstruction.rs1] + extendedImmediate);
 	#endif
@@ -631,6 +638,193 @@ void slliInstruction(instruction_t decInstruction)
 	#endif
 }
 
+void sltiInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+	
+	// If rd = reg[0], return, don't do anything
+	if (REG[decInstruction.rd] == 0)
+	{
+		return;
+	}
+	
+	int32_t extendedImmediate = REG[decInstruction.immediate];
+	// Sign extend
+	int32_t msb = extendedImmediate &0x00000800;
+	if (msb > 0)
+	{
+		extendedImmediate = extendedImmediate | 0xFFFFF000;
+	}
 
+	//SLTI instruction	
+	if (REG[decInstruction.rs1] < extendedImmediate)
+	 	REG[decInstruction.rd] = 1; 
+	else
+	 	REG[decInstruction.rd] = 0; 
+	
+	#ifdef DEBUG
+		Printf("SLTI, rd = %d, rs1 = %d, (unsigned) signExtended(imm) = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], extendedImmediate);
+	#endif
+}
+
+void sltiuInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+	
+	// If rd = reg[0], return, don't do anything
+	if (REG[decInstruction.rd] == 0)
+	{
+		return;
+	}
+	
+	int32_t extendedImmediate = REG[decInstruction.immediate];
+	// Sign extend
+	int32_t msb = extendedImmediate &0x00000800;
+	if (msb > 0)
+	{
+		extendedImmediate = extendedImmediate | 0xFFFFF000;
+	}
+	
+	//SLTIU instruction. NOTE TEST SLTIU rd, x0, imm sets rd to 1 if rs1 is equal to 0 and imm is equal to 1
+	if ((REG[decInstruction.rs1] == 0) && (REG[decInstruction.immediate] == 1)
+	{
+		REG[decInstruction.rd] = 1;
+	}
+	else
+	{
+		if (((uint32_t)REG[decInstruction.rs1]) < ((uint32_t) extendedImmediate))
+			REG[decInstruction.rd] = 1;
+		else
+			REG[decInstruction.rd] = 0;
+	}
+	
+	#ifdef DEBUG
+		Printf("SLTIU, rd = %d, rs1 = %d, (unsigned) signExtended(imm) = %u\n", REG[decInstruction.rd], REG[decInstruction.rs1], (uint32_t) extendedImmediate);
+	#endif
+}
+
+void xoriInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+	
+	// If rd = reg[0], return, don't do anything
+	if (REG[decInstruction.rd] == 0)
+	{
+		return;
+	}
+	
+	int32_t extendedImmediate = REG[decInstruction.immediate];
+	// Sign extend
+	int32_t msb = extendedImmediate &0x00000800;
+	if (msb > 0)
+	{
+		extendedImmediate = extendedImmediate | 0xFFFFF000;
+	}
+	
+	//rd = rs1 ^ signExtend(imm);
+	REG[decInstruction.rd] = REG[decInstruction.rs1] ^ extendedImmediate;
+	#ifdef DEBUG
+		Printf("Xori Instruction, rd = rs1 ^ signExtended(imm) = %d ^ %d = %d\n", REG[decInstruction.rs1], extendedImmediate, REG[decInstruction.rs1] ^ extendedImmediate);
+	#endif
+}
+
+void oriInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+	
+	// If rd = reg[0], return, don't do anything
+	if (REG[decInstruction.rd] == 0)
+	{
+		return;
+	}
+	
+	int32_t extendedImmediate = REG[decInstruction.immediate];
+	// Sign extend
+	int32_t msb = extendedImmediate &0x00000800;
+	if (msb > 0)
+	{
+		extendedImmediate = extendedImmediate | 0xFFFFF000;
+	}
+	
+	// rd = rs1 | rs2;
+	REG[decInstruction.rd] = REG[decInstruction.rs1] | extendedImmediate;
+	#ifdef DEBUG
+		Printf("Ori Instruction, rd = rs1 | signExtended(imm) = %d | %d = %d\n", REG[decInstruction.rs1], extendedImmediate, REG[decInstruction.rs1] | extendedImmediate);
+	#endif
+}
+
+void andiInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+	
+	// If rd = reg[0], return, don't do anything
+	if (REG[decInstruction.rd] == 0)
+	{
+		return;
+	}
+	
+	int32_t extendedImmediate = REG[decInstruction.immediate];
+	// Sign extend
+	int32_t msb = extendedImmediate &0x00000800;
+	if (msb > 0)
+	{
+		extendedImmediate = extendedImmediate | 0xFFFFF000;
+	}
+	
+	//rd = rs1 & rs2;
+	REG[decInstruction.rd] = REG[decInstruction.rs1] & extendedImmediate;
+	#ifdef DEBUG
+		Printf("Andi Instruction, rd = rs1 & signExtended(imm) = %d & %d = %d\n", REG[decInstruction.rs1], extendedImmediate, REG[decInstruction.rs1] & extendedImmediate);
+	#endif
+}
+
+void srliInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+	
+	// If rd = reg[0], return, don't do anything
+	if (REG[decInstruction.rd] == 0)
+	{
+		return;
+	}
+	
+	REG[decInstruction.rd] = REG[decInstruction.rs1] >> (REG[decInstruction.immediate] & 0x1F);
+	
+	#ifdef DEBUG
+		Printf("SRLI, rd = %d, rs1 = %d, imm & 0x1F = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], REG[decInstruction.immediate] & 0x1F);
+	#endif
+}
+
+
+//todo look into more
+void sraiInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+	
+	// If rd = reg[0], return, don't do anything
+	if (REG[decInstruction.rd] == 0)
+	{
+		return;
+	}
+	
+	int32_t msb = REG[decInstruction.rs1] & 0x80000000; // filter out all but msb
+	uint32_t shamt = REG[decInstruction.immediate] & 0x1F;
+	int32_t result = REG[decInstruction.rs1];
+	if (msb > 0)
+	{
+		for (uint32_t i = 0; i != shamt; i++)
+		{
+			result = (result >> 1) | msb; // Shift once and OR in the 1 to the MSB
+		}
+		REG[decInstruction.rd] = result;
+	}
+	else
+	{
+		REG[decInstruction.rd] = REG[decInstruction.rs1] >> (REG[decInstruction.immediate] & 0x1F);
+	}
+	#ifdef DEBUG
+		Printf("SRAI, rd = %d, rs1 = %d, imm & 0x1F = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], REG[decInstruction.immediate] & 0x1F);
+	#endif
+}
 
 // END I Type Instructions
