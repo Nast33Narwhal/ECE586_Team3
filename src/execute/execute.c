@@ -20,18 +20,6 @@
 
 void executeInstruction(instruction_t decInstruction)
 {
-	extern int32_t* REG;
-	
-	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
-	{
-		#ifdef DEBUG
-			Printf("Instruction Execution Requested has rd = x0, do nothing and return.\n");
-		#endif
-		
-		return;
-	}
-	
 	switch(decInstruction.instruction)
 	{
 		case ERROR:
@@ -83,13 +71,13 @@ void executeInstruction(instruction_t decInstruction)
 			lhuInstruction(decInstruction);
 			break;
 		case SB:
-
+			sbInstruction(decInstruction);
 			break;
 		case SH:
-
+			shInstruction(decInstruction);
 			break;
 		case SW:
-
+			swInstruction(decInstruction);
 			break;
 		case ADDI:
 			addiInstruction(decInstruction);
@@ -506,7 +494,6 @@ void lwInstruction(instruction_t decInstruction)
 	#endif
 }
 
-// I Type Instructions
 void lbuInstruction(instruction_t decInstruction)
 {
 	extern int32_t *REG;
@@ -686,7 +673,7 @@ void sltiuInstruction(instruction_t decInstruction)
 	}
 	
 	//SLTIU instruction. NOTE TEST SLTIU rd, x0, imm sets rd to 1 if rs1 is equal to 0 and imm is equal to 1
-	if ((REG[decInstruction.rs1] == 0) && (REG[decInstruction.immediate] == 1)
+	if ((REG[decInstruction.rs1] == 0) && (REG[decInstruction.immediate] == 1))
 	{
 		REG[decInstruction.rd] = 1;
 	}
@@ -795,7 +782,6 @@ void srliInstruction(instruction_t decInstruction)
 	#endif
 }
 
-
 //todo look into more
 void sraiInstruction(instruction_t decInstruction)
 {
@@ -827,4 +813,174 @@ void sraiInstruction(instruction_t decInstruction)
 	#endif
 }
 
+void jalrInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+	extern uint32_t PC;
+	
+	int32_t extendedImmediate = REG[decInstruction.immediate];
+	// Sign extend
+	int32_t msb = extendedImmediate &0x00000800;
+	if (msb > 0)
+	{
+		extendedImmediate = extendedImmediate | 0xFFFFF000;
+	}
+	
+	// Set least significant bit to 0 per spec
+	extendedImmediate = extendedImmediate & 0xFFFFFFFE; 
+	
+	// if rd = reg[0], don't store anything, but still change PC.
+	if (REG[decInstruction.rd] == 0)
+	{
+		PC = REG[decInstruction.rs1] + extendedImmediate;
+	}
+	else
+	{
+		REG[decInstruction.rd] = PC + 4;
+		PC = REG[decInstruction.rs1] + extendedImmediate;
+	}
+	#ifdef DEBUG
+		Printf("JALR, rd = %d, rs1 = %d, PC = %u, signExtended(imm) & 0xFFFFFFFC = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], PC, extendedImmediate);
+	#endif
+}
+
+void ecallInstruction(instruction_t decInstruction)
+{
+	Printf("ecall instruction not set up yet\n");
+}
+
+void ebreakInstruction(instruction_t decInstruction)
+{
+	Printf("ebreak instruction not set up yet\n");
+}
+
 // END I Type Instructions
+
+// S Type Instructions
+void sbInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+	
+	// Load 32 bit value from memory (base + offset)
+	int32_t memoryLoaded = readMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) );
+	int32_t byteToStore = REG[decInstruction.rs2];
+	
+	// Determine byte selected
+	int32_t byteSelected = decInstruction.immediate % 4;
+	switch(byteSelected)
+	{
+		case 0:
+			memoryLoaded = (memoryLoaded & 0xFFFFFF00) | byteToStore;
+			break;
+		case 1:
+			memoryLoaded = (memoryLoaded & 0xFFFF00FF) | (byteToStore << 8);
+			break;
+		case 2:
+			memoryLoaded = (memoryLoaded & 0xFF00FFFF) | (byteToStore << 16);
+			break;
+		case 3:
+			memoryLoaded = (memoryLoaded & 0x00FFFFFF) | (byteToStore << 24);
+			break;
+		default:
+			Fprintf(stderr, "Error executing SB Instruction, byte select error\n");
+			exit(1);
+	}
+	writeMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) , memoryLoaded);
+	
+	#ifdef DEBUG
+		Printf("SB, rs1 = %d, rs2 = %d, imm = %d", REG[decInstruction.rs1], REG[decInstruction.rs2], REG[decInstruction.immediate]);
+	#endif
+}
+
+void shInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+	
+	// Load 32 bit value from memory (base + offset)
+	int32_t memoryLoaded = readMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) );
+	int32_t shortToStore = REG[decInstruction.rs2];
+	
+	// Determine byte selected
+	int32_t byteSelected = decInstruction.immediate % 4;
+	switch(byteSelected)
+	{
+		case 0:
+			memoryLoaded = (memoryLoaded & 0xFFFF0000) | shortToStore;
+			writeMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), memoryLoaded);
+			break;
+		case 1:
+			memoryLoaded = (memoryLoaded & 0xFF0000FF) | (shortToStore << 8);
+			writeMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), memoryLoaded);
+			break;
+		case 2:
+			memoryLoaded = (memoryLoaded & 0x0000FFFF) | (shortToStore << 16);
+			writeMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), memoryLoaded);
+			break;
+		case 3: // Happens on a boundary, need to grab the other 8 bits
+			memoryLoaded = (memoryLoaded & 0x00FFFFFF) | (shortToStore << 24);
+			writeMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), memoryLoaded);
+			// Load next word to store other half of short
+			memoryLoaded = readMemory(((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)) + 1);
+			memoryLoaded = (memoryLoaded & 0xFFFFFF00) | (shortToStore >> 8);
+			writeMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) + 1, memoryLoaded);
+			break;
+		default:
+			Fprintf(stderr, "Error executing LH Instruction, byte select error\n");
+			exit(1);
+	}
+	
+	#ifdef DEBUG
+		Printf("SH, rs1 = %d, rs2 = %d, imm = %d", REG[decInstruction.rs1], REG[decInstruction.rs2], REG[decInstruction.immediate]);
+	#endif
+}
+
+void swInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+	
+	// Load 32 bit value from memory (base + offset)
+	int32_t memoryLoaded = readMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) );
+	int32_t wordToStore = REG[decInstruction.rs2];
+
+	// Determine byte selected
+	int32_t byteSelected = decInstruction.immediate % 4;
+	switch(byteSelected)
+	{
+		case 0:
+			// memoryLoaded already set
+			writeMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), wordToStore);
+			break;
+		case 1:
+			memoryLoaded = (memoryLoaded & 0x000000FF) | (wordToStore << 8);
+			writeMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), memoryLoaded);
+			// Load next word to store other byte of the word
+			memoryLoaded = readMemory(((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)) + 1);
+			memoryLoaded = (memoryLoaded & 0xFFFFFF00) | (wordToStore >> 24);
+			writeMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) + 1, memoryLoaded);
+			break;
+		case 2:
+			memoryLoaded = (memoryLoaded & 0x0000FFFF) | (wordToStore << 16);
+			writeMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), memoryLoaded);
+			// Load next word to store other byte of the word
+			memoryLoaded = readMemory(((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)) + 1);
+			memoryLoaded = (memoryLoaded & 0xFFFF0000) | (wordToStore >> 16);
+			writeMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) + 1, memoryLoaded);
+			break;
+		case 3: // Happens on a boundary, need to grab the other 8 bits
+			memoryLoaded = (memoryLoaded & 0x00FFFFFF) | (wordToStore << 24);
+			writeMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), memoryLoaded);
+			// Load next word to store other half of the word
+			memoryLoaded = readMemory(((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)) + 1);
+			memoryLoaded = (memoryLoaded & 0xFF000000) | (wordToStore >> 8);
+			writeMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) + 1, memoryLoaded);
+			break;
+		default:
+			Fprintf(stderr, "Error executing LH Instruction, byte select error\n");
+			exit(1);
+	}
+	
+	#ifdef DEBUG
+		Printf("SW, rs1 = %d, rs2 = %d, imm = %d", REG[decInstruction.rs1], REG[decInstruction.rs2], REG[decInstruction.immediate]);
+	#endif
+}
+// END S Type Instructions

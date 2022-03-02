@@ -267,7 +267,7 @@ void shInstruction(instruction_t decInstruction);
 
 
 /**
- * @fn sbInstruction
+ * @fn swInstruction
  * @brief executes the function: store word
  *
  * @detail  The 12 bit sign-extended imm. field is added to rs1 to create the target address. The contents of rs2 are stored
@@ -277,20 +277,6 @@ void shInstruction(instruction_t decInstruction);
  *
  */
 void swInstruction(instruction_t decInstruction);
-
-
-/**
- * @fn sbInstruction
- * @brief executes the function: load byte
- *
- * @detail  The 12 bit sign-extended imm. field is added to rs1 to create the target address. The lower 8 bits of contents of rs2 are stored
- *          in the target address. 
- * @param decInstruction - instruction_t passed by reference to be updated
- * @returns void
- *
- */
-void sbInstruction(instruction_t decInstruction);
-
 
 /**
  * @fn addiInstruction
@@ -354,7 +340,7 @@ void oriInstruction(instruction_t decInstruction);
 
 
 /**
- * @fn xoriInstruction
+ * @fn andiInstruction
  * @brief executes the function: and immediate
  *
  * @detail Register rs1 is and'd with the sign extended 12 bit immediate field and the result is stored in rd.
@@ -362,7 +348,7 @@ void oriInstruction(instruction_t decInstruction);
  * @returns void
  *
  */
-void xoriInstruction(instruction_t decInstruction);
+void andiInstruction(instruction_t decInstruction);
 
 
 /**
@@ -402,21 +388,6 @@ void sraiInstruction(instruction_t decInstruction);
 
 
 /**
- * @fn addiInstruction
- * @brief executes the function: load byte
- *
- * @detail  The 12 bit sign-extended imm. field is added to rs1 to create the target address. The lower 8 bits of contents of rs2 are stored
- *          in the target address. 
- * @param decInstruction - instruction_t passed by reference to be updated
- * @returns void
- *
- */
-void sbInstruction(instruction_t decInstruction);
-
-
-
-
-/**
  * @fn addInstruction
  * @brief executes the add instruction
  *
@@ -426,136 +397,150 @@ void sbInstruction(instruction_t decInstruction);
  * @returns void
  *
  */
-
-
 void addInstruction(instruction_t decInstruction);
 
 
 /**
- * @fn TODO
- * @brief TODO
+ * @fn subInstruction
+ * @brief executes the subtract instruction
  *
- * @detail TODO
+ * @detail rd = rs1-rs2
  *
- * @param TODO
- * @returns TODO
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
  *
  */
-
 void subInstruction(instruction_t decInstruction);
 
-
 /**
- * @fn TODO
- * @brief TODO
+ * @fn sllInstruction
+ * @brief executes the shift left logical instruction
  *
- * @detail TODO
+ * @detail rd = rs1 << rs2
  *
- * @param TODO
- * @returns TODO
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
  *
  */
-
-void andInstruction(instruction_t decInstruction);
-
-
-/**
- * @fn TODO
- * @brief TODO
- *
- * @detail TODO
- *
- * @param TODO
- * @returns TODO
- *
- */
-
-void orInstruction(instruction_t decInstruction);
-
-
-/**
- * @fn TODO
- * @brief TODO
- *
- * @detail TODO
- *
- * @param TODO
- * @returns TODO
- *
- */
-
-
-void xorInstruction(instruction_t decInstruction);
-
-
-/**
- * @fn TODO
- * @brief TODO
- *
- * @detail TODO
- *
- * @param TODO
- * @returns TODO
- *
- */
-
-void sltInstruction(instruction_t decInstruction);
-
-
-/**
- * @fn TODO
- * @brief TODO
- *
- * @detail TODO
- *
- * @param TODO
- * @returns TODO
- *
- */
-
-void sltuInstruction(instruction_t decInstruction);
-
-
-/**
- * @fn TODO
- * @brief TODO
- *
- * @detail TODO
- *
- * @param TODO
- * @returns TODO
- *
- */
-
 void sllInstruction(instruction_t decInstruction);
 
 
 /**
- * @fn TODO
- * @brief TODO
+ * @fn sltInstruction
+ * @brief executes the set less than instruction
  *
- * @detail TODO
+ * @detail rd = (rs1 < rs2) ? 1 : 0;
  *
- * @param TODO
- * @returns TODO
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
  *
  */
+void sltInstruction(instruction_t decInstruction);
 
+
+/**
+ * @fn sltuInstruction
+ * @brief executes the unsigned set less than instruction
+ *
+ * @detail rd = ((uint32_t) rs1 < (uint32_t) rs2) ? 1 : 0;
+ *
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
+ *
+ */
+void sltuInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn xorInstruction
+ * @brief executes the xor instruction
+ *
+ * @detail rd = rs1 ^ rs2
+ *
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
+ *
+ */
+void xorInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn srlInstruction
+ * @brief executes the shift right logical instruction
+ *
+ * @detail rd = rs1 >> rs2
+ *
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
+ *
+ */
 void srlInstruction(instruction_t decInstruction);
 
 
 /**
- * @fn TODO
- * @brief TODO
+ * @fn sraInstruction
+ * @brief executes the shift right arithmetic instruction
  *
- * @detail TODO
+ * @detail (if msb == 1) rd = ((rs1 >> rs2) | (0xFFFFFFFF << rs2)) else rd = rs1 >> rs2
  *
- * @param TODO
- * @returns TODO
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
  *
  */
-
 void sraInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn orInstruction
+ * @brief executes the or instruction
+ *
+ * @detail rd = rs1 | rs2
+ *
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
+ *
+ */
+void orInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn andInstruction
+ * @brief executes the and instruction
+ *
+ * @detail rd = rs1 & rs2
+ *
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
+ *
+ */
+void andInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn ecallInstruction
+ * @brief executes the ecall instruction
+ *
+ * @detail System call
+ *
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
+ *
+ */
+void ecallInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn ebreakInstruction
+ * @brief executes the ebreak instruction
+ *
+ * @detail System call
+ *
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
+ *
+ */
+void ebreakInstruction(instruction_t decInstruction);
+
 
 /**
  * @fn TODO

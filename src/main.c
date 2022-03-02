@@ -10,6 +10,7 @@
 #include "./registers/registers.h"
 #include "./decode/decode.h"
 #include "./memory/memory.h"
+#include "./execute/execute.h"
 
 #define MAX_ARRAY 16384
 
