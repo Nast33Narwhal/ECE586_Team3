@@ -51,22 +51,25 @@ int32_t main(int32_t argc, char **argv)
 	{
 		nextInstruction = readMemory(PC/4);//get instruction from memory[PC/4]
 		#ifdef DEBUG	
-			Printf("PC = %d = 0x%.8x\n", PC, PC);
-			Printf("nextInstruction = 0x%08X\n", nextInstruction);
+			Printf("\nPC = %d = 0x%.8x\n", PC, PC);
 		#endif
 		
 		decodeInstruction(nextInstruction, &decInstruction);
 		#ifdef DEBUG
+			//Printf("nextInstruction = 0x%08X\n", nextInstruction);
 			printInstruction(&decInstruction);
 		#endif
+		
+		// Decoded end program condition
 		if ((nextInstruction == 0x8067) && (REG[1] == 0))
 		{
 			Printf("JR RA, where value in RA = 0, meaning end program should be triggered.\n");
 			break;
 		}
-		//if PC/4 > memory_size, exit; 
-		//decode instruction
+		
 		//execute instruction
+		executeInstruction(decInstruction);
+		
 		PC += 4; // Should update PC when executing the instruction.
 	}
 
@@ -77,23 +80,23 @@ int32_t main(int32_t argc, char **argv)
 
 	#ifdef DEBUG
 	//temporay checking result, parsing
-	Printf("\n\nDEBUG RESULTS\n"); 
-    Printf("Filename: %s \nStarting Adress: %d \nStack Address: %d\n\n", fileName, PC, stackAddress); 
+	Printf("\n\nDEBUG RESULTS\n");
+    Printf("Filename: %s \nStarting Adress: %d \nStack Address: %d\n\n", fileName, PC, stackAddress);
 	
 	//temporary checking result, PC, SP, RA
-	Printf("PC=%d, SP=%d, RA=%d\n\n", PC, REG[2], REG[1]); 
+	Printf("PC=%d, SP=%d, RA=%d\n\n", PC, REG[2], REG[1]);
 	
 	//memory array
-	Printf("Number of array elements is: %d\n", memory_size); 
+	Printf("Number of array elements is: %d\n", memory_size);
 	for (int32_t i = 0; i < memory_size; i++)
 	{
-		printf("Mem %02X :0x%08X\n", i*4, memory[i]); 
+		printf("Mem %02X :0x%08X\n", i*4, memory[i]);
 	}
 	#endif
 
 	//free(registers);
-	free(memory); 
-	free(REG); 
+	free(memory);
+	free(REG);
     return 0;
 }
 
@@ -214,7 +217,7 @@ void printRegisters(){
 	Printf(" A6: 0x%08x\n", registers->a6);
 	Printf(" A7: 0x%08x\n", registers->a7);
 	*/
-
+	Printf("\n");
 	Printf("  PC: 0x%08x\n", PC);
 	Printf("  X0: 0x%08x\n", REG[0]);
 	Printf("RAX1: 0x%08x\n", REG[1]);
