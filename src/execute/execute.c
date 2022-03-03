@@ -154,7 +154,7 @@ void addInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -171,7 +171,7 @@ void subInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -188,7 +188,7 @@ void andInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -205,7 +205,7 @@ void orInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -222,7 +222,7 @@ void xorInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -239,7 +239,7 @@ void sltInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -260,7 +260,7 @@ void sltuInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -288,7 +288,7 @@ void sllInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -307,7 +307,7 @@ void srlInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -326,7 +326,7 @@ void sraInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -358,7 +358,7 @@ void lbInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -407,7 +407,7 @@ void lhInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -456,7 +456,7 @@ void lwInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -499,7 +499,7 @@ void lbuInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -542,7 +542,7 @@ void lhuInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -585,7 +585,7 @@ void addiInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -610,7 +610,7 @@ void slliInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -630,7 +630,7 @@ void sltiInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -659,7 +659,7 @@ void sltiuInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -695,7 +695,7 @@ void xoriInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -720,7 +720,7 @@ void oriInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -745,7 +745,7 @@ void andiInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -770,7 +770,7 @@ void srliInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -788,7 +788,7 @@ void sraiInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	
 	// If rd = reg[0], return, don't do anything
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		return;
 	}
@@ -830,7 +830,7 @@ void jalrInstruction(instruction_t decInstruction)
 	extendedImmediate = extendedImmediate & 0xFFFFFFFE; 
 	
 	// if rd = reg[0], don't store anything, but still change PC.
-	if (REG[decInstruction.rd] == 0)
+	if (decInstruction.rd == 0)
 	{
 		PC = REG[decInstruction.rs1] + extendedImmediate;
 	}
