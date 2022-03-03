@@ -12,7 +12,7 @@
  * @date Presented December 6th, 2021
  *
  * @author  Stephen Short   (steshort@pdx.edu)
- * @author  Drew Seidel (dseidel@pdx.edu)
+ * @author  Drew Seidel 	(dseidel@pdx.edu)
  * @author  Michael Weston  (miweston@pdx.edu)
  * @author  Braden Harwood  (bharwood@pdx.edu)
  *
