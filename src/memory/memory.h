@@ -26,10 +26,16 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include "../decode/decode.h"
+#include "../wrappers/wrappers.h"
+#include "../execute/execute.h"
+
 
 #define MAX_ARRAY 16384
 
 int32_t readMemory(int32_t memoryLocation);
+
+int32_t loadMemory(instruction_t decInstruction); 
 
 void writeMemory(int32_t memoryLocation, int32_t valueToWrite);
 #endif
