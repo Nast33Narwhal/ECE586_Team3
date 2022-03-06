@@ -22,6 +22,10 @@
 
 void executeInstruction(instruction_t decInstruction)
 {
+	#ifdef DEBUG
+	extern int32_t *REG;
+	#endif
+	
 	switch(decInstruction.instruction)
 	{
 		case ERROR:
@@ -72,14 +76,18 @@ void executeInstruction(instruction_t decInstruction)
 		case LHU:
 			lhuInstruction(decInstruction);
 			break;
-		*/
+		*/	
+		
 		case LB: 
 		case LH: 
 		case LW: 
 		case LBU: 
 		case LHU: 
 			registers_write(decInstruction.rd, loadMemory(decInstruction)); 
-			break; 
+			#ifdef DEBUG
+			Printf("Load = %s, rd = %d, rs1 = %d, imm = %d, rd = byte(mem[rs1/4+imm/4], imm%4) = %d", instructionEnumToStr(decInstruction.instruction), REG[decInstruction.rd], REG[decInstruction.rs1], decInstruction.immediate, loadMemory(decInstruction));
+			#endif
+			break; 	
 		case SB:
 			sbInstruction(decInstruction);
 			break;

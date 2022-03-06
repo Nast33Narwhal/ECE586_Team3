@@ -55,26 +55,18 @@ int32_t loadMemory(instruction_t decInstruction)
 
 	int32_t memoryLocation = (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4);
 
-
-	// Check for out of scope memory location
-	if (memoryLocation < 0)
-	{
-		Fprintf(stderr, "Error: readMemory seeking negative memory location: %d\n", memoryLocation);
-		exit(1);
-	}
-	if (memoryLocation > MAX_ARRAY)
-	{
-		Fprintf(stderr, "Error: readMemory seeking memory above maximum location: %d\n", memoryLocation);
-		exit(1);
-	}
+	#ifdef DEBUG
+	Printf("Memory Location: %d\n", memoryLocation); 
+	#endif
 
 	// Return 32 bit value from memory location
-	int32_t memoryLoaded = memory[memoryLocation];
-	int32_t nextMemoryLoaded = memory[memoryLocation+1]; 
+	int32_t memoryLoaded = readMemory(memoryLocation);
+	int32_t nextMemoryLoaded = readMemory(memoryLocation+1); 
 
 	// size correct byte select correct
 	// unsigned correct
 	int32_t finalMemory = memory_alignment_filter(decInstruction, memoryLoaded, nextMemoryLoaded);
+
 
 	// return word
 	return finalMemory;
@@ -87,12 +79,12 @@ void writeMemory(int32_t memoryLocation, int32_t valueToWrite)
 	// Check for out of scope memory location
 	if (memoryLocation < 0)
 	{
-		Fprintf(stderr, "Error: readMemory seeking negative memory location\n");
+		Fprintf(stderr, "Error: writeMemory seeking negative memory location\n");
 		exit(1);
 	}
 	if (memoryLocation > MAX_ARRAY)
 	{
-		Fprintf(stderr, "Error: readMemory seeking memory above maximum location.\n");
+		Fprintf(stderr, "Error: writeMemory seeking memory above maximum location.\n");
 		exit(1);
 	}
 
@@ -135,8 +127,9 @@ int32_t memory_alignment_filter(instruction_t decInstruction, int32_t memoryLoad
 		dataSize = 0x0000FFFF; 
 		unsigned_fetch = true; 
 		alignedMemory = align(dataSize, unsigned_fetch, memoryLoaded, nextMemoryLoaded, byteSelected); 
+		break; 
 	default:
-		Fprintf(stderr, "Error: Executing Instruction with no valid type instruction.\n");
+		Fprintf(stderr, "Error: Executing Load Instruction with no valid type instruction.\n");
 		break;
 	}
 
@@ -157,7 +150,7 @@ int32_t align(int32_t datasize, bool unsigned_fetch, int32_t memoryLoaded, int32
 		case 2:
 			temp_alignedMemory = (memoryLoaded & (datasize >> 16)) >> 16;
 			break;
-		case 3: // Happens on a boundary, need to grab the other 8 bits
+		case 3: // Happens on a boundary, need to grab the other bits
 			temp_alignedMemory = ((memoryLoaded & (datasize << 24)) >> 24) | ((nextMemoryLoaded & (datasize >> 8)) << 8);
 			break;
 		default:
@@ -179,7 +172,7 @@ int32_t align(int32_t datasize, bool unsigned_fetch, int32_t memoryLoaded, int32
 	   }
 	   else if (datasize == 0x0000FFFF)
 	   {
-		   msb = 0x00000080; 
+		   msb = 0x00008000; 
 	   }
 	   else
 	   {
@@ -189,10 +182,10 @@ int32_t align(int32_t datasize, bool unsigned_fetch, int32_t memoryLoaded, int32
 	   int32_t sign_extend = temp_alignedMemory & msb; 
 	   if (sign_extend > 0)
 	   {
-		   temp_alignedMemory = temp_alignedMemory & ~datasize; 
+		   temp_alignedMemory = temp_alignedMemory | ~datasize; 
 	   }	
 
-	   return datasize; 
+	   return temp_alignedMemory; 
 
    }
 

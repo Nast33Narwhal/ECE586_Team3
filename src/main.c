@@ -67,7 +67,8 @@ int32_t main(int32_t argc, char **argv)
 			break;
 		}
 		
-		
+	
+
 		//execute instruction
 		executeInstruction(decInstruction);
 
@@ -76,6 +77,12 @@ int32_t main(int32_t argc, char **argv)
 		Printf("\n\n\nInstruction Completed:\n"); 
 		printInstructionSimple(&decInstruction); 
 		printRegisters(); 
+		#endif
+
+		#ifdef VERBOSE
+		Printf("\nRegister States After Completion:"); 
+		printRegisters(); 
+		Printf("\n\n\n\n"); 
 		#endif
 		
 		PC += 4; // Should update PC when executing the instruction.
