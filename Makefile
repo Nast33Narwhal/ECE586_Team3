@@ -40,7 +40,11 @@ execute.o : src/execute/execute.c src/execute/execute.h
 
 # -DDEBUG will define DEBUG and recompile everything with DEBUG symbols enabled
 debug : $(OBJS)
-	$(CC) $(CFLAGS) -DDEBUG -DVERBOSE -o $(EXE) $(SRC)
+	$(CC) $(CFLAGS) -DDEBUG -o $(EXE) $(SRC)
+
+# -DDEBUG will define DEBUG and DVERBOSE and recompile everything with DEBUG and DVERBOSE symbols enabled
+verbose : $(OBJS)
+	$(CC) $(CFLAGS) -DDEBUG -DVERBOSE -o $(EXE) $(SRC)	
 
 # -DREGISTERS will define REGISTERS and recompile everything with REGISTERS symbols enabled
 registers : $(OBJS)
