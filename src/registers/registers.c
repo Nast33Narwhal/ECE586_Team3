@@ -42,3 +42,18 @@ registers_t *registers_init()
     
 }
 */
+
+void registers_write(uint8_t regNum, uint32_t data)
+{
+    extern int32_t *REG;
+    if (regNum > 31)
+    {
+        Fprintf(stderr, "ERROR in registers_write: Register number %d out of bounds.\n", regNum);
+        return;
+    }
+
+    if (regNum == 0)
+        return;
+
+    REG[regNum] = data;
+}

@@ -75,7 +75,19 @@ typedef struct {
  * @return	If sucsessful, SP, ZERO, and RA are initilized to zero
  */
 
-int32_t* registers_init(); 
+int32_t* registers_init();
+
+/**
+ * @fn         registers_write
+ * @brief      Writes data into a register
+ * 
+ * @details    Writes the provided data into the specified register in the provided
+ *             register file.
+ * @param      regNum    The number of the specific register to overwrite (0-31)
+ * @param      data      The data to write into the register.
+ * @note       Data is not sign extended within this method.
+ */
+void registers_write(uint8_t regNum, uint32_t data);
 
 
 #endif
