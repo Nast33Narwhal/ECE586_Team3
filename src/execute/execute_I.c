@@ -18,7 +18,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include "execute.h"
-#include "./registers/registers.h"
+#include "../registers/registers.h"
 
 // I Type Instructions
 void lbInstruction(instruction_t decInstruction)
@@ -287,9 +287,9 @@ void sltiuInstruction(instruction_t decInstruction)
 
 	//SLTIU instruction. NOTE TEST SLTIU rd, x0, imm sets rd to 1 if rs1 is equal to 0 and imm is equal to 1
 	if (((uint32_t)REG[decInstruction.rs1]) < ((uint32_t) extendedImmediate))
-		write_registers(decInstruction.rd, 1);
+		registers_write(decInstruction.rd, 1);
 	else
-		write_registers(decInstruction.rd, 0);
+		registers_write(decInstruction.rd, 0);
 
 	#ifdef DEBUG
 		Printf("SLTIU, rd = %d, rs1 = %d, (unsigned) signExtended(imm) = %u\n", REG[decInstruction.rd], REG[decInstruction.rs1], (uint32_t) extendedImmediate);
@@ -309,7 +309,7 @@ void xoriInstruction(instruction_t decInstruction)
 	}
 
 	//rd = rs1 ^ signExtend(imm);
-	write_registers(decInstruction.rd, REG[decInstruction.rs1] ^ extendedImmediate);
+	registers_write(decInstruction.rd, REG[decInstruction.rs1] ^ extendedImmediate);
 	#ifdef DEBUG
 		Printf("Xori Instruction, rd = rs1 ^ signExtended(imm) = %d ^ %d = %d\n", REG[decInstruction.rs1], extendedImmediate, REG[decInstruction.rs1] ^ extendedImmediate);
 	#endif
@@ -328,7 +328,7 @@ void oriInstruction(instruction_t decInstruction)
 	}
 
 	// rd = rs1 | rs2;
-	write_registers(decInstruction.rd, REG[decInstruction.rs1] | extendedImmediate);
+	registers_write(decInstruction.rd, REG[decInstruction.rs1] | extendedImmediate);
 	#ifdef DEBUG
 		Printf("Ori Instruction, rd = rs1 | signExtended(imm) = %d | %d = %d\n", REG[decInstruction.rs1], extendedImmediate, REG[decInstruction.rs1] | extendedImmediate);
 	#endif
@@ -347,7 +347,7 @@ void andiInstruction(instruction_t decInstruction)
 	}
 
 	//rd = rs1 & rs2;
-	write_registers(decInstruction.rd, REG[decInstruction.rs1] & extendedImmediate);
+	registers_write(decInstruction.rd, REG[decInstruction.rs1] & extendedImmediate);
 	#ifdef DEBUG
 		Printf("Andi Instruction, rd = rs1 & signExtended(imm) = %d & %d = %d\n", REG[decInstruction.rs1], extendedImmediate, REG[decInstruction.rs1] & extendedImmediate);
 	#endif
@@ -357,7 +357,7 @@ void srliInstruction(instruction_t decInstruction)
 {
 	extern int32_t *REG;
 
-	write_registers(decInstruction.rd, REG[decInstruction.rs1] >> (decInstruction.immediate & 0x1F));
+	registers_write(decInstruction.rd, REG[decInstruction.rs1] >> (decInstruction.immediate & 0x1F));
 
 	#ifdef DEBUG
 		Printf("SRLI, rd = %d, rs1 = %d, imm & 0x1F = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], decInstruction.immediate & 0x1F);
@@ -378,11 +378,11 @@ void sraiInstruction(instruction_t decInstruction)
 		{
 			result = (result >> 1) | msb; // Shift once and OR in the 1 to the MSB
 		}
-		write_registers(decInstruction.rd, result);
+		registers_write(decInstruction.rd, result);
 	}
 	else
 	{
-		write_registers(decInstruction.rd, REG[decInstruction.rs1] >> (decInstruction.immediate & 0x1F));
+		registers_write(decInstruction.rd, REG[decInstruction.rs1] >> (decInstruction.immediate & 0x1F));
 	}
 	#ifdef DEBUG
 		Printf("SRAI, rd = %d, rs1 = %d, imm & 0x1F = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], decInstruction.immediate & 0x1F);
@@ -406,7 +406,7 @@ void jalrInstruction(instruction_t decInstruction)
 	extendedImmediate = extendedImmediate & 0xFFFFFFFE;
 
 	// Store return address in rd
-	write_registers(decInstruction.rd, PC + 4);
+	registers_write(decInstruction.rd, PC + 4);
 	PC = ((uint32_t) (REG[decInstruction.rs1] + extendedImmediate)) - 4;
 
 	#ifdef DEBUG

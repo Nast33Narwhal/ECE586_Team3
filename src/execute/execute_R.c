@@ -18,7 +18,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include "execute.h"
-#include "./registers/registers.h"
+#include "../registers/registers.h"
 
 // R Type Instructions
 void addInstruction(instruction_t decInstruction)
