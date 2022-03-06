@@ -67,8 +67,16 @@ int32_t main(int32_t argc, char **argv)
 			break;
 		}
 		
+		
 		//execute instruction
 		executeInstruction(decInstruction);
+
+
+		#ifdef REGISTERS
+		Printf("\n\n\nInstruction Completed:\n"); 
+		printInstructionSimple(&decInstruction); 
+		printRegisters(); 
+		#endif
 		
 		PC += 4; // Should update PC when executing the instruction.
 	}
@@ -183,40 +191,6 @@ char *parseArgs(int32_t argc, char **argv)
 
 void printRegisters(){
 
-	/*Printf(" X0: 0x%08x\n", registers->zero);
-	Printf(" PC: 0x%08x\n", registers->pc);
-	Printf(" RA: 0x%08x\n", registers->ra);
-	Printf(" SP: 0x%08x\n", registers->sp);
-	Printf(" GP: 0x%08x\n", registers->gp);
-	Printf(" TP: 0x%08x\n", registers->tp);
-	Printf(" T0: 0x%08x\n", registers->t0);
-	Printf(" T1: 0x%08x\n", registers->t1);
-	Printf(" T2: 0x%08x\n", registers->t2);
-	Printf(" T3: 0x%08x\n", registers->t3);
-	Printf(" T4: 0x%08x\n", registers->t4);
-	Printf(" T5: 0x%08x\n", registers->t5);
-	Printf(" T6: 0x%08x\n", registers->t6);
-	Printf(" S0: 0x%08x\n", registers->s0);
-	Printf(" S1: 0x%08x\n", registers->s1);
-	Printf(" S2: 0x%08x\n", registers->s2);
-	Printf(" S3: 0x%08x\n", registers->s3);
-	Printf(" S4: 0x%08x\n", registers->s4);
-	Printf(" S5: 0x%08x\n", registers->s5);
-	Printf(" S6: 0x%08x\n", registers->s6);
-	Printf(" S7: 0x%08x\n", registers->s7);
-	Printf(" S8: 0x%08x\n", registers->s8);
-	Printf(" S9: 0x%08x\n", registers->s9);
-	Printf("S10: 0x%08x\n", registers->s10);
-	Printf("S11: 0x%08x\n", registers->s11);
-	Printf(" A0: 0x%08x\n", registers->a0);
-	Printf(" A1: 0x%08x\n", registers->a1);
-	Printf(" A2: 0x%08x\n", registers->a2);
-	Printf(" A3: 0x%08x\n", registers->a3);
-	Printf(" A4: 0x%08x\n", registers->a4);
-	Printf(" A5: 0x%08x\n", registers->a5);
-	Printf(" A6: 0x%08x\n", registers->a6);
-	Printf(" A7: 0x%08x\n", registers->a7);
-	*/
 	Printf("\n");
 	Printf("  PC: 0x%08x\n", PC);
 	Printf("  X0: 0x%08x\n", REG[0]);

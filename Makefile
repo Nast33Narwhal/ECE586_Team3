@@ -42,6 +42,11 @@ execute.o : src/execute/execute.c src/execute/execute.h
 debug : $(OBJS)
 	$(CC) $(CFLAGS) -DDEBUG -DVERBOSE -o $(EXE) $(SRC)
 
+# -DREGISTERS will define REGISTERS and recompile everything with REGISTERS symbols enabled
+registers : $(OBJS)
+	$(CC) $(CFLAGS) -DREGISTERS -o $(EXE) $(SRC)
+
+
 
 
 #.PHONY to inform Make to not associate clean with a file named clean

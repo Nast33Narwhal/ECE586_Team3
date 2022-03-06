@@ -376,7 +376,7 @@ void errorTypeDecode(void)
 void printInstructionSimple(instruction_t *decInstruction)
 {
 	extern uint32_t PC;
-	Printf("PC = 0x%.8X, Instruction = %s\n", PC, instructionEnumToStr(decInstruction->instruction));
+	Printf("PC = 0x%.8X, Instruction = %s\nrs1 = %d, rs2 = %d, Rd = %d, immediate = %d\n", PC, instructionEnumToStr(decInstruction->instruction), decInstruction->rs1, decInstruction->rs2, decInstruction->rd, decInstruction->immediate);
 }
 
 void printInstruction(instruction_t *decInstruction)

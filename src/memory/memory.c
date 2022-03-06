@@ -34,12 +34,12 @@ int32_t readMemory(int32_t memoryLocation)
 	// Check for out of scope memory location
 	if (memoryLocation < 0)
 	{
-		Fprintf(stderr, "Error: readMemory seeking negative memory location\n");
+		Fprintf(stderr, "Error: readMemory seeking negative memory location: %d\n", memoryLocation);
 		exit(1);
 	}
 	if (memoryLocation > MAX_ARRAY)
 	{
-		Fprintf(stderr, "Error: readMemory seeking memory above maximum location.\n");
+		Fprintf(stderr, "Error: readMemory seeking memory above maximum location: %d.\n", memoryLocation);
 		exit(1);
 	}
 	
@@ -59,12 +59,12 @@ int32_t loadMemory(instruction_t decInstruction)
 	// Check for out of scope memory location
 	if (memoryLocation < 0)
 	{
-		Fprintf(stderr, "Error: readMemory seeking negative memory location\n");
+		Fprintf(stderr, "Error: readMemory seeking negative memory location: %d\n", memoryLocation);
 		exit(1);
 	}
 	if (memoryLocation > MAX_ARRAY)
 	{
-		Fprintf(stderr, "Error: readMemory seeking memory above maximum location.\n");
+		Fprintf(stderr, "Error: readMemory seeking memory above maximum location: %d\n", memoryLocation);
 		exit(1);
 	}
 	
