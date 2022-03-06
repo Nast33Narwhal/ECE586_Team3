@@ -18,6 +18,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include "execute.h"
+#include "../registers/registers.h"
 
 void executeInstruction(instruction_t decInstruction)
 {
@@ -56,7 +57,7 @@ void executeInstruction(instruction_t decInstruction)
 		case BGEU:
 			bgeuInstruction(decInstruction);
 			break;
-		case LB:
+		/*case LB:
 			lbInstruction(decInstruction);
 			break;
 		case LH:
@@ -71,6 +72,14 @@ void executeInstruction(instruction_t decInstruction)
 		case LHU:
 			lhuInstruction(decInstruction);
 			break;
+		*/
+		case LB: 
+		case LH: 
+		case LW: 
+		case LBU: 
+		case LHU: 
+			registers_write(decInstruction.rd, loadMemory(decInstruction)); 
+			break; 
 		case SB:
 			sbInstruction(decInstruction);
 			break;
