@@ -8,6 +8,7 @@
  *
  * @author Braden Harwood (bharwood@pdx.edu)
  * @author Drew Seidel (dseidel@pdx.edu)
+ * @author Stephen Short (steshort@pdx.edu)
  *
  */
 
@@ -148,6 +149,12 @@ void executeInstruction(instruction_t decInstruction)
 	}
 }
 
+#include "execute_BJ.c"
+#include "execute_I.c"
+#include "execute_R.c"
+#include "execute_SU.c"
+
+/*
 // R Type Instructions
 void addInstruction(instruction_t decInstruction)
 {
@@ -1225,3 +1232,4 @@ void jalInstruction(instruction_t decInstruction)
 	#endif
 }
 // END J Type Instructions
+*/

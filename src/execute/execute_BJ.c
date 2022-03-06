@@ -8,6 +8,7 @@
  *
  * @author Braden Harwood (bharwood@pdx.edu)
  * @author Drew Seidel (dseidel@pdx.edu)
+ * @author Stephen Short (steshort@pdx.edu)
  *
  */
 
@@ -17,6 +18,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include "execute.h"
+#include "../registers/registers.h"
 
 // B Type Instructions
 void beqInstruction(instruction_t decInstruction)
@@ -182,16 +184,9 @@ void jalInstruction(instruction_t decInstruction)
 		Fprintf(stderr, "Error: jalInstruction has a destination for the PC which is not 4-byte aligned\n");
 	}
 	
-	// if rd = reg[0], don't store anything, but still change PC.
-	if (decInstruction.rd == 0)
-	{
-		PC = ((uint32_t) (REG[decInstruction.rs1] + extendedImmediate)) - 4;
-	}
-	else
-	{
-		REG[decInstruction.rd] = PC + 4;
-		PC = ((uint32_t) (REG[decInstruction.rs1] + extendedImmediate)) - 4;
-	}
+	registers_write(decInstruction.rd, PC + 4);
+	PC = ((uint32_t) (REG[decInstruction.rs1] + extendedImmediate)) - 4;
+
 	#ifdef DEBUG
 		Printf("JAL, rd = %d, signExtend(imm) = %d, PC = %u\n", REG[decInstruction.rd], extendedImmediate, PC);
 	#endif

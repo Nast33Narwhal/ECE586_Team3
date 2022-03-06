@@ -8,6 +8,7 @@
  *
  * @author Braden Harwood (bharwood@pdx.edu)
  * @author Drew Seidel (dseidel@pdx.edu)
+ * @author Stephen Short (steshort@pdx.edu)
  *
  */
 
@@ -17,6 +18,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include "execute.h"
+#include "../registers/registers.h"
 
 // S Type Instructions
 void sbInstruction(instruction_t decInstruction)
@@ -153,14 +155,7 @@ void auipcInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	extern uint32_t PC;
 
-	// If rd = reg[0], return, don't do anything
-	if (decInstruction.rd == 0)
-	{
-		Fprintf(stderr, "decInstruction.rd == 0\n");
-		return;
-	}
-
-	REG[decInstruction.rd] = PC + decInstruction.immediate;
+	registers_write(decInstruction.rd, PC + decInstruction.immediate);
 	#ifdef DEBUG
 		Printf("auipc Instruction, rd = pc + immediate = %d + %d = %d\n", PC, decInstruction.immediate, PC + decInstruction.immediate);
 	#endif
@@ -170,14 +165,7 @@ void luiInstruction(instruction_t decInstruction)
 {
 	extern int32_t *REG;
 
-	// If rd = reg[0], return, don't do anything
-	if (decInstruction.rd == 0)
-	{
-		Fprintf(stderr, "decInstruction.rd == 0\n");
-		return;
-	}
-
-	REG[decInstruction.rd] = decInstruction.immediate;
+	registers_write(decInstruction.rd, decInstruction.immediate);
 	#ifdef DEBUG
 		Printf("lui Instruction, rd = immediate = %d\n", decInstruction.immediate);
 	#endif
