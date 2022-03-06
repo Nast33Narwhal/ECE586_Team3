@@ -55,9 +55,7 @@ int32_t loadMemory(instruction_t decInstruction)
 
 	int32_t memoryLocation = (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4);
 
-	#ifdef DEBUG
-	Printf("Memory Location: %d\n", memoryLocation); 
-	#endif
+	
 
 	// Return 32 bit value from memory location
 	int32_t memoryLoaded = readMemory(memoryLocation);
@@ -66,7 +64,6 @@ int32_t loadMemory(instruction_t decInstruction)
 	// size correct byte select correct
 	// unsigned correct
 	int32_t finalMemory = memory_alignment_filter(decInstruction, memoryLoaded, nextMemoryLoaded);
-
 
 	// return word
 	return finalMemory;
@@ -133,6 +130,8 @@ int32_t memory_alignment_filter(instruction_t decInstruction, int32_t memoryLoad
 		break;
 	}
 
+	 
+
 	return alignedMemory; 
 }
 
@@ -145,10 +144,10 @@ int32_t align(int32_t datasize, bool unsigned_fetch, int32_t memoryLoaded, int32
 			temp_alignedMemory = (memoryLoaded & datasize);
 			break;
 		case 1:
-			temp_alignedMemory = (memoryLoaded & (datasize >> 8)) >>  8;
+			temp_alignedMemory = (memoryLoaded & (datasize << 8)) >>  8;
 			break;
 		case 2:
-			temp_alignedMemory = (memoryLoaded & (datasize >> 16)) >> 16;
+			temp_alignedMemory = (memoryLoaded & (datasize << 16)) >> 16;
 			break;
 		case 3: // Happens on a boundary, need to grab the other bits
 			temp_alignedMemory = ((memoryLoaded & (datasize << 24)) >> 24) | ((nextMemoryLoaded & (datasize >> 8)) << 8);
@@ -185,6 +184,7 @@ int32_t align(int32_t datasize, bool unsigned_fetch, int32_t memoryLoaded, int32
 		   temp_alignedMemory = temp_alignedMemory | ~datasize; 
 	   }	
 
+		
 	   return temp_alignedMemory; 
 
    }
