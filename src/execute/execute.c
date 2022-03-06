@@ -24,6 +24,7 @@ void executeInstruction(instruction_t decInstruction)
 {
 	#ifdef DEBUG
 	extern int32_t *REG;
+	int memoryToLoad = loadMemory(decInstruction);
 	#endif
 	
 	switch(decInstruction.instruction)
@@ -82,10 +83,10 @@ void executeInstruction(instruction_t decInstruction)
 		case LH: 
 		case LW: 
 		case LBU: 
-		case LHU: 
+		case LHU:  
 			registers_write(decInstruction.rd, loadMemory(decInstruction)); 
 			#ifdef DEBUG
-			Printf("Load = %s, rd = %d, rs1 = %d, imm = %d, rd = byte(mem[rs1/4+imm/4], imm%4) = %d", instructionEnumToStr(decInstruction.instruction), REG[decInstruction.rd], REG[decInstruction.rs1], decInstruction.immediate, loadMemory(decInstruction));
+			Printf("Load = %s, rd = %d, rs1 = %d, imm = %d, rd = byte(mem[rs1/4+imm/4], imm mod 4 = %d) = %d", instructionEnumToStr(decInstruction.instruction), REG[decInstruction.rd], REG[decInstruction.rs1], decInstruction.immediate, decInstruction.immediate % 4, memoryToLoad);
 			#endif
 			break; 	
 		case SB:
