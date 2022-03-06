@@ -19,6 +19,12 @@ int32_t* registers_init(){
     REG[1] = 0x00000000;    //Return address 
     REG[2] = stackAddress;  //SP
 
+    #ifdef DEBUG
+    for (int i = 3; i < 32; i++){
+        REG[i] = 0; 
+    }
+    #endif
+
     return REG; 
 
 }
