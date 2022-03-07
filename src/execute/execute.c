@@ -110,7 +110,7 @@ void executeInstruction(instruction_t decInstruction)
 			#endif	
 			storeMemory(decInstruction); 
 			#ifdef DEBUG
-			Printf("Store = %s, rs1(base) = %d, rs2 (value to store) = %x, imm = %d\n", instructionEnumToStr(decInstruction.instruction), REG[decInstruction.rs1], REG[decInstruction.rs2], decInstruction.immediate);
+			Printf("Store = %s, rs1(base) = %d, rs2 (value to store) = 0x%x, imm = %d\n", instructionEnumToStr(decInstruction.instruction), REG[decInstruction.rs1], REG[decInstruction.rs2], decInstruction.immediate);
 			Printf("After: Memory[%d] = 0x%08x\n", (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), readMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4))); 
 			Printf("After: Memory[%d] = 0x%08x\n", ((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)+1), readMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)+1)); 
 			#endif	
