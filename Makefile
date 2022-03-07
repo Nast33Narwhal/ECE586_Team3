@@ -4,8 +4,8 @@
 
 CC = gcc
 CFLAGS = -Wall -std=c99 -g
-OBJS = main.o wrappers.o registers.o decode.o parser.o memory.o execute.o
-SRC = src/main.c src/wrappers/wrappers.c src/registers/registers.c src/decode/decode.c src/parser/parser.c src/memory/memory.c src/execute/execute.c
+OBJS = main.o wrappers.o registers.o decode.o parser.o memory.o execute.o execute_R.o execute_I.o execute_SU.o execute_BJ.o
+SRC = src/main.c src/wrappers/wrappers.c src/registers/registers.c src/decode/decode.c src/parser/parser.c src/memory/memory.c src/execute/execute.c src/execute/execute_R.c src/execute/execute_I.c src/execute/execute_SU.c src/execute/execute_BJ.c 
 HDRS = src/wrappers/wrappers.h src/registers/registers.h src/decode/decode.h src/parser/parser.h src/memory/memory.h src/execute/execute.h
 EXE  = sim.exe
 
@@ -35,21 +35,24 @@ decode.o : src/decode/decode.c src/decode/decode.h
 memory.o : src/memory/memory.c src/memory/memory.h
 	$(CC) $(CFLAGS) -c src/memory/memory.c
 	
-execute.o : src/execute/execute.c src/execute/execute.h 
+execute.o : src/execute/execute.c  src/execute/execute.h 
 	$(CC) $(CFLAGS) -c src/execute/execute.c 
+				
+execute_R.o : src/execute/execute_R.c  src/execute/execute.h 
+	$(CC) $(CFLAGS) -c src/execute/execute.c
+
+execute_I.o : src/execute/execute_I.c  src/execute/execute.h 
+	$(CC) $(CFLAGS) -c src/execute/execute.c
+
+execute_SU.o : src/execute/execute_SU.c  src/execute/execute.h 
+	$(CC) $(CFLAGS) -c src/execute/execute.c
+
+execute_BJ.o : src/execute/execute_BJ.c  src/execute/execute.h 
+	$(CC) $(CFLAGS) -c src/execute/execute.c
 
 # -DDEBUG will define DEBUG and recompile everything with DEBUG symbols enabled
 debug : $(OBJS)
-	$(CC) $(CFLAGS) -DDEBUG -o $(EXE) $(SRC)
-
-# -DDEBUG will define DEBUG and DVERBOSE and recompile everything with DEBUG and DVERBOSE symbols enabled
-verbose : $(OBJS)
-	$(CC) $(CFLAGS) -DDEBUG -DVERBOSE -o $(EXE) $(SRC)	
-
-# -DREGISTERS will define REGISTERS and recompile everything with REGISTERS symbols enabled
-registers : $(OBJS)
-	$(CC) $(CFLAGS) -DREGISTERS -o $(EXE) $(SRC)
-
+	$(CC) $(CFLAGS) -DDEBUG -DVERBOSE -o $(EXE) $(SRC)
 
 
 
