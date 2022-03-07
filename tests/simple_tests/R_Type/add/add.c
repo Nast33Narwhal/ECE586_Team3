@@ -1,13 +1,15 @@
 #include <stdio.h>
+#include <stdint.h>
 
 int main(){
 
 //ADD tests
+//Test Upper and Lower register values
+int32_t a = 0x7FFFFFFF;
+int32_t b = 0x80000001;
+int32_t c = a + b;  // expected value of 0
 
-int a = 5; 
-int b = 6; 
-int c = a + b;  
-
+/*
 int d = -5; 
 int e = 6; 
 int f = d + e; 
@@ -21,8 +23,9 @@ long long int  z = x + y;
 x = -65; 
 y = -120; 
 int z1 = x + y; //test overflow
+*/
 
-//printf("c = %u, f = %u, j = %u z = %llu, z1 = %llu\n",c , f, j, z, z1); 
+//printf("b = %u, f = %u, j = %u z = %llu, z1 = %llu\n", b, f, j, z, z1); 
 
 return 0; 
 
