@@ -63,7 +63,7 @@ int32_t loadMemory(instruction_t decInstruction)
 
 	// size correct byte select correct
 	// unsigned correct
-	int32_t finalMemory = memory_alignment_filter(decInstruction, memoryLoaded, nextMemoryLoaded);
+	int32_t finalMemory = load_memory_alignment_filter(decInstruction, memoryLoaded, nextMemoryLoaded);
 
 	// return word
 	return finalMemory;
@@ -89,8 +89,32 @@ void writeMemory(int32_t memoryLocation, int32_t valueToWrite)
 	memory[memoryLocation] = valueToWrite;
 }
 
+void storeMemory(instruction_t decInstruction)
+{
+    extern int32_t *memory;
+    extern int32_t *REG;
 
-int32_t memory_alignment_filter(instruction_t decInstruction, int32_t memoryLoaded, int32_t nextMemoryLoaded)
+    int32_t memoryLocation = (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4);
+
+    // Return 32 bit value from memory location
+    int32_t memoryLoaded = readMemory(memoryLocation);
+    int32_t nextMemoryLoaded = readMemory(memoryLocation + 1);
+    int32_t valueToStore = REG[decInstruction.rs2];
+
+    // size correct byte select correct
+    // unsigned correct
+
+    int32_t finalValueToStore = memoryLoaded;
+    int32_t next_finalValueToStore = nextMemoryLoaded;
+
+    store_memory_alignment_filter(decInstruction, &finalValueToStore, &next_finalValueToStore, valueToStore);
+
+    // return word
+    writeMemory(memoryLocation, finalValueToStore);
+    writeMemory(memoryLocation + 1, next_finalValueToStore);
+}
+
+int32_t load_memory_alignment_filter(instruction_t decInstruction, int32_t memoryLoaded, int32_t nextMemoryLoaded)
 {
 
 	int32_t dataSize = 0x00000000; 
@@ -103,27 +127,27 @@ int32_t memory_alignment_filter(instruction_t decInstruction, int32_t memoryLoad
 	case LB:
 		dataSize = 0x000000FF; 
 		unsigned_fetch = false; 
-		alignedMemory = align(dataSize, unsigned_fetch, memoryLoaded, nextMemoryLoaded, byteSelected); 
+		alignedMemory = load_align(dataSize, unsigned_fetch, memoryLoaded, nextMemoryLoaded, byteSelected); 
 		break;
 	case LH:
 		dataSize = 0x0000FFFF; 
 		unsigned_fetch = false; 
-		alignedMemory = align(dataSize, unsigned_fetch, memoryLoaded, nextMemoryLoaded, byteSelected); 
+		alignedMemory = load_align(dataSize, unsigned_fetch, memoryLoaded, nextMemoryLoaded, byteSelected); 
 		break;
 	case LW:
 		dataSize = 0xFFFFFFFF; 
 		unsigned_fetch = true; 
-		alignedMemory = align(dataSize, unsigned_fetch, memoryLoaded, nextMemoryLoaded, byteSelected); 
+		alignedMemory = load_align(dataSize, unsigned_fetch, memoryLoaded, nextMemoryLoaded, byteSelected); 
 		break;
 	case LBU:
 		dataSize = 0x000000FF; 
 		unsigned_fetch = true; 
-		alignedMemory = align(dataSize, unsigned_fetch, memoryLoaded, nextMemoryLoaded, byteSelected); 
+		alignedMemory = load_align(dataSize, unsigned_fetch, memoryLoaded, nextMemoryLoaded, byteSelected); 
 		break;
 	case LHU:
 		dataSize = 0x0000FFFF; 
 		unsigned_fetch = true; 
-		alignedMemory = align(dataSize, unsigned_fetch, memoryLoaded, nextMemoryLoaded, byteSelected); 
+		alignedMemory = load_align(dataSize, unsigned_fetch, memoryLoaded, nextMemoryLoaded, byteSelected); 
 		break; 
 	default:
 		Fprintf(stderr, "Error: Executing Load Instruction with no valid type instruction.\n");
@@ -135,7 +159,7 @@ int32_t memory_alignment_filter(instruction_t decInstruction, int32_t memoryLoad
 	return alignedMemory; 
 }
 
-int32_t align(int32_t datasize, bool unsigned_fetch, int32_t memoryLoaded, int32_t nextMemoryLoaded, int32_t byteSelected)
+int32_t load_align(int32_t datasize, bool unsigned_fetch, int32_t memoryLoaded, int32_t nextMemoryLoaded, int32_t byteSelected)
 {
 	int32_t temp_alignedMemory; 
 	switch(byteSelected)
@@ -188,5 +212,52 @@ int32_t align(int32_t datasize, bool unsigned_fetch, int32_t memoryLoaded, int32
 	   return temp_alignedMemory; 
 
    }
+
+}
+
+void store_memory_alignment_filter(instruction_t decInstruction, int32_t *finalValueToStore, int32_t *next_finalValueToStore, int32_t valueToStore)
+{
+
+    int32_t dataSize = 0x00000000;
+    int32_t byteSelected = decInstruction.immediate % 4;
+
+    switch (decInstruction.instruction)
+    {
+    case SB:
+        dataSize = 0x000000FF;
+        break;
+    case SH:
+        dataSize = 0x0000FFFF;
+        break;
+    case SW:
+        dataSize = 0xFFFFFFFF;
+        break;
+    default:
+        Fprintf(stderr, "Error: Executing Store Instruction with no valid type instruction.\n");
+        break;
+    }
+
+    valueToStore = valueToStore & dataSize; 
+    switch (byteSelected)
+    {
+    case 0:
+        *finalValueToStore = (*finalValueToStore & ~dataSize) | valueToStore;
+        break;
+    case 1:
+        *finalValueToStore = (*finalValueToStore & ~(dataSize << 8)) | (valueToStore << 8);
+        *next_finalValueToStore = (*next_finalValueToStore & ~(dataSize >> 24)) | (valueToStore >> 24);
+        break;
+    case 2:
+        *finalValueToStore = (*finalValueToStore & ~(dataSize << 16)) | (valueToStore << 16);
+        *next_finalValueToStore = (*next_finalValueToStore & ~(dataSize >> 16)) | (valueToStore >> 16);
+        break;
+    case 3:
+        *finalValueToStore = (*finalValueToStore & ~(dataSize << 24)) | (valueToStore << 24);
+        *next_finalValueToStore = (*next_finalValueToStore & ~(dataSize >> 8)) | (valueToStore >> 8);
+        break;
+    default:
+        Fprintf(stderr, "Error: Executing Store Instruction With No Valid Byte Select.\n");
+        break;
+    }
 
 }

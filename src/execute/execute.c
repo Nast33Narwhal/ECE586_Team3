@@ -24,7 +24,7 @@ void executeInstruction(instruction_t decInstruction)
 {
 	#ifdef DEBUG
 	extern int32_t *REG;
-	int memoryToLoad = loadMemory(decInstruction);
+	int memoryToLoad = 0; 
 	#endif
 	
 	switch(decInstruction.instruction)
@@ -86,10 +86,12 @@ void executeInstruction(instruction_t decInstruction)
 		case LHU:  
 			registers_write(decInstruction.rd, loadMemory(decInstruction)); 
 			#ifdef DEBUG
+			memoryToLoad = loadMemory(decInstruction);
 			Printf("Load = %s, rd = %d, rs1 = %d, imm = %d, rd = byte(mem[rs1/4+imm/4], imm mod 4 = %d) = %d", instructionEnumToStr(decInstruction.instruction), REG[decInstruction.rd], REG[decInstruction.rs1], decInstruction.immediate, decInstruction.immediate % 4, memoryToLoad);
 			#endif
 			break; 	
-		case SB:
+		
+		/*case SB:
 			sbInstruction(decInstruction);
 			break;
 		case SH:
@@ -98,6 +100,21 @@ void executeInstruction(instruction_t decInstruction)
 		case SW:
 			swInstruction(decInstruction);
 			break;
+		*/
+		case SB: 
+		case SH: 
+		case SW: 
+			#ifdef DEBUG
+			Printf("Before: Memory[%d] = 0x%08x\n", (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), readMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4))); 
+			Printf("Before: Memory[%d] = 0x%08x\n", ((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)+1), readMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)+1)); 
+			#endif	
+			storeMemory(decInstruction); 
+			#ifdef DEBUG
+			Printf("Store = %s, rs1(base) = %d, rs2 (value to store) = %x, imm = %d\n", instructionEnumToStr(decInstruction.instruction), REG[decInstruction.rs1], REG[decInstruction.rs2], decInstruction.immediate);
+			Printf("After: Memory[%d] = 0x%08x\n", (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), readMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4))); 
+			Printf("After: Memory[%d] = 0x%08x\n", ((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)+1), readMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)+1)); 
+			#endif	
+			break; 
 		case ADDI:
 			addiInstruction(decInstruction);
 			break;

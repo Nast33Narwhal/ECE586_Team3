@@ -41,10 +41,17 @@ int32_t loadMemory(instruction_t decInstruction);
 void writeMemory(int32_t memoryLocation, int32_t valueToWrite);
 
 //todo write function header
-int32_t memory_alignment_filter(instruction_t decInstruction, int32_t memoryLoaded, int32_t nextMemoryLoaded); 
+int32_t load_memory_alignment_filter(instruction_t decInstruction, int32_t memoryLoaded, int32_t nextMemoryLoaded); 
 
 //to do write function header 
-int32_t align(int32_t datasize, bool unsigned_fetch, int32_t memoryLoaded, int32_t nextMemoryLoaded, int32_t byteSelected); 
+int32_t load_align(int32_t datasize, bool unsigned_fetch, int32_t memoryLoaded, int32_t nextMemoryLoaded, int32_t byteSelected); 
+
+
+//to do write function header 
+void storeMemory(instruction_t decInstruction); 
+
+//to do write function header
+void store_memory_alignment_filter(instruction_t decInstruction, int32_t *finalValueToStore, int32_t *next_finalValueToStore, int32_t valueToStore); 
 
 
 #endif
