@@ -29,6 +29,6 @@
 
 #define MAX_ARRAY 16384
 
-int32_t* parseMemFile(char *fileName); 
+void parseMemFile(char *fileName); 
 
 #endif

@@ -8,6 +8,7 @@
  *
  * @author Braden Harwood (bharwood@pdx.edu)
  * @author Drew Seidel    (dseidel@pdx.edu)
+ * @author Stephen Short  (steshort@pdx.edu)
  *
  */
 
@@ -541,16 +542,14 @@ void ecallInstruction(instruction_t decInstruction);
  */
 void ebreakInstruction(instruction_t decInstruction);
 
-
 /**
- * @fn TODO
- * @brief TODO
+ * @fn      TODO
+ * @brief   TODO
  *
- * @detail TODO
+ * @details TODO
  *
- * @param TODO
+ * @param   TODO
  * @returns TODO
- *
  */
 
 #endif

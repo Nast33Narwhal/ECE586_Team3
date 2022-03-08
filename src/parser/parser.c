@@ -25,12 +25,13 @@
 #include <stdbool.h>
 #include "parser.h"
 #include "../wrappers/wrappers.h"
+#include "../memory/memory.h"
 
 #define MAX_LINE_SIZE 128
 
 int32_t memory_size;  
 
-int* parseMemFile(char *fileName){ 
+void parseMemFile(char *fileName){ 
 
 	FILE *fp; 
 	fp = Fopen(fileName, "r"); 
@@ -43,24 +44,18 @@ int* parseMemFile(char *fileName){
 	int32_t i = 0; 
 	uint32_t address; 
 	uint32_t address_contents; 
-    int32_t *memory = Malloc(sizeof(int) * MAX_ARRAY); //initially allocate 64KiB
 
 	
 	while ((fgets(line, MAX_LINE_SIZE, fp) != NULL))
 	{
-		sscanf(line, " %x: %x\n", &address, &address_contents); 
-		memory[address/4] = address_contents; 
+		sscanf(line, " %x: %x\n", &address, &address_contents);
+		writeMemory((unsigned)(address/4), (int32_t)address_contents);
 		
 		#ifdef DEBUG
 			Fprintf(outFile, "%4x:    %08x\n", address, address_contents);
 		#endif
 		
 		i++; 
-		if (i > MAX_ARRAY)
-		{
-			Printf("Error. Memory file bigger than 64KB\n"); 
-			exit(-1);
-		}
 	}
 	
 	memory_size = i; 
@@ -71,7 +66,4 @@ int* parseMemFile(char *fileName){
 	#ifdef DEBUG
 		Fclose(outFile);
 	#endif
-	
-
-    return memory; 
 }

@@ -18,7 +18,6 @@
 #ifndef _MEMORY_H
 #define _MEMORY_H
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,28 +29,40 @@
 #include "../wrappers/wrappers.h"
 #include "../execute/execute.h"
 
+/**
+ * @fn      mem_init()
+ * @brief   Initializes the system memory for the simulator
+ * 
+ * @param   maxSize Maximum number of 32 bit words the memory can contain
+ * @param   usrCmds If true, also initializes breakpoints and watchpoints for
+ *                  memory locations
+ */
+void mem_init(unsigned maxSize, bool usrCmds);
 
-#define MAX_ARRAY 16384
+/**
+ * @fn      mem_deinit()
+ * @brief   Frees allocated memory
+ */
+void mem_deinit(void);
 
-int32_t readMemory(int32_t memoryLocation);
+int32_t readMemory(unsigned memoryLocation);
 
-//to do write function header 
-int32_t loadMemory(instruction_t decInstruction); 
+void writeMemory(unsigned memoryLocation, int32_t valueToWrite);
 
-void writeMemory(int32_t memoryLocation, int32_t valueToWrite);
+/**
+ * @fn      writeMemoryMasked
+ * @brief   Overwrites the masked bits at an address with the provided bits
+ * 
+ * @param memoryLocation Word address to write to
+ * @param valueToWrite   Value to be masked and then written
+ * @param mask           Mask denoting bits in memory word that will be overwritten
+ */
+void writeMemoryMasked(unsigned memoryLocation, int32_t valueToWrite, uint32_t mask);
 
-//todo write function header
-int32_t load_memory_alignment_filter(instruction_t decInstruction, int32_t memoryLoaded, int32_t nextMemoryLoaded); 
-
-//to do write function header 
-int32_t load_align(int32_t datasize, bool unsigned_fetch, int32_t memoryLoaded, int32_t nextMemoryLoaded, int32_t byteSelected); 
-
-
-//to do write function header 
-void storeMemory(instruction_t decInstruction); 
-
-//to do write function header
-void store_memory_alignment_filter(instruction_t decInstruction, int32_t *finalValueToStore, int32_t *next_finalValueToStore, int32_t valueToStore); 
-
+/**
+ * @fn      printMemory
+ * @brief   Prints entire memory contents to stdout
+ */
+void printMemory(void);
 
 #endif
