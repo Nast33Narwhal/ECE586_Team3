@@ -23,9 +23,6 @@ int32_t *REG;  //global array of registers
 bool usrCmds = false; //Flag to enable/disable user commands
 
 char *parseArgs(int32_t argc, char **argv);
-void printRegisters(); 
-void printMemory();
-
 
 int32_t main(int32_t argc, char **argv)
 {
@@ -195,41 +192,5 @@ char *parseArgs(int32_t argc, char **argv)
 
 
 
-void printRegisters(){
 
-	Printf("\n");
-	Printf("  PC: 0x%08x\n", PC);
-	Printf("  X0: 0x%08x\n", REG[0]);
-	Printf("RAX1: 0x%08x\n", REG[1]);
-	Printf("SPX2: 0x%08x\n", REG[2]);
-	Printf("  X3: 0x%08x\n", REG[3]);
-	Printf("  X4: 0x%08x\n", REG[4]);
-	Printf("  X5: 0x%08x\n", REG[5]);
-	Printf("  X6: 0x%08x\n", REG[6]);
-	Printf("  X7: 0x%08x\n", REG[7]);
-	Printf("  X8: 0x%08x\n", REG[8]);
-	Printf("  X9: 0x%08x\n", REG[9]);
-	Printf(" X10: 0x%08x\n", REG[10]);
-	Printf(" X11: 0x%08x\n", REG[11]);
-	Printf(" X12: 0x%08x\n", REG[12]);
-	Printf(" X13: 0x%08x\n", REG[13]);
-	Printf(" X14: 0x%08x\n", REG[14]);
-	Printf(" X15: 0x%08x\n", REG[15]);
-	Printf(" X16: 0x%08x\n", REG[16]);
-	Printf(" X17: 0x%08x\n", REG[17]);
-	Printf(" X18: 0x%08x\n", REG[18]);
-	Printf(" X19: 0x%08x\n", REG[19]);
-	Printf(" X20: 0x%08x\n", REG[20]);
-	Printf(" X21: 0x%08x\n", REG[21]);
-	Printf(" X22: 0x%08x\n", REG[22]);
-	Printf(" X23: 0x%08x\n", REG[23]);
-	Printf(" X24: 0x%08x\n", REG[24]);
-	Printf(" X25: 0x%08x\n", REG[25]);
-	Printf(" X26: 0x%08x\n", REG[26]);
-	Printf(" X27: 0x%08x\n", REG[27]);
-	Printf(" X28: 0x%08x\n", REG[28]);
-	Printf(" X29: 0x%08x\n", REG[29]);
-	Printf(" X30: 0x%08x\n", REG[30]);
-	Printf(" X31: 0x%08x\n", REG[31]);
-}
 

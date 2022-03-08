@@ -100,8 +100,31 @@ void writeMemoryMasked(unsigned memoryLocation, int32_t valueToWrite, uint32_t m
 
 void printMemory()
 {
+	uint32_t state = 0;
 	for(unsigned i = 0; i < memory.size; i++)
 	{
-		Printf("memory[0x%08X] = 0x%08x\n", i*4, memory.address[i].data);
+		if (memory.address[i].data != 0)
+		{
+			Printf("memory[0x%08X] = 0x%08x\n", i*4, memory.address[i].data);
+			state = 0;
+		}
+		else if ((memory.address[i].data == 0) && (state == 0))
+		{
+			Printf("memory[0x%08X] = 0x%08x\n", i*4, memory.address[i].data);
+			state = 1;
+		}
+		else if ((memory.address[i].data == 0) && (state == 1))
+		{
+			Printf("...\n");
+			state = 2;
+		}
+		else
+		{
+			// Do nothing unless we are at the end of the memory and last thing printed was ...
+			if(i == (memory.size-1))
+			{
+				Printf("memory[0x%08X] = 0x%08x\n", i*4, memory.address[i].data);
+			}
+		}
 	}
 }

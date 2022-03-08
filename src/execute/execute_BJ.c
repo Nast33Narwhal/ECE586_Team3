@@ -34,14 +34,14 @@ void beqInstruction(instruction_t decInstruction)
 		extendedOffset = extendedOffset | 0xFFFFF000;
 	}
 	
+	#ifdef DEBUG
+		Printf("beq Instruction, if (rs1 == rs2) PC = PC + signExtend(offset) - 4 = %u + %d - 4\n", PC, extendedOffset);
+	#endif
+	
 	if (REG[decInstruction.rs1] == REG[decInstruction.rs2])
 	{
 		PC = PC + extendedOffset - 4;
 	}
-	
-	#ifdef DEBUG
-		Printf("beq Instruction, if (rs1 == rs2) PC = PC + signExtend(offset) - 4 = %u + %d - 4\n", PC, extendedOffset);
-	#endif
 }
 
 void bneInstruction(instruction_t decInstruction)
@@ -57,14 +57,14 @@ void bneInstruction(instruction_t decInstruction)
 		extendedOffset = extendedOffset | 0xFFFFF000;
 	}
 	
-	if (REG[decInstruction.rs1] != REG[decInstruction.rs2])
-	{
-		PC = PC + extendedOffset - 4;
-	}
-	
 	#ifdef DEBUG
 		Printf("bne Instruction, if (rs1 != rs2) PC = PC + signExtend(offset) - 4 = %u + %d - 4\n", PC, extendedOffset);
 	#endif
+	
+	if (REG[decInstruction.rs1] != REG[decInstruction.rs2])
+	{
+		PC = PC + extendedOffset - 4;
+	}	
 }
 
 void bltInstruction(instruction_t decInstruction)
@@ -80,14 +80,14 @@ void bltInstruction(instruction_t decInstruction)
 		extendedOffset = extendedOffset | 0xFFFFF000;
 	}
 	
+	#ifdef DEBUG
+		Printf("blt Instruction, if (rs1 < rs2) PC = PC + signExtend(offset) - 4 = %u + %d - 4\n", PC, extendedOffset);
+	#endif
+	
 	if (REG[decInstruction.rs1] < REG[decInstruction.rs2])
 	{
 		PC = PC + extendedOffset - 4;
 	}
-	
-	#ifdef DEBUG
-		Printf("blt Instruction, if (rs1 < rs2) PC = PC + signExtend(offset) - 4 = %u + %d - 4\n", PC, extendedOffset);
-	#endif
 }
 
 void bgeInstruction(instruction_t decInstruction)
@@ -103,14 +103,14 @@ void bgeInstruction(instruction_t decInstruction)
 		extendedOffset = extendedOffset | 0xFFFFF000;
 	}
 	
+	#ifdef DEBUG
+		Printf("bge Instruction, if (rs1 >= rs2) PC = PC + signExtend(offset) - 4 = %u + %d - 4\n", PC, extendedOffset);
+	#endif
+	
 	if (REG[decInstruction.rs1] >= REG[decInstruction.rs2])
 	{
 		PC = PC + extendedOffset - 4;
 	}
-	
-	#ifdef DEBUG
-		Printf("bge Instruction, if (rs1 >= rs2) PC = PC + signExtend(offset) - 4 = %u + %d - 4\n", PC, extendedOffset);
-	#endif
 }
 
 void bltuInstruction(instruction_t decInstruction)
@@ -126,14 +126,14 @@ void bltuInstruction(instruction_t decInstruction)
 		extendedOffset = extendedOffset | 0xFFFFF000;
 	}
 	
+	#ifdef DEBUG
+		Printf("bltu Instruction, if (((unsigned) rs1) < ((unsigned) rs2)) PC = PC + signExtend(offset) - 4 = %u + %d - 4\n", PC, extendedOffset);
+	#endif
+	
 	if (((unsigned) REG[decInstruction.rs1]) < ((unsigned) REG[decInstruction.rs2]))
 	{
 		PC = PC + extendedOffset - 4;
 	}
-	
-	#ifdef DEBUG
-		Printf("bltu Instruction, if (((unsigned) rs1) < ((unsigned) rs2)) PC = PC + signExtend(offset) - 4 = %u + %d - 4\n", PC, extendedOffset);
-	#endif
 }
 
 void bgeuInstruction(instruction_t decInstruction)
@@ -149,14 +149,14 @@ void bgeuInstruction(instruction_t decInstruction)
 		extendedOffset = extendedOffset | 0xFFFFF000;
 	}
 	
+	#ifdef DEBUG
+		Printf("bgeu Instruction, if (((unsigned) rs1) >= ((unsigned) rs2)) PC = PC + signExtend(offset) - 4 = %u + %d - 4\n", PC, extendedOffset);
+	#endif
+	
 	if (((unsigned) REG[decInstruction.rs1]) >= ((unsigned) REG[decInstruction.rs2]))
 	{
 		PC = PC + extendedOffset - 4;
 	}
-	
-	#ifdef DEBUG
-		Printf("bgeu Instruction, if (((unsigned) rs1) >= ((unsigned) rs2)) PC = PC + signExtend(offset) - 4 = %u + %d - 4\n", PC, extendedOffset);
-	#endif
 }
 // END B Type Instructions
 
@@ -184,11 +184,11 @@ void jalInstruction(instruction_t decInstruction)
 		Fprintf(stderr, "Error: jalInstruction has a destination for the PC which is not 4-byte aligned\n");
 	}
 	
-	registers_write(decInstruction.rd, PC + 4);
-	PC = ((uint32_t) (REG[decInstruction.rs1] + extendedImmediate)) - 4;
-
 	#ifdef DEBUG
 		Printf("JAL, rd = %d, signExtend(imm) = %d, PC = %u\n", REG[decInstruction.rd], extendedImmediate, PC);
 	#endif
+	
+	registers_write(decInstruction.rd, PC + 4);
+	PC = ((uint32_t) (REG[decInstruction.rs1] + extendedImmediate)) - 4;
 }
 // END J Type Instructions

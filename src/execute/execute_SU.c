@@ -31,13 +31,17 @@ void sbInstruction(instruction_t decInstruction)
 	writeMemoryMasked(address/4, byteToStore<<(byteOffset*8), 0xFF<<(byteOffset*8)); //Overwrite byte in memory
 
 	#ifdef DEBUG
-		Printf("SB, rs1 = %u, rs2 = %u, imm = %d", REG[decInstruction.rs1], REG[decInstruction.rs2], signExtend(decInstruction.immediate,11));
+		Printf("SB, rs1 = %u, rs2 = %u, imm = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], signExtend(decInstruction.immediate,11));
 	#endif
 }
 
 void shInstruction(instruction_t decInstruction)
 {
 	extern int32_t *REG;
+	
+	#ifdef DEBUG
+		Printf("SH, rs1 = %u, rs2 = %u, imm = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], signExtend(decInstruction.immediate,11));
+	#endif
 
 	int32_t shortToStore = REG[decInstruction.rs2] & 0xFFFF;
 	unsigned address = (unsigned)(REG[decInstruction.rs1] + signExtend(decInstruction.immediate,11));
@@ -45,17 +49,13 @@ void shInstruction(instruction_t decInstruction)
 	writeMemoryMasked(address/4, shortToStore<<(byteOffset*8), 0xFFFF<<(byteOffset*8));
 	if (byteOffset == 3)
 		writeMemoryMasked(address/4 + 1, shortToStore >> 8, 0xFF);
-
-	#ifdef DEBUG
-		Printf("SH, rs1 = %u, rs2 = %u, imm = %d", REG[decInstruction.rs1], REG[decInstruction.rs2], signExtend(decInstruction.immediate,11));
-	#endif
 }
 
 void swInstruction(instruction_t decInstruction)
 {
 	extern int32_t *REG;
 	#ifdef DEBUG
-		Printf("SW, rs1 = %u, rs2 = %u, imm = %d", REG[decInstruction.rs1], REG[decInstruction.rs2], signExtend(decInstruction.immediate,11));
+		Printf("SW, rs1 = %u, rs2 = %u, imm = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], signExtend(decInstruction.immediate,11));
 	#endif
 
 	int32_t wordToStore = REG[decInstruction.rs2]; //Get value to store
@@ -73,19 +73,21 @@ void auipcInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	extern uint32_t PC;
 
-	registers_write(decInstruction.rd, PC + decInstruction.immediate);
 	#ifdef DEBUG
 		Printf("auipc Instruction, rd = pc + immediate = %d + %d = %d\n", PC, decInstruction.immediate, PC + decInstruction.immediate);
 	#endif
+
+	registers_write(decInstruction.rd, PC + decInstruction.immediate);
 }
 
 void luiInstruction(instruction_t decInstruction)
 {
 	extern int32_t *REG;
-
-	registers_write(decInstruction.rd, decInstruction.immediate);
+	
 	#ifdef DEBUG
 		Printf("lui Instruction, rd = immediate = %d\n", decInstruction.immediate);
 	#endif
+	
+	registers_write(decInstruction.rd, decInstruction.immediate);
 }
 // END U Type Instructions
