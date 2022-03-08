@@ -89,5 +89,12 @@ int32_t* registers_init();
  */
 void registers_write(uint8_t regNum, uint32_t data);
 
-
+/**
+ * @fn         printRegisters
+ * @brief      Prints out the registers and their values
+ * 
+ * @details    Writes the registers and the values held to stdout
+ *
+ */
+void printRegisters();
 #endif
