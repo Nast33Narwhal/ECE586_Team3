@@ -30,6 +30,8 @@ int32_t main(int32_t argc, char **argv)
 	char *fileName = parseArgs(argc, argv);
 	
 	mem_init(MEM_SIZE, usrCmds);
+	if (usrCmds)
+		setBreakpoint(PC/4);
 
 	//load program 
    	parseMemFile(fileName); 
@@ -155,6 +157,11 @@ char *parseArgs(int32_t argc, char **argv)
 				else
 					stackAddress = (unsigned int)convert;	
 			}
+		}
+
+		else if (!strcmp(argv[i], "-ui")) 
+		{
+			usrCmds = true;
 		}
 
         else if (!strcmp(argv[i], "-pc")) 
