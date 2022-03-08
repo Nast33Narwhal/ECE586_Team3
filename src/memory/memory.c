@@ -98,6 +98,17 @@ void writeMemoryMasked(unsigned memoryLocation, int32_t valueToWrite, uint32_t m
 	memory.address[memoryLocation].data = (valueToWrite & mask) | (oldData & ~mask);
 }
 
+void setBreakpoint(unsigned location)
+{
+	if (location > memory.size)
+	{
+		Fprintf(stderr, "Error in setBreakpoint(): Seeking memory above maximum location(0x%08X).\n", location*4);
+		exit(1);		
+	}
+
+	memory.address[location].breakpoint = true;
+}
+
 void printMemory()
 {
 	uint32_t state = 0;

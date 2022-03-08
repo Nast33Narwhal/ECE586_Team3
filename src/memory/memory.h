@@ -60,6 +60,14 @@ void writeMemory(unsigned memoryLocation, int32_t valueToWrite);
 void writeMemoryMasked(unsigned memoryLocation, int32_t valueToWrite, uint32_t mask);
 
 /**
+ * @fn      setBreakpoint
+ * @brief   Sets a breakpoint at the specified word
+ * 
+ * @param   location    Word aligned address of the breakpoint
+ */
+void setBreakpoint(unsigned location);
+
+/**
  * @fn      printMemory
  * @brief   Prints entire memory contents to stdout
  */
