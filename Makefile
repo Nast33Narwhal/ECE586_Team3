@@ -35,7 +35,7 @@ decode.o : src/decode/decode.c src/decode/decode.h
 memory.o : src/memory/memory.c src/memory/memory.h
 	$(CC) $(CFLAGS) -c src/memory/memory.c
 	
-execute.o : src/execute/execute.c src/execute/execute.h 
+execute.o : src/execute/execute.c src/execute/execute.h src/execute/execute_I.c src/execute/execute_R.c src/execute/execute_BJ.c src/execute/execute_SU.c 
 	$(CC) $(CFLAGS) -c src/execute/execute.c 
 
 # -DDEBUG will define DEBUG and recompile everything with DEBUG symbols enabled
