@@ -12,15 +12,15 @@
 #include "./memory/memory.h"
 #include "./execute/execute.h"
 
-#define MAX_ARRAY 16384
+#define MEM_SIZE 16384
 
 // global variables
 uint32_t stackAddress = 0; //fix (unneccesary global)
-int32_t *memory; 				//dynamically allocated memory space
 extern int32_t memory_size; 	//how many values in dynamically allocated memory array. fix
 uint32_t PC = 0; 
 //registers_t *registers; 
 int32_t *REG;  //global array of registers
+bool usrCmds = false; //Flag to enable/disable user commands
 
 char *parseArgs(int32_t argc, char **argv);
 void printRegisters(); 
@@ -32,8 +32,10 @@ int32_t main(int32_t argc, char **argv)
 	//parse args
 	char *fileName = parseArgs(argc, argv);
 	
+	mem_init(MEM_SIZE, usrCmds);
+
 	//load program 
-   	memory = parseMemFile(fileName); 
+   	parseMemFile(fileName); 
 	#ifdef DEBUG
 		printMemory();
 	#endif
@@ -103,14 +105,11 @@ int32_t main(int32_t argc, char **argv)
 	
 	//memory array
 	Printf("Number of array elements is: %d\n", memory_size);
-	for (int32_t i = 0; i < memory_size; i++)
-	{
-		printf("Mem %02X :0x%08X\n", i*4, memory[i]);
-	}
+	printMemory();
 	#endif
 
 	//free(registers);
-	free(memory);
+	mem_deinit();
 	free(REG);
     return 0;
 }
@@ -232,13 +231,5 @@ void printRegisters(){
 	Printf(" X29: 0x%08x\n", REG[29]);
 	Printf(" X30: 0x%08x\n", REG[30]);
 	Printf(" X31: 0x%08x\n", REG[31]);
-}
-
-void printMemory()
-{
-	for(int32_t i = 0; i != memory_size; i++)
-	{
-		Printf("memory[%2d] = 0x%08x\n", i, memory[i]);
-	}
 }
 

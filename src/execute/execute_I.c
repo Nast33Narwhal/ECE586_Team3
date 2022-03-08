@@ -25,41 +25,14 @@ void lbInstruction(instruction_t decInstruction)
 {
 	extern int32_t *REG;
 
-	// Load 32 bit value from memory (base + offset)
-	int32_t memoryLoaded = readMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) );
-
-	// Determine byte selected
-	int32_t byteSelected = decInstruction.immediate % 4;
-	switch(byteSelected)
-	{
-		case 0:
-			memoryLoaded = (memoryLoaded & 0x000000FF);
-			break;
-		case 1:
-			memoryLoaded = (memoryLoaded & 0x0000FF00) >>  8;
-			break;
-		case 2:
-			memoryLoaded = (memoryLoaded & 0x00FF0000) >> 16;
-			break;
-		case 3:
-			memoryLoaded = (memoryLoaded & 0xFF000000) >> 24;
-			break;
-		default:
-			Fprintf(stderr, "Error executing LB Instruction, byte select error\n");
-			exit(1);
-	}
-
-	// Sign extend
-	int32_t msb = memoryLoaded &0x00000080;
-	if (msb > 0) // Need to sign extend
-	{
-		memoryLoaded = memoryLoaded | 0xFFFFFF00; // Sign extend
-	}
-
-	registers_write(decInstruction.rd, memoryLoaded);
+	// Load value from memory (base + offset)
+	unsigned address = (unsigned)(REG[decInstruction.rs1] + signExtend(decInstruction.immediate,11));
+	uint8_t byteOffset = address % 4;
+	int32_t byteLoaded = (readMemory(address/4)>>(byteOffset*8)) & 0xFF;
+	registers_write(decInstruction.rd, (uint32_t)signExtend(byteLoaded, 7));
 
 	#ifdef DEBUG
-		Printf("LB, rd = %d, rs1 = %d, imm = %d, rd = byte(mem[rs1/4+imm/4], imm%4) = %d", REG[decInstruction.rd], REG[decInstruction.rs1], decInstruction.immediate, memoryLoaded);
+		Printf("LB, rd = %u, rs1 = %u, imm = %d, rd = byte(mem[rs1/4+imm/4], imm%4) = %d", REG[decInstruction.rd], REG[decInstruction.rs1], signExtend(decInstruction.immediate,11), signExtend(byteLoaded, 7));
 	#endif
 }
 
@@ -67,42 +40,18 @@ void lhInstruction(instruction_t decInstruction)
 {
 	extern int32_t *REG;
 
-	// Load 32 bit value from memory (base + offset)
-	int32_t memoryLoaded = readMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) );
-
-	// Determine byte selected
-	int32_t byteSelected = decInstruction.immediate % 4;
-	switch(byteSelected)
+	// Load value from memory (base + offset)
+	unsigned address = (unsigned)(REG[decInstruction.rs1] + signExtend(decInstruction.immediate,11));
+	uint8_t byteOffset = address % 4;
+	int32_t hwLoaded = (readMemory(address/4)>>(byteOffset*8)) & 0xFFFF;
+	if (byteOffset == 3)
 	{
-		case 0:
-			memoryLoaded = (memoryLoaded & 0x0000FFFF);
-			break;
-		case 1:
-			memoryLoaded = (memoryLoaded & 0x00FFFF00) >>  8;
-			break;
-		case 2:
-			memoryLoaded = (memoryLoaded & 0xFFFF0000) >> 16;
-			break;
-		case 3: // Happens on a boundary, need to grab the other 8 bits
-			memoryLoaded = ((memoryLoaded & 0xFF000000) >> 24) | ((readMemory(((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)) + 1) & 0x000000FF) << 8);
-			break;
-		default:
-			Fprintf(stderr, "Error executing LH Instruction, byte select error\n");
-			exit(1);
+		hwLoaded |= ((readMemory(address/4 + 1) << 8) & 0xFF00);
 	}
-
-	// Sign extend
-	int32_t msb = memoryLoaded &0x00008000;
-	if (msb > 0) // Need to sign extend
-	{
-		memoryLoaded = memoryLoaded | 0xFFFF0000; // Sign extend
-	}
-
-
-	registers_write(decInstruction.rd, memoryLoaded);
+	registers_write(decInstruction.rd, (uint32_t)signExtend(hwLoaded, 15));
 
 	#ifdef DEBUG
-		Printf("LH, rd = %d, rs1 = %d, imm = %d, rd = byte(mem[rs1/4+imm/4], imm%4) = %d", REG[decInstruction.rd], REG[decInstruction.rs1], decInstruction.immediate, memoryLoaded);
+		Printf("LH, rd = %u, rs1 = %u, imm = %d, rd = byte(mem[rs1/4+imm/4], imm%4) = %d", REG[decInstruction.rd], REG[decInstruction.rs1], signExtend(decInstruction.immediate,11), signExtend(hwLoaded,15));
 	#endif
 }
 
@@ -110,36 +59,18 @@ void lwInstruction(instruction_t decInstruction)
 {
 	extern int32_t *REG;
 
-	// Load 32 bit value from memory (base + offset)
-	int32_t memoryLoaded = readMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) );
-
-	// Determine byte selected
-	int32_t byteSelected = decInstruction.immediate % 4;
-	switch(byteSelected)
+	// Load value from memory (base + offset)
+	unsigned address = (unsigned)(REG[decInstruction.rs1] + signExtend(decInstruction.immediate,11));
+	uint8_t byteOffset = address % 4;
+	int32_t wordLoaded = (readMemory(address/4)>>(byteOffset*8)) & (0xFFFFFFFF>>(byteOffset*8));
+	if (byteOffset != 0)
 	{
-		case 0:
-			// memoryLoaded already set
-			break;
-		case 1:
-			memoryLoaded = (memoryLoaded & 0xFFFFFF00) >>  8 | ((readMemory(((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)) + 1) & 0x000000FF) << 24);
-			break;
-		case 2:
-			memoryLoaded = (memoryLoaded & 0xFFFF0000) >> 16 | ((readMemory(((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)) + 1) & 0x0000FFFF) << 16);
-			break;
-		case 3: // Happens on a boundary, need to grab the other 8 bits
-			memoryLoaded = ((memoryLoaded & 0xFF000000) >> 24) | ((readMemory(((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)) + 1) & 0x00FFFFFF) << 8);
-			break;
-		default:
-			Fprintf(stderr, "Error executing LW Instruction, byte select error\n");
-			exit(1);
+		wordLoaded |= ((readMemory(address/4 + 1) << (byteOffset*8)) & (0xFFFFFFFF<<(byteOffset*8)));
 	}
-
-	// Sign extend not needed
-
-	registers_write(decInstruction.rd, memoryLoaded);
+	registers_write(decInstruction.rd, (uint32_t)wordLoaded);
 
 	#ifdef DEBUG
-		Printf("LW, rd = %d, rs1 = %d, imm = %d, rd = byte(mem[rs1/4+imm/4], imm%4) = %d", REG[decInstruction.rd], REG[decInstruction.rs1], decInstruction.immediate, memoryLoaded);
+		Printf("LW, rd = %u, rs1 = %u, imm = %d, rd = byte(mem[rs1/4+imm/4], imm%4) = %d", REG[decInstruction.rd], REG[decInstruction.rs1], signExtend(decInstruction.immediate,11), wordLoaded);
 	#endif
 }
 
@@ -147,36 +78,14 @@ void lbuInstruction(instruction_t decInstruction)
 {
 	extern int32_t *REG;
 
-	// Load 32 bit value from memory (base + offset)
-	int32_t memoryLoaded = readMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) );
-
-	// Determine byte selected
-	int32_t byteSelected = decInstruction.immediate % 4;
-	switch(byteSelected)
-	{
-		case 0:
-			memoryLoaded = (memoryLoaded & 0x000000FF);
-			break;
-		case 1:
-			memoryLoaded = (memoryLoaded & 0x0000FF00) >>  8;
-			break;
-		case 2:
-			memoryLoaded = (memoryLoaded & 0x00FF0000) >> 16;
-			break;
-		case 3:
-			memoryLoaded = (memoryLoaded & 0xFF000000) >> 24;
-			break;
-		default:
-			Fprintf(stderr, "Error executing LB Instruction, byte select error\n");
-			exit(1);
-	}
-
-	// No Sign Extend
-
-	registers_write(decInstruction.rd, memoryLoaded);
+	// Load value from memory (base + offset)
+	unsigned address = (unsigned)(REG[decInstruction.rs1] + signExtend(decInstruction.immediate,11));
+	uint8_t byteOffset = address % 4;
+	int32_t byteLoaded = (readMemory(address/4)>>(byteOffset*8)) & 0xFF;
+	registers_write(decInstruction.rd, (uint32_t)(byteLoaded << 24));
 
 	#ifdef DEBUG
-		Printf("LBU, rd = %d, rs1 = %d, imm = %d, rd = byte(mem[rs1/4+imm/4], imm%4) = %d", REG[decInstruction.rd], REG[decInstruction.rs1], decInstruction.immediate, memoryLoaded);
+		Printf("LBU, rd = %u, rs1 = %u, imm = %d, rd = byte(mem[rs1/4+imm/4], imm%4) = %d", REG[decInstruction.rd], REG[decInstruction.rs1], signExtend(decInstruction.immediate,11), byteLoaded<<24);
 	#endif
 }
 
@@ -184,36 +93,18 @@ void lhuInstruction(instruction_t decInstruction)
 {
 	extern int32_t *REG;
 
-	// Load 32 bit value from memory (base + offset)
-	int32_t memoryLoaded = readMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) );
-
-	// Determine byte selected
-	int32_t byteSelected = decInstruction.immediate % 4;
-	switch(byteSelected)
+	// Load value from memory (base + offset)
+	unsigned address = (unsigned)(REG[decInstruction.rs1] + signExtend(decInstruction.immediate,11));
+	uint8_t byteOffset = address % 4;
+	int32_t hwLoaded = (readMemory(address/4)>>(byteOffset*8)) & 0xFFFF;
+	if (byteOffset == 3)
 	{
-		case 0:
-			memoryLoaded = (memoryLoaded & 0x0000FFFF);
-			break;
-		case 1:
-			memoryLoaded = (memoryLoaded & 0x00FFFF00) >>  8;
-			break;
-		case 2:
-			memoryLoaded = (memoryLoaded & 0xFFFF0000) >> 16;
-			break;
-		case 3: // Happens on a boundary, need to grab the other 8 bits
-			memoryLoaded = ((memoryLoaded & 0xFF000000) >> 24) | ((readMemory(((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)) + 1) & 0x000000FF) << 8);
-			break;
-		default:
-			Fprintf(stderr, "Error executing LH Instruction, byte select error\n");
-			exit(1);
+		hwLoaded |= ((readMemory(address/4 + 1) << 8) & 0xFF00);
 	}
-
-	// No Sign Extend
-
-	registers_write(decInstruction.rd, memoryLoaded);
+	registers_write(decInstruction.rd, (uint32_t)(hwLoaded << 16));
 
 	#ifdef DEBUG
-		Printf("LHU, rd = %d, rs1 = %d, imm = %d, rd = byte(mem[rs1/4+imm/4], imm%4) = %d", REG[decInstruction.rd], REG[decInstruction.rs1], decInstruction.immediate, memoryLoaded);
+		Printf("LHU, rd = %u, rs1 = %u, imm = %d, rd = byte(mem[rs1/4+imm/4], imm%4) = %d", REG[decInstruction.rd], REG[decInstruction.rs1], signExtend(decInstruction.immediate,11), hwLoaded<<16);
 	#endif
 }
 

@@ -25,34 +25,13 @@ void sbInstruction(instruction_t decInstruction)
 {
 	extern int32_t *REG;
 
-	// Load 32 bit value from memory (base + offset)
-	int32_t memoryLoaded = readMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) );
-	int32_t byteToStore = REG[decInstruction.rs2];
-
-	// Determine byte selected
-	int32_t byteSelected = decInstruction.immediate % 4;
-	switch(byteSelected)
-	{
-		case 0:
-			memoryLoaded = (memoryLoaded & 0xFFFFFF00) | byteToStore;
-			break;
-		case 1:
-			memoryLoaded = (memoryLoaded & 0xFFFF00FF) | (byteToStore << 8);
-			break;
-		case 2:
-			memoryLoaded = (memoryLoaded & 0xFF00FFFF) | (byteToStore << 16);
-			break;
-		case 3:
-			memoryLoaded = (memoryLoaded & 0x00FFFFFF) | (byteToStore << 24);
-			break;
-		default:
-			Fprintf(stderr, "Error executing SB Instruction, byte select error\n");
-			exit(1);
-	}
-	writeMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) , memoryLoaded);
+	int32_t byteToStore = REG[decInstruction.rs2] & 0xFF; //Grab lowest byte from source register
+	unsigned address = (unsigned)(REG[decInstruction.rs1] + signExtend(decInstruction.immediate,11)); //Calculate address
+	uint8_t byteOffset = address % 4; //Calculate byte offset
+	writeMemoryMasked(address/4, byteToStore<<(byteOffset*8), 0xFF<<(byteOffset*8)); //Overwrite byte in memory
 
 	#ifdef DEBUG
-		Printf("SB, rs1 = %d, rs2 = %d, imm = %d", REG[decInstruction.rs1], REG[decInstruction.rs2], decInstruction.immediate);
+		Printf("SB, rs1 = %u, rs2 = %u, imm = %d", REG[decInstruction.rs1], REG[decInstruction.rs2], signExtend(decInstruction.immediate,11));
 	#endif
 }
 
@@ -60,92 +39,31 @@ void shInstruction(instruction_t decInstruction)
 {
 	extern int32_t *REG;
 
-	// Load 32 bit value from memory (base + offset)
-	int32_t memoryLoaded = readMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) );
-	int32_t shortToStore = REG[decInstruction.rs2];
-
-	// Determine byte selected
-	int32_t byteSelected = decInstruction.immediate % 4;
-	switch(byteSelected)
-	{
-		case 0:
-			memoryLoaded = (memoryLoaded & 0xFFFF0000) | shortToStore;
-			writeMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), memoryLoaded);
-			break;
-		case 1:
-			memoryLoaded = (memoryLoaded & 0xFF0000FF) | (shortToStore << 8);
-			writeMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), memoryLoaded);
-			break;
-		case 2:
-			memoryLoaded = (memoryLoaded & 0x0000FFFF) | (shortToStore << 16);
-			writeMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), memoryLoaded);
-			break;
-		case 3: // Happens on a boundary, need to grab the other 8 bits
-			memoryLoaded = (memoryLoaded & 0x00FFFFFF) | (shortToStore << 24);
-			writeMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), memoryLoaded);
-			// Load next word to store other half of short
-			memoryLoaded = readMemory(((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)) + 1);
-			memoryLoaded = (memoryLoaded & 0xFFFFFF00) | (shortToStore >> 8);
-			writeMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) + 1, memoryLoaded);
-			break;
-		default:
-			Fprintf(stderr, "Error executing LH Instruction, byte select error\n");
-			exit(1);
-	}
+	int32_t shortToStore = REG[decInstruction.rs2] & 0xFFFF;
+	unsigned address = (unsigned)(REG[decInstruction.rs1] + signExtend(decInstruction.immediate,11));
+	uint8_t byteOffset = address % 4;
+	writeMemoryMasked(address/4, shortToStore<<(byteOffset*8), 0xFFFF<<(byteOffset*8));
+	if (byteOffset == 3)
+		writeMemoryMasked(address/4 + 1, shortToStore >> 8, 0xFF);
 
 	#ifdef DEBUG
-		Printf("SH, rs1 = %d, rs2 = %d, imm = %d", REG[decInstruction.rs1], REG[decInstruction.rs2], decInstruction.immediate);
+		Printf("SH, rs1 = %u, rs2 = %u, imm = %d", REG[decInstruction.rs1], REG[decInstruction.rs2], signExtend(decInstruction.immediate,11));
 	#endif
 }
 
 void swInstruction(instruction_t decInstruction)
 {
 	extern int32_t *REG;
-
-	// Load 32 bit value from memory (base + offset)
-	int32_t memoryLoaded = readMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) );
-	int32_t wordToStore = REG[decInstruction.rs2];
-
-	// Determine byte selected
-	int32_t byteSelected = decInstruction.immediate % 4;
-	switch(byteSelected)
-	{
-		case 0:
-			// memoryLoaded already set
-			writeMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), wordToStore);
-			break;
-		case 1:
-			memoryLoaded = (memoryLoaded & 0x000000FF) | (wordToStore << 8);
-			writeMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), memoryLoaded);
-			// Load next word to store other byte of the word
-			memoryLoaded = readMemory(((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)) + 1);
-			memoryLoaded = (memoryLoaded & 0xFFFFFF00) | (wordToStore >> 24);
-			writeMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) + 1, memoryLoaded);
-			break;
-		case 2:
-			memoryLoaded = (memoryLoaded & 0x0000FFFF) | (wordToStore << 16);
-			writeMemory( (REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), memoryLoaded);
-			// Load next word to store other byte of the word
-			memoryLoaded = readMemory(((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)) + 1);
-			memoryLoaded = (memoryLoaded & 0xFFFF0000) | (wordToStore >> 16);
-			writeMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) + 1, memoryLoaded);
-			break;
-		case 3: // Happens on a boundary, need to grab the other 8 bits
-			memoryLoaded = (memoryLoaded & 0x00FFFFFF) | (wordToStore << 24);
-			writeMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4), memoryLoaded);
-			// Load next word to store other half of the word
-			memoryLoaded = readMemory(((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4)) + 1);
-			memoryLoaded = (memoryLoaded & 0xFF000000) | (wordToStore >> 8);
-			writeMemory((REG[decInstruction.rs1] / 4) + (decInstruction.immediate / 4) + 1, memoryLoaded);
-			break;
-		default:
-			Fprintf(stderr, "Error executing LH Instruction, byte select error\n");
-			exit(1);
-	}
-
 	#ifdef DEBUG
-		Printf("SW, rs1 = %d, rs2 = %d, imm = %d", REG[decInstruction.rs1], REG[decInstruction.rs2], decInstruction.immediate);
+		Printf("SW, rs1 = %u, rs2 = %u, imm = %d", REG[decInstruction.rs1], REG[decInstruction.rs2], signExtend(decInstruction.immediate,11));
 	#endif
+
+	int32_t wordToStore = REG[decInstruction.rs2]; //Get value to store
+	unsigned address = (unsigned)(REG[decInstruction.rs1] + signExtend(decInstruction.immediate,11)); //Calculate address
+	uint8_t byteOffset = address % 4; //Calculate bytes offset from word alignment
+	writeMemoryMasked(address/4, wordToStore<<(byteOffset*8), 0xFFFFFFFF<<(byteOffset*8)); //Write word to memory
+	if (byteOffset) //If word is not word aligned...
+		writeMemoryMasked(address/4 + 1, wordToStore >> (byteOffset * 8), 0xFFFFFFFF >> (byteOffset * 8)); //Write MSBs into next word
 }
 // END S Type Instructions
 
