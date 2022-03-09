@@ -85,6 +85,14 @@ void clrBreakpoint(unsigned location);
 bool isBreakpoint(unsigned location);
 
 /**
+ * @fn      mem_getSize
+ * @brief   Returns the number of memWords_t in memory
+ * 
+ * @return  Number of memWords_t in memory
+ */
+unsigned mem_getSize(void);
+
+/**
  * @fn      printMemory
  * @brief   Prints entire memory contents to stdout
  */

@@ -131,6 +131,11 @@ bool isBreakpoint(unsigned location)
 	return memory.address[location].breakpoint;
 }
 
+unsigned mem_getSize()
+{
+	return memory.size;
+}
+
 void printMemory()
 {
 	uint32_t state = 0;
