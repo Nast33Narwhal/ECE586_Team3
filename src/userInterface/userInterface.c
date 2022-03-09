@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "userInterface.h"
+#include "../registers/registers.h"
 #include "../wrappers/wrappers.h"
 #include "../memory/memory.h"
 
@@ -40,6 +41,11 @@ void displayUserInterface(bool *singleStep)
             *singleStep = true;
             free(input);
             return;    
+        }
+        //Display register contents
+        else if (!strcmp(cmd, "reg"))
+        {
+            printRegisters();
         }
         //Set/clear a breakpoint
         else if ((strcmp(cmd, "b")==0) || (strcmp(cmd, "break")==0))
@@ -112,5 +118,5 @@ void displayUserInterface(bool *singleStep)
 void displayHelp()
 {
     Printf("List of available commands:");
-    Printf("run, help, mem, step, break\n");
+    Printf("run, help, mem, reg, step, break\n");
 }
