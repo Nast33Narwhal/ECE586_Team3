@@ -69,6 +69,21 @@ int Scanf(char* format, ...)
 	return result;
 }
 
+int Sscanf(const char *str, char* format, ...)
+{
+	va_list args;
+	va_start (args, format);
+	int result = vsscanf(str, format, args);
+	va_end(args);
+
+	if (result < 0) //If the scan was not successful, alert user via stderr and exit
+	{
+		perror("Error calling sscanf()");
+		exit(EXIT_FAILURE);
+	}
+	return result;
+}
+
 void *Malloc(size_t size)
 {
 	void* newPtr = malloc(size);

@@ -54,6 +54,17 @@ void Fprintf(FILE* stream, char* format, ...);
 int Scanf(char* format, ...);
 
 /**
+ * @fn		Sscanf
+ * @brief	Wrapper function for sscanf to catch errors
+ *
+ * @param   str String being scanned
+ * @param	format	A format string provided to scanf
+ * @param	...	All other variables required for the given format string
+ * @return  Number of fields assigned with scanf
+ */
+int Sscanf(const char *str, char* format, ...);
+
+/**
  * @fn		Malloc
  * @brief	Wrapper function for malloc
  *
