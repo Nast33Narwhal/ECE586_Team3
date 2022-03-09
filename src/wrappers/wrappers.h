@@ -54,6 +54,16 @@ void Fprintf(FILE* stream, char* format, ...);
 int Scanf(char* format, ...);
 
 /**
+ * @fn		Gets
+ * @brief	Wrapper function for gets to catch errors
+ *
+ * @param	str	Pointer to a buffer that will be filled with input from stdin
+ * @return  Pointer to str
+ * @warning Will throw an error and exit if EOF is read before any characters
+ */
+char *Gets(char *str);
+
+/**
  * @fn		Malloc
  * @brief	Wrapper function for malloc
  *

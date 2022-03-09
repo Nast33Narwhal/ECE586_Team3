@@ -69,6 +69,16 @@ int Scanf(char* format, ...)
 	return result;
 }
 
+char *Gets(char *str)
+{
+	char *result = gets(str);
+	if (result)
+		return result;
+
+	perror("Error calling gets()");
+	exit(EXIT_FAILURE);
+}
+
 void *Malloc(size_t size)
 {
 	void* newPtr = malloc(size);
