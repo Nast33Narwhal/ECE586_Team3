@@ -63,8 +63,8 @@ void *Malloc(size_t size);
 FILE *Fopen(const char *pathname, const char *mode);
 
 /**
- * @fn		Fopen
- * @brief	Wrapper function for fopen
+ * @fn		Fclose
+ * @brief	Wrapper function for fclose
  *
  * @param	stream  FILE pointer to be closed
  */
