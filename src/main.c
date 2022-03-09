@@ -30,7 +30,7 @@ int32_t main(int32_t argc, char **argv)
 	//parse args
 	char *fileName = parseArgs(argc, argv);
 	
-	mem_init(MEM_SIZE, usrCmds);
+	mem_init(MEM_SIZE);
 	if (usrCmds)
 		setBreakpoint(PC/4);
 

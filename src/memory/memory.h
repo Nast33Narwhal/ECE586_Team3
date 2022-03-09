@@ -34,10 +34,8 @@
  * @brief   Initializes the system memory for the simulator
  * 
  * @param   maxSize Maximum number of 32 bit words the memory can contain
- * @param   usrCmds If true, also initializes breakpoints and watchpoints for
- *                  memory locations
  */
-void mem_init(unsigned maxSize, bool usrCmds);
+void mem_init(unsigned maxSize);
 
 /**
  * @fn      mem_deinit()

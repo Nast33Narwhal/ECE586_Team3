@@ -40,12 +40,10 @@ typedef struct {
 
 static memory_t memory;
 
-void mem_init(unsigned maxSize, bool usrCmds)
+void mem_init(unsigned maxSize)
 {
 	memory.address = Malloc(maxSize * sizeof(memWord_t));
 	memory.size = maxSize;
-	if (!usrCmds)
-		return;
 
 	for (unsigned i = 0; i < maxSize; i++)
 	{
