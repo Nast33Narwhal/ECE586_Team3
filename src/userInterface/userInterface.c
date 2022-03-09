@@ -6,8 +6,6 @@
 #include "../memory/memory.h"
 #include "../decode/decode.h"
 
-#define MEM_SIZE 16384
-
 void displayUserInterface()
 {
     extern uint32_t PC; 
@@ -34,27 +32,25 @@ void displayUserInterface()
             }
             else if ((strcmp(cmd, "b")==0) || (strcmp(cmd, "break")==0))
             {
-                Printf("Enter breakpoint location:"); 
-                Scanf("%u", &breakpoint); 
+                Printf("Enter breakpoint location(in hex):"); 
+                Scanf("%x", &breakpoint); 
                 
-                if (breakpoint > MEM_SIZE * 4)
+                if (breakpoint/4 > mem_getSize())
                 {
-                    Printf("Breakpoint too large!\n"); 
-                    continue; 
-                }
-                else if (breakpoint % 4 != 0)
-                {
-                    Printf("Breakpoint must be aligned (divisible by four)\n"); 
-                    continue;  
-                }
-                else if (breakpoint <= PC)
-                {
-                    Printf("Breakpoint must be greater than the current PC\n"); 
+                    Printf("Breakpoint too large! Maximum address is 0x%08X\n", mem_getSize()*4); 
                     continue; 
                 }
                 else{
-                    setBreakpoint(breakpoint/4); 
-                    break; 
+                    if (isBreakpoint(breakpoint/4))
+                    {
+                        clrBreakpoint(breakpoint/4);
+                        Printf("Breakpoint cleared at 0x%08X\n", breakpoint & 0xFFFFFFFC); //Force word alignment
+                    }
+                    else
+                    {
+                        setBreakpoint(breakpoint/4);
+                        Printf("Breakpoint set at 0x%08X\n", breakpoint & 0xFFFFFFFC);
+                    } 
                 }
             }
             else
