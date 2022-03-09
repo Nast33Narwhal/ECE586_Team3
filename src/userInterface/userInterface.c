@@ -7,56 +7,94 @@
 #include "../decode/decode.h"
 
 void displayUserInterface(bool *singleStep)
-{ 
-    uint32_t breakpoint = 0; 
-    char cmd[128] = "\0";
+{  
+    char *input = NULL;
+    size_t inputSize = 0;
+    char cmd[50];
+    unsigned arg;
+    char extra[20];
     *singleStep = false;
 
-    while (strcmp(cmd, "run") && strcmp(cmd, "r"))
+    while (1)
     {
         Printf("Enter command:");
-        if(Scanf("%128s", cmd))
+        getline(&input, &inputSize, stdin);
+        while (input[0] == '\n')
+            getline(&input, &inputSize, stdin); //ignore newlines
+        switch(Sscanf(input, "%50s %64u%20s", cmd, &arg, extra))
         {
-            if ((strcmp(cmd, "h")==0) || (strcmp(cmd, "help")==0))
-            {
-                displayHelp();
-            }
-            else if ((strcmp(cmd, "r")==0) || (strcmp(cmd, "run")==0))
-            {
-                continue; //break condition set by loop, but don't want to print "unknown command"
-            }
-            else if ((strcmp(cmd, "s")==0) || (strcmp(cmd, "step")==0))
-            {
-                *singleStep = true; 
-                return;    
-            }
-            else if ((strcmp(cmd, "b")==0) || (strcmp(cmd, "break")==0))
-            {
-                Printf("Enter breakpoint location(in hex):"); 
-                Scanf("%x", &breakpoint); 
-                
-                if (breakpoint/4 > mem_getSize())
+            case 1:
+                if ((strcmp(cmd, "h")==0) || (strcmp(cmd, "help")==0))
                 {
-                    Printf("Breakpoint too large! Maximum address is 0x%08X\n", mem_getSize()*4); 
-                    continue; 
+                    displayHelp();
                 }
-                else{
-                    if (isBreakpoint(breakpoint/4))
+                else if ((strcmp(cmd, "r")==0) || (strcmp(cmd, "run")==0))
+                {
+                    return; //break condition set by loop, but don't want to print "unknown command"
+                }
+                else if ((strcmp(cmd, "s")==0) || (strcmp(cmd, "step")==0))
+                {
+                    *singleStep = true;
+                    free(input);
+                    return;    
+                }
+                else
+                {
+                    Printf("Unknown command \"%s\" Type \"h\" or \"help\" for a list of commands.\n", cmd);
+                }
+                break;
+            case 2:
+                if ((strcmp(cmd, "b")==0) || (strcmp(cmd, "break")==0))
+                {                    
+                    if (arg/4 > mem_getSize())
                     {
-                        clrBreakpoint(breakpoint/4);
-                        Printf("Breakpoint cleared at 0x%08X\n", breakpoint & 0xFFFFFFFC); //Force word alignment
+                        Printf("Breakpoint too large! Maximum address is 0x%08X\n", mem_getSize()*4); 
+                        continue; 
                     }
-                    else
-                    {
-                        setBreakpoint(breakpoint/4);
-                        Printf("Breakpoint set at 0x%08X\n", breakpoint & 0xFFFFFFFC);
-                    } 
+                    else{
+                        if (isBreakpoint(arg/4))
+                        {
+                            clrBreakpoint(arg/4);
+                            Printf("Breakpoint cleared at 0x%08X\n", arg & 0xFFFFFFFC); //Force word alignment
+                        }
+                        else
+                        {
+                            setBreakpoint(arg/4);
+                            Printf("Breakpoint set at 0x%08X\n", arg & 0xFFFFFFFC);
+                        } 
+                    }
                 }
-            }
-            else
-            {
-                Printf("Unknown command \"%s\" Type \"h\" or \"help\" for a list of commands.\n", cmd);
-            }
+                else
+                {
+                    Printf("Unknown command \"%s\" Type \"h\" or \"help\" for a list of commands.\n", cmd);
+                }
+                break;
+            case 3:
+                Sscanf(input, "%50s %64x", cmd, &arg);
+                if ((strcmp(cmd, "b")==0) || (strcmp(cmd, "break")==0))
+                { 
+                    if (arg/4 > mem_getSize())
+                    {
+                        Printf("Breakpoint too large! Maximum address is 0x%08X\n", mem_getSize()*4); 
+                        continue; 
+                    }
+                    else{
+                        if (isBreakpoint(arg/4))
+                        {
+                            clrBreakpoint(arg/4);
+                            Printf("Breakpoint cleared at 0x%08X\n", arg & 0xFFFFFFFC); //Force word alignment
+                        }
+                        else
+                        {
+                            setBreakpoint(arg/4);
+                            Printf("Breakpoint set at 0x%08X\n", arg & 0xFFFFFFFC);
+                        } 
+                    }
+                }
+                else
+                {
+                    Printf("Unknown command \"%s\" Type \"h\" or \"help\" for a list of commands.\n", cmd);
+                }
         }        
     }
 }
