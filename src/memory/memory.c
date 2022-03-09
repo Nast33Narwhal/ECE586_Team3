@@ -102,8 +102,19 @@ void setBreakpoint(unsigned location)
 {
 	if (location > memory.size)
 	{
-		Fprintf(stderr, "Error in setBreakpoint(): Seeking memory above maximum location(0x%08X).\n", location*4);
-		exit(1);		
+		Fprintf(stderr, "Warning in setBreakpoint(): Seeking memory above maximum location(0x%08X).\n", location*4);
+		return;		
+	}
+
+	memory.address[location].breakpoint = true;
+}
+
+void clrBreakpoint(unsigned location)
+{
+	if (location > memory.size)
+	{
+		Fprintf(stderr, "Warning in clrBreakpoint(): Seeking memory above maximum location(0x%08X).\n", location*4);
+		return;		
 	}
 
 	memory.address[location].breakpoint = true;
@@ -113,8 +124,8 @@ bool isBreakpoint(unsigned location)
 {
 	if (location > memory.size)
 	{
-		Fprintf(stderr, "Error in isBreakpoint(): Seeking memory above maximum location(0x%08X).\n", location*4);
-		exit(1);		
+		Fprintf(stderr, "Warning in isBreakpoint(): Seeking memory above maximum location(0x%08X).\n", location*4);
+		return false;		
 	}
 
 	return memory.address[location].breakpoint;

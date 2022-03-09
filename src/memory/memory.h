@@ -68,6 +68,14 @@ void writeMemoryMasked(unsigned memoryLocation, int32_t valueToWrite, uint32_t m
 void setBreakpoint(unsigned location);
 
 /**
+ * @fn      clrBreakpoint
+ * @brief   Clears a breakpoint at the specified word
+ * 
+ * @param   location    Word aligned address of the breakpoint
+ */
+void clrBreakpoint(unsigned location);
+
+/**
  * @fn      isBreakpoint
  * @brief   Check if memory word is a breakpoint
  * 
