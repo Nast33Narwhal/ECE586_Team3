@@ -44,6 +44,15 @@ void Printf(char* format, ...);
 void Fprintf(FILE* stream, char* format, ...);
 
 /**
+ * @fn		Scanf
+ * @brief	Wrapper function for scanf to catch errors
+ *
+ * @param	format	A format string provided to scanf
+ * @param	...	All other variables required for the given format string
+ */
+void Scanf(char* format, ...);
+
+/**
  * @fn		Malloc
  * @brief	Wrapper function for malloc
  *

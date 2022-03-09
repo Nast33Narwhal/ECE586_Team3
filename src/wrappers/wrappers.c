@@ -54,6 +54,20 @@ void Fprintf(FILE* stream, char* format, ...)
 	}
 }
 
+void Scanf(char* format, ...)
+{
+	va_list args;
+	va_start (args, format);
+	int result = vscanf(format, args);
+	va_end(args);
+
+	if (result < 0) //If the scan was not successful, alert user via stderr and exit
+	{
+		perror("Error calling scanf()");
+		exit(EXIT_FAILURE);
+	}
+}
+
 void *Malloc(size_t size)
 {
 	void* newPtr = malloc(size);
