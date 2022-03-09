@@ -109,6 +109,17 @@ void setBreakpoint(unsigned location)
 	memory.address[location].breakpoint = true;
 }
 
+bool isBreakpoint(unsigned location)
+{
+	if (location > memory.size)
+	{
+		Fprintf(stderr, "Error in isBreakpoint(): Seeking memory above maximum location(0x%08X).\n", location*4);
+		exit(1);		
+	}
+
+	return memory.address[location].breakpoint;
+}
+
 void printMemory()
 {
 	uint32_t state = 0;

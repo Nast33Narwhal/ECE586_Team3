@@ -68,6 +68,15 @@ void writeMemoryMasked(unsigned memoryLocation, int32_t valueToWrite, uint32_t m
 void setBreakpoint(unsigned location);
 
 /**
+ * @fn      isBreakpoint
+ * @brief   Check if memory word is a breakpoint
+ * 
+ * @param   location Address of memory word
+ * @return  true if the memory word is a breakpoint, false otherwise 
+ */
+bool isBreakpoint(unsigned location);
+
+/**
  * @fn      printMemory
  * @brief   Prints entire memory contents to stdout
  */
