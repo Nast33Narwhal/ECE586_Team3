@@ -11,6 +11,7 @@
 #include "./decode/decode.h"
 #include "./memory/memory.h"
 #include "./execute/execute.h"
+#include "./userInterface/userInterface.h"
 
 #define MEM_SIZE 16384
 
@@ -60,6 +61,12 @@ int32_t main(int32_t argc, char **argv)
 			//Printf("nextInstruction = 0x%08X\n", nextInstruction);
 			printInstruction(&decInstruction);
 		#endif
+
+		if (usrCmds && isBreakpoint(PC/4))
+		{
+			Fprintf(stdout, "Breakpoint at 0x%08X:0x%08X\n", PC, nextInstruction);
+			displayUserInterface();
+		}
 		
 		// Decoded end program condition
 		if ((nextInstruction == 0x8067) && (REG[1] == 0))

@@ -4,9 +4,9 @@
 
 CC = gcc
 CFLAGS = -Wall -std=c99 -g
-OBJS = main.o wrappers.o registers.o decode.o parser.o memory.o execute.o
-SRC = src/main.c src/wrappers/wrappers.c src/registers/registers.c src/decode/decode.c src/parser/parser.c src/memory/memory.c src/execute/execute.c
-HDRS = src/wrappers/wrappers.h src/registers/registers.h src/decode/decode.h src/parser/parser.h src/memory/memory.h src/execute/execute.h
+OBJS = main.o wrappers.o registers.o decode.o parser.o memory.o execute.o userInterface.o
+SRC = src/main.c src/wrappers/wrappers.c src/registers/registers.c src/decode/decode.c src/parser/parser.c src/memory/memory.c src/execute/execute.c src/userInterface/userInterface.c
+HDRS = src/wrappers/wrappers.h src/registers/registers.h src/decode/decode.h src/parser/parser.h src/memory/memory.h src/execute/execute.h src/userInterface/userInterface.h
 EXE  = sim.exe
 
 
@@ -25,6 +25,9 @@ wrappers.o : src/wrappers/wrappers.c src/wrappers/wrappers.h
 
 parser.o : src/parser/parser.c src/parser/parser.h
 	$(CC) $(CFLAGS) -c src/parser/parser.c
+
+userInterface.o : src/userInterface/userInterface.c src/userInterface/userInterface.h
+	$(CC) $(CFLAGS) -c src/userInterface/userInterface.c
 
 registers.o : src/registers/registers.c src/registers/registers.h
 	$(CC) $(CFLAGS) -c src/registers/registers.c
