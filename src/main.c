@@ -78,7 +78,7 @@ int32_t main(int32_t argc, char **argv)
 		}
 		else if (singleStep) //Check if we just stepped through a command
 		{
-			Fprintf(stdout, "PC at 0x%08X : 0x%08X", PC, nextInstruction);
+			Fprintf(stdout, "PC at 0x%08X : 0x%08X\n", PC, nextInstruction);
 			displayUserInterface(&singleStep);
 		}
 		
