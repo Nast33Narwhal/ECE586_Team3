@@ -54,7 +54,7 @@ void Fprintf(FILE* stream, char* format, ...)
 	}
 }
 
-void Scanf(char* format, ...)
+int Scanf(char* format, ...)
 {
 	va_list args;
 	va_start (args, format);
@@ -66,6 +66,7 @@ void Scanf(char* format, ...)
 		perror("Error calling scanf()");
 		exit(EXIT_FAILURE);
 	}
+	return result;
 }
 
 void *Malloc(size_t size)

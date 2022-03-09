@@ -49,8 +49,9 @@ void Fprintf(FILE* stream, char* format, ...);
  *
  * @param	format	A format string provided to scanf
  * @param	...	All other variables required for the given format string
+ * @return  Number of fields assigned with scanf
  */
-void Scanf(char* format, ...);
+int Scanf(char* format, ...);
 
 /**
  * @fn		Malloc
