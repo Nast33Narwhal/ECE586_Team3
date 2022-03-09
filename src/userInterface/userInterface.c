@@ -4,7 +4,6 @@
 #include "userInterface.h"
 #include "../wrappers/wrappers.h"
 #include "../memory/memory.h"
-#include "../decode/decode.h"
 
 void displayUserInterface(bool *singleStep)
 {  
@@ -24,21 +23,25 @@ void displayUserInterface(bool *singleStep)
             getline(&input, &inputSize, stdin); //ignore newlines
 
         Sscanf(input, "%50s ", cmd);
+        //Help
         if ((strcmp(cmd, "h")==0) || (strcmp(cmd, "help")==0))
         {
             displayHelp();
         }
+        //Run
         else if ((strcmp(cmd, "r")==0) || (strcmp(cmd, "run")==0))
         {
             free(input);
             return; //break condition set by loop, but don't want to print "unknown command"
         }
+        //Single step
         else if ((strcmp(cmd, "s")==0) || (strcmp(cmd, "step")==0))
         {
             *singleStep = true;
             free(input);
             return;    
         }
+        //Set/clear a breakpoint
         else if ((strcmp(cmd, "b")==0) || (strcmp(cmd, "break")==0))
         {
             if (Sscanf(input, "%50s %64u%20s", cmd, &arg1, extra) == 2 ||
@@ -67,6 +70,7 @@ void displayUserInterface(bool *singleStep)
                 Printf("Format is \"break <address>\"\n");
             }
         }
+        //Display memory
         else if ((strcmp(cmd, "m")==0) || (strcmp(cmd, "mem")==0))
         {
             if (Sscanf(input, "%50s %64u%20s", cmd, &arg1, extra) == 2 ||
@@ -97,6 +101,7 @@ void displayUserInterface(bool *singleStep)
                 Printf("Formats of mem command:\nmem <address>\nmem <start_address>-<stop_address>\n");
             }
         }
+        //Everything else
         else
         {
             Printf("Unknown command \"%s\" Type \"h\" or \"help\" for a list of commands.\n", cmd);
