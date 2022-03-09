@@ -54,6 +54,8 @@ int32_t main(int32_t argc, char **argv)
 	instruction_t decInstruction;
 	int32_t nextInstruction;
 
+	bool singleStep = false;
+
 	//main loop
     
 	while(1)
@@ -69,10 +71,15 @@ int32_t main(int32_t argc, char **argv)
 			printInstruction(&decInstruction);
 		#endif
 
-		if (usrCmds && isBreakpoint(PC/4))
+		if (isBreakpoint(PC/4)) //Check if we're at a breakpoint
 		{
-			Fprintf(stdout, "Breakpoint at 0x%08X:0x%08X\n", PC, nextInstruction);
-			displayUserInterface();
+			Fprintf(stdout, "Breakpoint at 0x%08X : 0x%08X\n", PC, nextInstruction);
+			displayUserInterface(&singleStep);
+		}
+		else if (singleStep) //Check if we just stepped through a command
+		{
+			Fprintf(stdout, "PC at 0x%08X : 0x%08X", PC, nextInstruction);
+			displayUserInterface(&singleStep);
 		}
 		
 		// Decoded end program condition

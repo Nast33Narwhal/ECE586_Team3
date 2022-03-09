@@ -6,11 +6,11 @@
 #include "../memory/memory.h"
 #include "../decode/decode.h"
 
-void displayUserInterface()
-{
-    extern uint32_t PC; 
+void displayUserInterface(bool *singleStep)
+{ 
     uint32_t breakpoint = 0; 
     char cmd[128] = "\0";
+    *singleStep = false;
 
     while (strcmp(cmd, "run") && strcmp(cmd, "r"))
     {
@@ -27,8 +27,8 @@ void displayUserInterface()
             }
             else if ((strcmp(cmd, "s")==0) || (strcmp(cmd, "step")==0))
             {
-                setBreakpoint((PC + 4)/4); 
-                break;    
+                *singleStep = true; 
+                return;    
             }
             else if ((strcmp(cmd, "b")==0) || (strcmp(cmd, "break")==0))
             {
