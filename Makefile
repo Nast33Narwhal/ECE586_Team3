@@ -45,13 +45,13 @@ execute.o : src/execute/execute.c src/execute/execute.h src/execute/execute_I.c 
 debug : $(OBJS)
 	$(CC) $(CFLAGS) -DDEBUG -o $(EXE) $(SRC)
 
-# -DDEBUG will define DEBUG and DVERBOSE and recompile everything with DEBUG and DVERBOSE symbols enabled
-verbose : $(OBJS)
-	$(CC) $(CFLAGS) -DDEBUG -DVERBOSE -o $(EXE) $(SRC)	
+# -DREG_MEM will define DEBUG and DREG_MEM and recompile everything with DEBUG and DREG_MEM symbols enabled
+reg_mem : $(OBJS)
+	$(CC) $(CFLAGS) -DDEBUG -DREG_MEM -o $(EXE) $(SRC)	
 
-# -DREGISTERS will define REGISTERS and recompile everything with REGISTERS symbols enabled
-registers : $(OBJS)
-	$(CC) $(CFLAGS) -DREGISTERS -o $(EXE) $(SRC)
+# -DVERBOSE will define RVERBOSE and recompile everything with REGISTERS symbols enabled
+verbose : $(OBJS)
+	$(CC) $(CFLAGS) -DVERBOSE -o $(EXE) $(SRC)
 
 
 

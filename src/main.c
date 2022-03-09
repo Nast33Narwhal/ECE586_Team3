@@ -36,12 +36,19 @@ int32_t main(int32_t argc, char **argv)
 
 	//load program 
    	parseMemFile(fileName); 
+
+	//set initial values
+	REG = registers_init();
+
 	#ifdef DEBUG
+		Printf("\n\nDEBUG INITIAL STATES\n");
+		Printf("Filename: %s \nStarting Adress: %d \nStack Address: %d\n\n", fileName, PC, stackAddress);
+
+		printRegisters(); 
 		printMemory();
 	#endif
 	
-	//set initial values
-	REG = registers_init();
+
 
 	//initialize decodedInstruction type
 	instruction_t decInstruction;
@@ -70,8 +77,10 @@ int32_t main(int32_t argc, char **argv)
 		
 		// Decoded end program condition
 		if ((nextInstruction == 0x8067) && (REG[1] == 0))
-		{
+		{	
+			#if defined(DEBUG) || defined(VERBOSE)
 			Printf("JR RA, where value in RA = 0, meaning end program should be triggered.\n");
+			#endif
 			break;
 		}
 		
@@ -81,20 +90,28 @@ int32_t main(int32_t argc, char **argv)
 		executeInstruction(decInstruction);
 
 
-		#ifdef REGISTERS
-		Printf("\n\n\nInstruction Completed:\n"); 
+		#ifdef VERBOSE
+		Printf("Instruction Completed:\n"); 
 		printInstructionSimple(&decInstruction); 
 		printRegisters(); 
 		#endif
 
-		#ifdef VERBOSE
-		Printf("\nRegister States After Completion:"); 
+		#ifdef REG_MEM
+		Printf("\nRegister States After Completion:\n"); 
 		printRegisters(); 
+		Printf("\nMemory States After Completion:"); 
+		printMemory(); 
 		Printf("\n\n\n\n"); 
 		#endif
 		
 		PC += 4; // Should update PC when executing the instruction.
 	}
+	
+
+	#ifdef DEBUG
+	Printf("\n\nDEBUG RESULTS\n");
+	Printf("PC=%d, SP=%d, RA=%d\n\n", PC, REG[2], REG[1]);
+	#endif
 
 	//print registers
 	printRegisters(); 
@@ -102,19 +119,10 @@ int32_t main(int32_t argc, char **argv)
 	
 
 	#ifdef DEBUG
-	//temporay checking result, parsing
-	Printf("\n\nDEBUG RESULTS\n");
-    Printf("Filename: %s \nStarting Adress: %d \nStack Address: %d\n\n", fileName, PC, stackAddress);
-	
-	//temporary checking result, PC, SP, RA
-	Printf("PC=%d, SP=%d, RA=%d\n\n", PC, REG[2], REG[1]);
-	
-	//memory array
-	Printf("Number of array elements is: %d\n", memory_size);
 	printMemory();
 	#endif
 
-	//free(registers);
+	//free(registers)
 	mem_deinit();
 	free(REG);
     return 0;
