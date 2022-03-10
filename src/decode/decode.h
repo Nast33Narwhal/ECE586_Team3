@@ -72,10 +72,11 @@ typedef struct _instruction_s
  * @detail outputs instruction type based on the opcode
  *
  * @param opcode - 7 bit opcode stored in uint8_t
+ * @param rawInstruction - In case there is an error, prints out the raw encoded instruction
  * @returns decode_t enumeration holding the different encoding types
  *
  */
-decode_t iTypeDecode(uint8_t opcode);
+decode_t iTypeDecode(uint8_t opcode, int32_t rawInstruction);
 
 /**
  * @fn decodeInstruction_R
@@ -159,11 +160,11 @@ instruction_e_t decodeInstruction_J(uint8_t opcode);
  *
  * @detail prints errors
  *
- * @param void 
+ * @param rawInstruction - in the event that an error occurs, prints the hex info on the instruction
  * @returns void
  *
  */
-void errorTypeDecode(void);
+void errorTypeDecode(int32_t rawInstruction);
 
 
 /**

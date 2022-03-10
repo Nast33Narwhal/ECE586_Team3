@@ -21,7 +21,7 @@
 void decodeInstruction(int32_t rawInstruction, instruction_t *decInstruction)
 {
 	uint8_t opcodeVal = rawInstruction & 0x7F;
-	decode_t instructionType = iTypeDecode(opcodeVal);
+	decode_t instructionType = iTypeDecode(opcodeVal, rawInstruction);
 	
 	decInstruction->itype = instructionType;
 	decInstruction->opcode = opcodeVal;
@@ -108,7 +108,7 @@ void decodeInstruction(int32_t rawInstruction, instruction_t *decInstruction)
 
 }
 
-decode_t iTypeDecode(uint8_t opcode)
+decode_t iTypeDecode(uint8_t opcode, int32_t rawInstruction)
 {
 	decode_t iType;
 	switch(opcode)
@@ -137,7 +137,7 @@ decode_t iTypeDecode(uint8_t opcode)
 			break;
 		default:
 			// Error
-			errorTypeDecode();
+			errorTypeDecode(rawInstruction);
 			break;
 	}
 	return iType;
@@ -365,9 +365,11 @@ instruction_e_t decodeInstruction_J(uint8_t opcode)
 	return determinedInstruction;
 }
 
-void errorTypeDecode(void)
+void errorTypeDecode(int32_t rawInstruction)
 {
+	extern uint32_t PC;
 	Fprintf(stderr, "Error: Invalid opcode, unable to decode instruction encoding type.\n");
+	Fprintf(stderr, "PC = 0x%.8X, raw instruction = 0x%.8X\n", PC, rawInstruction);
 	//TODO Update this error function
 	//garbageCollection();
 	exit(1);
