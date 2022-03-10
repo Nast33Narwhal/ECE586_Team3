@@ -264,7 +264,7 @@ void srliInstruction(instruction_t decInstruction)
 		Printf("SRLI, rd = %d, rs1 = %d, imm & 0x1F = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], decInstruction.immediate & 0x1F);
 	#endif
 	
-	registers_write(decInstruction.rd, REG[decInstruction.rs1] >> (decInstruction.immediate & 0x1F));
+	registers_write(decInstruction.rd, (uint32_t)REG[decInstruction.rs1] >> (uint32_t)(decInstruction.immediate & 0x1F));
 }
 
 //todo look into more
