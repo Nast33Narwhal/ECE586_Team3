@@ -63,11 +63,12 @@ void lwInstruction(instruction_t decInstruction)
 
 	// Load value from memory (base + offset)
 	unsigned address = (unsigned)(REG[decInstruction.rs1] + signExtend(decInstruction.immediate,11));
-	uint8_t byteOffset = address % 4;
+	uint8_t byteOffset = address % 4; 
 	int32_t wordLoaded = (readMemory(address/4)>>(byteOffset*8)) & (0xFFFFFFFF>>(byteOffset*8));
 	if (byteOffset != 0)
-	{
-		wordLoaded |= ((readMemory(address/4 + 1) << (byteOffset*8)) & (0xFFFFFFFF<<(byteOffset*8)));
+	{	
+		
+		wordLoaded |= ((readMemory(address/4 + 1) << (32-(byteOffset * 8))) & (0xFFFFFFFF<<(byteOffset*8)));
 	}
 	
 	#ifdef DEBUG
@@ -264,7 +265,7 @@ void srliInstruction(instruction_t decInstruction)
 		Printf("SRLI, rd = %d, rs1 = %d, imm & 0x1F = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], decInstruction.immediate & 0x1F);
 	#endif
 	
-	registers_write(decInstruction.rd, (uint32_t)REG[decInstruction.rs1] >> (uint32_t)(decInstruction.immediate & 0x1F));
+	registers_write(decInstruction.rd, (uint32_t)REG[decInstruction.rs1] >> (decInstruction.immediate & 0x1F));
 }
 
 //todo look into more

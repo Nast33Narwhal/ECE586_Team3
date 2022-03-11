@@ -133,7 +133,7 @@ void srlInstruction(instruction_t decInstruction)
 		Printf("SRL, rd = %d, rs1 = %d, rs2 & 0x1F = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], REG[decInstruction.rs2] & 0x1F);
 	#endif
 	
-	registers_write(decInstruction.rd, (uint32_t)REG[decInstruction.rs1] >> (uint32_t)(REG[decInstruction.rs2] & 0x1F));
+	registers_write(decInstruction.rd, (uint32_t)REG[decInstruction.rs1] >> (REG[decInstruction.rs2] & 0x1F));
 }
 
 
