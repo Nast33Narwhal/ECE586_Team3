@@ -159,4 +159,192 @@ void sraInstruction(instruction_t decInstruction)
 		registers_write(decInstruction.rd, REG[decInstruction.rs1] >> shamt);
 	}
 }
+
+
+
+//MUL RV32M standard extension instructions; 
+
+void mulInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+
+	int64_t result = (REG[decInstruction.rs1] * REG[decInstruction.rs2]) & 0x00000000FFFFFFFF; 
+	result = (int32_t)result; 
+	
+	#ifdef DEBUG
+		Printf("MUL Instruction, rd (lower) = rs1 * rs2 = %d * %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], result);
+	#endif
+	
+	// lower half of result stored in rd, rd = rs1 * rs2;
+	registers_write(decInstruction.rd, result);
+}
+
+void mulhInstruction(instruction_t decInstruction)
+{
+
+	//confusing wording on spec page 43 for below blocked out error check
+	/*
+	if (decInstruction.rd == decInstruction.rs1 || decInstruction.rd ==decInstruction.rs2)
+	{
+		Printf("Error. Could not complete instruction.\nMULH, MULHU, MULHSU does not allow rd to be the same as rs1 or rs2\n");
+		return;  
+	}
+	*/
+
+	extern int32_t *REG;
+
+	int64_t result = (int64_t)REG[decInstruction.rs1] * (int64_t)REG[decInstruction.rs2]; 
+	result = (uint64_t)result >> 32;  //shift right logical as if unsigned
+	result = (int32_t)result; 
+	
+	#ifdef DEBUG
+		Printf("MULH Instruction, rd (higher) = rs1 * rs2 = %d * %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], result);
+	#endif
+	
+	// lower half of result stored in rd, rd = rs1 * rs2;
+	registers_write(decInstruction.rd, result);
+}
+
+
+void mulhuInstruction(instruction_t decInstruction)
+{
+
+	//confusing wording on spec page 43 for below blocked out error check
+	/*if (decInstruction.rd == decInstruction.rs1 || decInstruction.rd ==decInstruction.rs2)
+	{
+		Printf("Error. Could not complete instruction.\nMULH, MULHU, MULHSU does not allow rd to be the same as rs1 or rs2\n");
+		return;  
+	}
+	*/
+
+	extern int32_t *REG;
+
+	int64_t result = (uint64_t)REG[decInstruction.rs1] * (uint64_t)REG[decInstruction.rs2]; 
+	result = (uint64_t)result >> 32;  //shift right logical as if unsigned
+	result = (int32_t)result; 
+	
+	#ifdef DEBUG
+		Printf("MULHU Instruction, rd (higher) = (unsigned)rs1 * (unsigned)rs2 = %d * %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], result);
+	#endif
+	
+	// lower half of result stored in rd, rd = rs1 * rs2;
+	registers_write(decInstruction.rd, result);
+}
+
+void mulhsuInstruction(instruction_t decInstruction)
+{
+
+	//confusing wording on spec page 43 for below blocked out error check
+	/*if (decInstruction.rd == decInstruction.rs1 || decInstruction.rd ==decInstruction.rs2)
+	{
+		Printf("Error. Could not complete instruction.\nMULH, MULHU, MULHSU does not allow rd to be the same as rs1 or rs2\n");
+		return;  
+	}
+	*/
+	extern int32_t *REG;
+
+    int64_t result = (int64_t)REG[decInstruction.rs1] * (uint64_t)REG[decInstruction.rs2];
+	result = (uint64_t)result >> 32;  //shift right logical as if unsigned
+	result = (int32_t)result; 
+	
+	#ifdef DEBUG
+		Printf("MULHSU, rd (higher) = (signed)rs1 * (unsigned)rs2 = %d * %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], result);
+	#endif
+	
+	// upper half of result stored in rd, rd = (signed)rs1 * (unsigned)rs2;
+	registers_write(decInstruction.rd, result);
+}
+
+void divInstruction(instruction_t decInstruction)
+{
+	//confusing wording on spec page 44 for below blocked out error check
+	/*if (decInstruction.rd == decInstruction.rs1 || decInstruction.rd ==decInstruction.rs2)
+	{
+		Printf("Error. Could not complete instruction.\nDIV, DIV, REM, REMU does not allow rd to be the same as rs1 or rs2\n");
+		return;  
+	}
+	*/
+
+	extern int32_t *REG;
+
+	int32_t result = REG[decInstruction.rs1] / REG[decInstruction.rs2]; 
+	
+	#ifdef DEBUG
+		Printf("DIV Instruction, rd = rs1 / rs2 = %d / %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], result);
+	#endif
+	
+	// lower half of result stored in rd, rd = rs1 * rs2;
+	registers_write(decInstruction.rd, result);
+}
+
+void divuInstruction(instruction_t decInstruction)
+{
+
+	//confusing wording on spec page 44 for below blocked out error check
+	/*if (decInstruction.rd == decInstruction.rs1 || decInstruction.rd ==decInstruction.rs2)
+	{
+		Printf("Error. Could not complete instruction.\nDIV, DIV, REM, REMU does not allow rd to be the same as rs1 or rs2\n");
+		return;  
+	}
+	*/
+
+	extern int32_t *REG;
+
+	int32_t result = (uint32_t)REG[decInstruction.rs1] / REG[decInstruction.rs2]; 
+	
+	#ifdef DEBUG
+		Printf("DIVU Instruction, rd = (unsigned)rs1 / rs2 = %d / %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], result);
+	#endif
+	
+	// lower half of result stored in rd, rd = rs1 * rs2;
+	registers_write(decInstruction.rd, result);
+}
+
+void remInstruction(instruction_t decInstruction)
+{
+
+	//confusing wording on spec page 44 for below blocked out error check
+	/*if (decInstruction.rd == decInstruction.rs1 || decInstruction.rd ==decInstruction.rs2)
+	{
+		Printf("Error. Could not complete instruction.\nDIV, DIV, REM, REMU does not allow rd to be the same as rs1 or rs2\n");
+		return;  
+	}
+	*/
+
+	extern int32_t *REG;
+
+	int32_t result = REG[decInstruction.rs1] % REG[decInstruction.rs2]; 
+	
+	#ifdef DEBUG
+		Printf("REM Instruction, rd = rs1 % rs2 = %d % %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], result);
+	#endif
+	
+	// lower half of result stored in rd, rd = rs1 * rs2;
+	registers_write(decInstruction.rd, result);
+}
+
+void remuInstruction(instruction_t decInstruction)
+{
+
+	//confusing wording on spec page 43 for below blocked out error check
+	/*if (decInstruction.rd == decInstruction.rs1 || decInstruction.rd ==decInstruction.rs2)
+	{
+		Printf("Error. Could not complete instruction.\nDIV, DIV, REM, REMU does not allow rd to be the same as rs1 or rs2\n");
+		return;  
+	}
+	*/
+
+	extern int32_t *REG;
+
+	int32_t result = (uint32_t)REG[decInstruction.rs1] % REG[decInstruction.rs2]; 
+	
+	#ifdef DEBUG
+		Printf("REMU Instruction, rd = (unsigned)rs1 % rs2 = %d % %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], result);
+	#endif
+	
+	// lower half of result stored in rd, rd = rs1 * rs2;
+	registers_write(decInstruction.rd, result);
+}
+
+
 // END R Type Instructions

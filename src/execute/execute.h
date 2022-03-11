@@ -518,6 +518,110 @@ void andInstruction(instruction_t decInstruction);
 
 
 /**
+ * @fn mulInstruction
+ * @brief executes the mul instruction
+ *
+ * @detail rd gets the lower 32 bits of = rs1 * rs2
+ *
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
+ *
+ */
+void mulInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn mulhInstruction
+ * @brief executes the mulh instruction
+ *
+ * @detail rd gets the upper 32 bits of = rs1 * rs2
+ *
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
+ *
+ */
+void mulhInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn mulhuInstruction
+ * @brief executes the mulhu instruction
+ *
+ * @detail rd gets the upper 32 bits of = (unsigned)rs1 * (unsigned)rs2
+ *
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
+ *
+ */
+void mulhuInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn mulhsuInstruction
+ * @brief executes the mulhsu instruction
+ *
+ * @detail rd gets the upper 32 bits of = (unsigned)rs1 * (unsigned)rs2
+ *
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
+ *
+ */
+void mulhsuInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn divInstruction
+ * @brief executes the div instruction
+ *
+ * @detail rd gets signed(rs1) / rs2
+ *
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
+ *
+ */
+void divInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn divuInstruction
+ * @brief executes the divu instruction
+ *
+ * @detail rd gets unsigned(rs1) / rs2
+ *
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
+ *
+ */
+void divuInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn remInstruction
+ * @brief executes the rem instruction
+ *
+ * @detail rd gets signed(rs1) % rs2
+ *
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
+ *
+ */
+void remInstruction(instruction_t decInstruction);
+
+
+/**
+ * @fn remuInstruction
+ * @brief executes the remu instruction
+ *
+ * @detail rd gets unsigned(rs1) % rs2
+ *
+ * @param decInstruction - instruction_t passed by reference to be updated
+ * @returns void
+ *
+ */
+void remuInstruction(instruction_t decInstruction);
+
+
+/**
  * @fn ecallInstruction
  * @brief executes the ecall instruction
  *
@@ -541,6 +645,7 @@ void ecallInstruction(instruction_t decInstruction);
  *
  */
 void ebreakInstruction(instruction_t decInstruction);
+
 
 /**
  * @fn      TODO

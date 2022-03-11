@@ -7,7 +7,7 @@
  * @date Presented TODO
  *
  * @author Braden Harwood (bharwood@pdx.edu)
- * @author TODO
+ * @author Drew Seidel (dseidel@pdx.edu)
  *
  */
 
@@ -154,6 +154,8 @@ instruction_e_t decodeInstruction_R(uint8_t func3, uint8_t func7)
 				determinedInstruction = ADD;
 			else if (func7 == 0b0100000)
 				determinedInstruction = SUB;
+			else if (func7 == 0b0000001)
+				determinedInstruction = MUL; 
 			else // invalid
 			{
 				Fprintf(stderr, "Error: Invalid func7 when func3 = 0b000 in R-type instruction.\n");
@@ -161,22 +163,56 @@ instruction_e_t decodeInstruction_R(uint8_t func3, uint8_t func7)
 			}
 			break;
 		case 0b001:
-			determinedInstruction = SLL;
+			if 		(func7 == 0b0000000)
+				determinedInstruction = SLL;
+			else if (func7 == 0b0000001)
+				determinedInstruction = MULH; 
+			else
+			{
+				Fprintf(stderr, "Error: Invalid func7 when func3 = 0b001 in R-type instruction.\n");
+				exit(1);
+			}
 			break;
 		case 0b010:
+			if 		(func7 == 0b0000000)
 			determinedInstruction = SLT;
+			else if (func7 == 0b0000001)
+				determinedInstruction = MULHSU; 
+			else
+			{
+				Fprintf(stderr, "Error: Invalid func7 when func3 = 0b010 in R-type instruction.\n");
+				exit(1);
+			}			
 			break;
 		case 0b011:
+			if 		(func7 == 0b0000000)
 			determinedInstruction = SLTU;
+			else if (func7 == 0b0000001)
+				determinedInstruction = MULHU; 
+			else
+			{
+				Fprintf(stderr, "Error: Invalid func7 when func3 = 0b011 in R-type instruction.\n");
+				exit(1);
+			}						
 			break;
 		case 0b100:
+			if 		(func7 == 0b0000000)
 			determinedInstruction = XOR;
+			else if (func7 == 0b0000001)
+				determinedInstruction = DIV; 
+			else
+			{
+				Fprintf(stderr, "Error: Invalid func7 when func3 = 0b100 in R-type instruction.\n");
+				exit(1);
+			}								
 			break;
 		case 0b101:
 			if      (func7 == 0b0000000)
 				determinedInstruction = SRL;
 			else if (func7 == 0b0100000)
 				determinedInstruction = SRA;
+			else if (func7 == 0b0000001)
+				determinedInstruction = DIVU; 
 			else
 			{
 				Fprintf(stderr, "Error: Invalid func7 when func3 = 0b101 in R-type instruction.\n");
@@ -184,11 +220,27 @@ instruction_e_t decodeInstruction_R(uint8_t func3, uint8_t func7)
 			}
 			break;
 		case 0b110:
+			if 		(func7 == 0b0000000)
 			determinedInstruction = OR;
-			break;
+			else if (func7 == 0b0000001)
+				determinedInstruction = REM; 
+			else
+			{
+				Fprintf(stderr, "Error: Invalid func7 when func3 = 0b110 in R-type instruction.\n");
+				exit(1);
+			}						
+			break;		
 		case 0b111:
+			if 		(func7 == 0b0000000)
 			determinedInstruction = AND;
-			break;
+			else if (func7 == 0b0000001)
+				determinedInstruction = REMU; 
+			else
+			{
+				Fprintf(stderr, "Error: Invalid func7 when func3 = 0b111 in R-type instruction.\n");
+				exit(1);
+			}						
+			break;		
 		default:
 			Fprintf(stderr, "Error determining instruction of type R.\n");
 			determinedInstruction = ERROR;
@@ -576,6 +628,30 @@ const char *instructionEnumToStr(instruction_e_t instruction)
 		case AND:
 			return "AND";
 			break;
+		case MUL: 
+			return "MUL"; 
+			break; 
+		case MULH:
+			return "MULH";
+			break; 
+		case MULHSU:
+			return "MULHSU";
+			break; 
+		case MULHU:
+			return "MULHU";
+			break; 
+		case DIV:
+			return "DIV"; 
+			break; 
+		case DIVU: 
+			return "DIVU"; 
+			break; 
+		case REM: 
+			return "REM"; 
+			break; 
+		case REMU:
+			return "REMU"; 
+			break; 
 		case ECALL:
 			return "ECALL";
 			break;

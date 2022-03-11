@@ -7,7 +7,7 @@
  * @date Presented TODO
  *
  * @author Braden Harwood (bharwood@pdx.edu)
- * @author TODO
+ * @author Drew Seide (dseidel@pdx.edu)
  *
  */
 
@@ -30,7 +30,7 @@ typedef enum _decode_e {R, I, S, U, B, J} decode_t;
 // instruction enum for all of the possible instructions encoded in RV32I
 #ifndef INSTRUCTION_ENUM_T_
 #define INSTRUCTION_ENUM_T_
-typedef enum _instruction_e {ERROR, LUI, AUIPC, JAL, JALR, BEQ, BNE, BLT, BGE, BLTU, BGEU, LB, LH, LW, LBU, LHU, SB, SH, SW, ADDI, SLTI, SLTIU, XORI, ORI, ANDI, SLLI, SRLI, SRAI, ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND, ECALL, EBREAK} instruction_e_t;
+typedef enum _instruction_e {ERROR, LUI, AUIPC, JAL, JALR, BEQ, BNE, BLT, BGE, BLTU, BGEU, LB, LH, LW, LBU, LHU, SB, SH, SW, ADDI, SLTI, SLTIU, XORI, ORI, ANDI, SLLI, SRLI, SRAI, ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND, ECALL, EBREAK, MUL, MULH, MULHSU, MULHU, DIV, DIVU, REM, REMU} instruction_e_t;
 #endif
 
 #ifndef INSTRUCTION_T_

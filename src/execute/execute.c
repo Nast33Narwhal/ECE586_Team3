@@ -147,6 +147,29 @@ void executeInstruction(instruction_t decInstruction)
 			break;
 		case AND:
 			andInstruction(decInstruction);
+		case MUL: 
+			 mulInstruction(decInstruction); 
+			break; 
+		case MULH:
+			 mulhInstruction(decInstruction); 
+			break; 
+		case MULHSU:
+			 mulhsuInstruction(decInstruction); 
+			break; 
+		case MULHU:
+			 mulhuInstruction(decInstruction); 
+			break; 
+		case DIV:
+			 divInstruction(decInstruction);
+			break; 
+		case DIVU: 
+			 divuInstruction(decInstruction);
+			break; 
+		case REM: 
+			remInstruction(decInstruction); 
+			break; 
+		case REMU:
+			remuInstruction(decInstruction); 
 			break;
 		case ECALL:
 			Printf("ECALL instruction execution function not implemented yet\n");
