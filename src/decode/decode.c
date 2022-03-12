@@ -18,6 +18,7 @@
 #include <stdbool.h>
 #include "decode.h"
 #include "../execute/execute.h"
+#include "../registers/registers.h"
 
 void decodeInstruction(int32_t rawInstruction, instruction_t *decInstruction)
 {
@@ -527,22 +528,22 @@ void printAssembly(FILE *fd, int32_t opcode)
 	switch (instruction.itype)
 	{
 		case (R):
-			Fprintf(fd, "%s\t%d, %d, %d\n", instructionEnumToStr(instruction.instruction), instruction.rd, instruction.rs1, instruction.rs2);
+			Fprintf(fd, "%s\t%s, %s, %s\n", instructionEnumToStr(instruction.instruction), regNumToStr(instruction.rd), regNumToStr(instruction.rs1), regNumToStr(instruction.rs2));
 			break;
 		case (I):
-			Fprintf(fd, "%s\t%d, %d, %d\n", instructionEnumToStr(instruction.instruction), instruction.rd, instruction.rs1, signExtend(instruction.immediate, 11));
+			Fprintf(fd, "%s\t%s, %s, %d\n", instructionEnumToStr(instruction.instruction), regNumToStr(instruction.rd), regNumToStr(instruction.rs1), signExtend(instruction.immediate, 11));
 			break;
 		case (S):
-			Fprintf(fd, "%s\t%d, %d(%d)\n", instructionEnumToStr(instruction.instruction), instruction.rs2, signExtend(instruction.immediate, 11), instruction.rs1);
+			Fprintf(fd, "%s\t%s, %d(%s)\n", instructionEnumToStr(instruction.instruction), regNumToStr(instruction.rs2), signExtend(instruction.immediate, 11), regNumToStr(instruction.rs1));
 			break;
 		case (U):
-			Fprintf(fd, "%s\t%d, %d\n", instructionEnumToStr(instruction.instruction), instruction.rd, instruction.immediate<<12);
+			Fprintf(fd, "%s\t%s, %d\n", instructionEnumToStr(instruction.instruction), regNumToStr(instruction.rd), instruction.immediate);
 			break;
 		case (B):
-			Fprintf(fd, "%s\t%d, %d, %d\n", instructionEnumToStr(instruction.instruction), instruction.rs1, instruction.rs2, signExtend(instruction.immediate<<1, 12));
+			Fprintf(fd, "%s\t%s, %s, %d\n", instructionEnumToStr(instruction.instruction), regNumToStr(instruction.rs1), regNumToStr(instruction.rs2), signExtend(instruction.immediate, 12));
 			break;
 		case (J):
-			Fprintf(fd, "%s\t%d, %d\n", instructionEnumToStr(instruction.instruction), instruction.rd, signExtend(instruction.immediate<<1, 20));
+			Fprintf(fd, "%s\t%s, %d\n", instructionEnumToStr(instruction.instruction), regNumToStr(instruction.rd), signExtend(instruction.immediate, 20));
 			break;
 		case (NONE):
 			Fprintf(fd, "...\n");
