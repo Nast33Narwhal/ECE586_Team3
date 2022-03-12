@@ -68,7 +68,7 @@ void lwInstruction(instruction_t decInstruction)
 	if (byteOffset != 0)
 	{	
 		
-		wordLoaded |= ((readMemory(address/4 + 1) << (32-(byteOffset * 8))) & (0xFFFFFFFF<<(byteOffset*8)));
+		wordLoaded |= ((readMemory(address/4 + 1) << (32-(byteOffset * 8))) & (0xFFFFFFFF<<(32-byteOffset*8)));
 	}
 	
 	#ifdef DEBUG
@@ -88,10 +88,10 @@ void lbuInstruction(instruction_t decInstruction)
 	int32_t byteLoaded = (readMemory(address/4)>>(byteOffset*8)) & 0xFF;
 	
 	#ifdef DEBUG
-		Printf("LBU, rd = %u, rs1 = %u, imm = %d, rd = byte(mem[rs1/4+imm/4], imm%4) = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], signExtend(decInstruction.immediate,11), byteLoaded<<24);
+		Printf("LBU, rd = %u, rs1 = %u, imm = %d, rd = byte(mem[rs1/4+imm/4], imm%4) = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], signExtend(decInstruction.immediate,11), byteLoaded);
 	#endif
 	
-	registers_write(decInstruction.rd, (uint32_t)(byteLoaded << 24));
+	registers_write(decInstruction.rd, (uint32_t)byteLoaded);
 }
 
 void lhuInstruction(instruction_t decInstruction)
@@ -107,10 +107,10 @@ void lhuInstruction(instruction_t decInstruction)
 		hwLoaded |= ((readMemory(address/4 + 1) << 8) & 0xFF00);
 	}
 	#ifdef DEBUG
-		Printf("LHU, rd = %u, rs1 = %u, imm = %d, rd = byte(mem[rs1/4+imm/4], imm%4) = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], signExtend(decInstruction.immediate,11), hwLoaded<<16);
+		Printf("LHU, rd = %u, rs1 = %u, imm = %d, rd = byte(mem[rs1/4+imm/4], imm%4) = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], signExtend(decInstruction.immediate,11), hwLoaded);
 	#endif
 	
-	registers_write(decInstruction.rd, (uint32_t)(hwLoaded << 16));
+	registers_write(decInstruction.rd, (uint32_t)hwLoaded);
 }
 
 void addiInstruction(instruction_t decInstruction)
