@@ -83,6 +83,31 @@ void clrBreakpoint(unsigned location);
 bool isBreakpoint(unsigned location);
 
 /**
+ * @fn      setWatchpoint
+ * @brief   Sets a watchpoint at the specified word
+ * 
+ * @param   location    Word aligned address of the watchpoint
+ */
+void setWatchpoint(unsigned location);
+
+/**
+ * @fn      clrWatchpoint
+ * @brief   Clears a watchpoint at the specified word
+ * 
+ * @param   location    Word aligned address of the watchpoint
+ */
+void clrWatchpoint(unsigned location);
+
+/**
+ * @fn      isWatchpoint
+ * @brief   Check if memory word is a watchpoint
+ * 
+ * @param   location Address of memory word
+ * @return  true if the memory word is a watchpoint, false otherwise 
+ */
+bool isWatchpoint(unsigned location);
+
+/**
  * @fn      mem_getSize
  * @brief   Returns the number of memWords_t in memory
  * 
