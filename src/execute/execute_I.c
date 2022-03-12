@@ -126,7 +126,14 @@ void addiInstruction(instruction_t decInstruction)
 	}
 
 	#ifdef DEBUG
-		Printf("Addi Instruction, rd = rs1 + signExtended(imm) = %d + signExtended(%d) = %d + %d = %d\n", REG[decInstruction.rs1], decInstruction.immediate, REG[decInstruction.rs1], extendedImmediate, REG[decInstruction.rs1] + extendedImmediate);
+		if (extendedImmediate == 0)
+		{
+			Printf("Mv Instruction, rd = rs1 = %d \n", REG[decInstruction.rs1]);
+		}
+		else
+		{
+			Printf("Addi Instruction, rd = rs1 + signExtended(imm) = %d + signExtended(%d) = %d + %d = %d\n", REG[decInstruction.rs1], decInstruction.immediate, REG[decInstruction.rs1], extendedImmediate, REG[decInstruction.rs1] + extendedImmediate);	
+		}
 	#endif
 
 	// Overflow ignored, rd = rs1 + rs2;
