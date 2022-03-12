@@ -1,0 +1,23 @@
+   0:   00037333                and     t1,t1,zero
+   4:   0003f3b3                and     t2,t2,zero
+   8:   0013e393                ori     t2,t2,1
+   c:   20031463                bne     t1,0x14
+  14:   00031463                bne     t1,0x1c
+  1c:   00731463                bne     t1,t2,0x24
+  24:   00030463                beq     t1,0x2c
+  2c:   00730463                beq     t1,t2,0x34
+  34:   00730463                beq     t1,t2,0x3c
+  3c:   00035463                bge     t1,0x44
+  44:   00735463                bge     t1,t2,0x4c
+  4c:   00735463                bge     t1,t2,0x54
+  54:   00034463                blt     t1,0x5c
+  5c:   0063c463                blt     t2,t1,0x64
+  64:   00734463                blt     t1,t2,0x6c
+  6c:   00037463                bgeu    t1,zero,0x74
+  74:   00737463                bgeu    t1,t2,0x7c
+  7c:   00737463                bgeu    t1,t2,0x84
+  84:   00036463                bltu    t1,zero,0x8c
+  8c:   0063e463                bltu    t2,t1,0x94
+  94:   00736463                bltu    t1,t2,0x9c
+  9c:   00008067                ret
+
