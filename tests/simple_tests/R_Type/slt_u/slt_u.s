@@ -2,8 +2,8 @@
 # comparing negatives
 AND x6, x6, zero
 AND x7, x7, zero
-ORI x6, x6, 0x7FB       # x6 = -5
-ORI x7, x7, 0x7FC       # x7 = -4
+ORI x6, x6, 0xFFB       # x6 = -5
+ORI x7, x7, 0xFFC       # x7 = -4
 SLT x5, x6, x7          # x5 should be 1, -5 < -4
 
 # comparing positives
@@ -16,7 +16,7 @@ SLT x5, x6, x7          # x5 should be 0, 5 !< 4
 # positive/negative comparison
 AND x6, x6, zero
 AND x7, x7, zero
-ORI x6, x6, 0x7FF       # x6 = -1
+ORI x6, x6, 0xFFF       # x6 = -1
 ORI x7, x7, 0x001       # x7 = 1
 SLT x5, x6, x7          # x5 should be 1, -1 < 1
 
@@ -31,8 +31,8 @@ SLT x5, x6, x7          # x5 should be 0, 1 !< 1
 # comparing numbers with 1 in MSBit
 AND x6, x6, zero
 AND x7, x7, zero
-ORI x6, x6, 0x7FE       
-ORI x7, x7, 0x7FF
+ORI x6, x6, 0xFFE       
+ORI x7, x7, 0xFFF
 SLTU x5, x6, x7         # x5 should be 1, 0xFFFFFFFE < 0xFFFFFFFF
 
 # comparing numbers with 0 in MSBit
