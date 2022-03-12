@@ -80,6 +80,35 @@ void displayUserInterface(bool *singleStep)
                 Printf("Format is \"break <address>\"\n");
             }
         }
+        //Set/clear watchpoints
+        else if ((strcmp(cmd, "w")==0) || (strcmp(cmd, "watch")==0))
+        {
+            if (Sscanf(input, "%50s %64u%20s", cmd, &arg1, extra) == 2 ||
+                Sscanf(input, "%50s %64x%20s", cmd, &arg1, extra) == 2)
+            {
+                if (arg1/4 > mem_getSize())
+                {
+                    Printf("Watchpoint too large! Maximum address is 0x%08X\n", mem_getSize()*4); 
+                    continue; 
+                }
+                else{
+                    if (isWatchpoint(arg1/4))
+                    {
+                        clrWatchpoint(arg1/4);
+                        Printf("Watchpoint cleared at 0x%08X\n", arg1 & 0xFFFFFFFC); //Force word alignment
+                    }
+                    else
+                    {
+                        setWatchpoint(arg1/4);
+                        Printf("Watchpoint set at 0x%08X\n", arg1 & 0xFFFFFFFC);
+                    } 
+                }
+            }
+            else
+            {
+                Printf("Format is \"watch <address>\"\n");
+            }
+        }
         //Display memory
         else if ((strcmp(cmd, "m")==0) || (strcmp(cmd, "mem")==0))
         {
@@ -124,5 +153,5 @@ void displayUserInterface(bool *singleStep)
 void displayHelp()
 {
     Printf("List of available commands:");
-    Printf("run, help, mem, reg, step, break\n");
+    Printf("run, help, mem, reg, step, break, watch\n");
 }
