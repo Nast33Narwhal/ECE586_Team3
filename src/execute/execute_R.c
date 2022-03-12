@@ -219,8 +219,8 @@ void mulhuInstruction(instruction_t decInstruction)
 
 	extern int32_t *REG;
 
-	int64_t result = (uint64_t)REG[decInstruction.rs1] * (uint64_t)REG[decInstruction.rs2]; 
-	result = (uint64_t)result >> 32;  //shift right logical as if unsigned
+	uint64_t result = (uint64_t)((uint32_t)REG[decInstruction.rs1]) * (uint64_t)((uint32_t)REG[decInstruction.rs2]); 
+	result = result >> 32;  //shift right logical as if unsigned 
 	result = (int32_t)result; 
 	
 	#ifdef DEBUG
@@ -243,8 +243,8 @@ void mulhsuInstruction(instruction_t decInstruction)
 	*/
 	extern int32_t *REG;
 
-    int64_t result = (int64_t)REG[decInstruction.rs1] * (uint64_t)REG[decInstruction.rs2];
-	result = (uint64_t)result >> 32;  //shift right logical as if unsigned
+    uint64_t result = (int64_t)REG[decInstruction.rs1] * (uint64_t)((uint32_t)REG[decInstruction.rs2]);
+	result = result >> 32;  //shift right logical as if unsigned
 	result = (int32_t)result; 
 	
 	#ifdef DEBUG

@@ -28,7 +28,8 @@ divu x20, x7, x5 #0xFFFFFFFA / 0x5 = 0x33333332
 rem x21, x10, x5 #30%5 = 6r0 = 0
 rem x22, x6, x5 #6%5 = 1r1 = 1
 
+
 # Remainder Unsigned
-rem x23, x7, x6 #0xFFFFFFFA % 0x6 = r4 = 4
+remu x23, x7, x6 #0xFFFFFFFA % 0x6 = r4 = 4
 
 jr ra
