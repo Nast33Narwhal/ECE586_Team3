@@ -399,7 +399,7 @@ void remuInstruction(instruction_t decInstruction)
 		#endif
 	}
 	
-	registers_write(decInstruction.rd, result);
+	registers_write(decInstruction.rd, remainder);
 }
 
 
