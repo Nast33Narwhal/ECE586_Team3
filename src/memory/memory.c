@@ -79,6 +79,7 @@ void writeMemory(unsigned memoryLocation, int32_t valueToWrite)
 		exit(1);
 	}
 
+	
 	// Write 32 bit value to memory location
 	memory.address[memoryLocation].data = valueToWrite;
 }
@@ -127,6 +128,39 @@ bool isBreakpoint(unsigned location)
 	}
 
 	return memory.address[location].breakpoint;
+}
+
+void setWatchpoint(unsigned location)
+{
+	if (location > memory.size)
+	{
+		Fprintf(stderr, "Warning in setWatchpoint(): Seeking memory above maximum location(0x%08X).\n", location*4);
+		return;		
+	}
+
+	memory.address[location].watchpoint = true;
+}
+
+void clrWatchpoint(unsigned location)
+{
+	if (location > memory.size)
+	{
+		Fprintf(stderr, "Warning in clrWatchpoint(): Seeking memory above maximum location(0x%08X).\n", location*4);
+		return;		
+	}
+
+	memory.address[location].watchpoint = true;
+}
+
+bool isWatchpoint(unsigned location)
+{
+	if (location > memory.size)
+	{
+		Fprintf(stderr, "Warning in isWatchpoint(): Seeking memory above maximum location(0x%08X).\n", location*4);
+		return false;		
+	}
+
+	return memory.address[location].watchpoint;
 }
 
 unsigned mem_getSize()

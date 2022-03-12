@@ -15,15 +15,17 @@
 
 #define MEM_SIZE 16384
 
+//Helper functions
+char *parseArgs(int32_t argc, char **argv);
+void writeToWatchpoint(unsigned address);
+
 // global variables
 uint32_t stackAddress = 0; //fix (unneccesary global)
 extern int32_t memory_size; 	//how many values in dynamically allocated memory array. fix
 uint32_t PC = 0; 
 //registers_t *registers; 
 int32_t *REG;  //global array of registers
-bool usrCmds = false; //Flag to enable/disable user commands
-
-char *parseArgs(int32_t argc, char **argv);
+bool singleStep = false;
 
 int32_t main(int32_t argc, char **argv)
 {
@@ -31,8 +33,6 @@ int32_t main(int32_t argc, char **argv)
 	char *fileName = parseArgs(argc, argv);
 	
 	mem_init(MEM_SIZE);
-	if (usrCmds)
-		setBreakpoint(PC/4);
 
 	//load program 
    	parseMemFile(fileName); 
@@ -53,8 +53,6 @@ int32_t main(int32_t argc, char **argv)
 	//initialize decodedInstruction type
 	instruction_t decInstruction;
 	int32_t nextInstruction;
-
-	bool singleStep = false;
 
 	//main loop
     
@@ -134,6 +132,17 @@ int32_t main(int32_t argc, char **argv)
     return 0;
 }
 
+/**
+ * @fn      writeToWatchpoint
+ * @brief   Prompts the user that a watchpoint is about to be overwritten
+ * 
+ * @param   address Address of the watchpoint in memory
+ */
+void writeToWatchpoint(unsigned address)
+{
+    Printf("Attempting to write to watchpoint at 0x%08X\n", address);
+    displayUserInterface(&singleStep);
+}
 
 char *parseArgs(int32_t argc, char **argv)
 {
@@ -182,7 +191,7 @@ char *parseArgs(int32_t argc, char **argv)
 
 		else if (!strcmp(argv[i], "-ui")) 
 		{
-			usrCmds = true;
+			singleStep = true;
 		}
 
         else if (!strcmp(argv[i], "-pc")) 
