@@ -20,6 +20,8 @@
 #include "execute.h"
 #include "../registers/registers.h"
 
+extern void writeToWatchpoint(unsigned address);
+
 // S Type Instructions
 void sbInstruction(instruction_t decInstruction)
 {
@@ -28,6 +30,12 @@ void sbInstruction(instruction_t decInstruction)
 	int32_t byteToStore = REG[decInstruction.rs2] & 0xFF; //Grab lowest byte from source register
 	unsigned address = (unsigned)(REG[decInstruction.rs1] + signExtend(decInstruction.immediate,11)); //Calculate address
 	uint8_t byteOffset = address % 4; //Calculate byte offset
+
+	if (isWatchpoint(address/4))
+	{
+		writeToWatchpoint(address & 0xFFFFFFFC);
+	}
+
 	writeMemoryMasked(address/4, byteToStore<<(byteOffset*8), 0xFF<<(byteOffset*8)); //Overwrite byte in memory
 
 	#ifdef DEBUG
@@ -46,6 +54,16 @@ void shInstruction(instruction_t decInstruction)
 	int32_t shortToStore = REG[decInstruction.rs2] & 0xFFFF;
 	unsigned address = (unsigned)(REG[decInstruction.rs1] + signExtend(decInstruction.immediate,11));
 	uint8_t byteOffset = address % 4;
+
+	if (isWatchpoint(address/4))
+	{
+		writeToWatchpoint(address & 0xFFFFFFFC);
+	}
+	if (byteOffset == 3 && isWatchpoint(address/4+1))
+	{
+		writeToWatchpoint((address+4) & 0xFFFFFFFC);
+	}
+
 	writeMemoryMasked(address/4, shortToStore<<(byteOffset*8), 0xFFFF<<(byteOffset*8));
 	if (byteOffset == 3)
 		writeMemoryMasked(address/4 + 1, shortToStore >> 8, 0xFF);
@@ -61,6 +79,16 @@ void swInstruction(instruction_t decInstruction)
 	int32_t wordToStore = REG[decInstruction.rs2]; //Get value to store
 	unsigned address = (unsigned)(REG[decInstruction.rs1] + signExtend(decInstruction.immediate,11)); //Calculate address
 	uint8_t byteOffset = address % 4; //Calculate bytes offset from word alignment
+
+	if (isWatchpoint(address/4))
+	{
+		writeToWatchpoint(address & 0xFFFFFFFC);
+	}
+	if (byteOffset > 0 && isWatchpoint(address/4+1))
+	{
+		writeToWatchpoint((address+4) & 0xFFFFFFFC);
+	}
+
 	writeMemoryMasked(address/4, wordToStore<<(byteOffset*8), 0xFFFFFFFF<<(byteOffset*8)); //Write word to memory
 	if (byteOffset) //If word is not word aligned...
 		writeMemoryMasked(address/4 + 1, wordToStore >> (byteOffset * 8), 0xFFFFFFFF >> (byteOffset * 8)); //Write MSBs into next word
