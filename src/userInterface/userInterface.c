@@ -18,7 +18,7 @@ void displayUserInterface(bool *singleStep)
     *singleStep = false;
 
     Printf("PC = 0x%08X : ", PC);
-    printAssembly(stdout, readMemory((unsigned)PC));
+    printAssembly(stdout, readMemory((unsigned)PC/4));
 
     while (1)
     {
@@ -91,7 +91,7 @@ void displayUserInterface(bool *singleStep)
                     Printf("Address too large! Maximum address is 0x%08X\n", mem_getSize()*4); 
                     continue; 
                 }
-                Printf("0x%08X : 0x%08X\t", arg1 & 0xFFFFFFFC, readMemory(arg1/4));
+                Printf("0x%08X : 0x%08X\t\t", arg1 & 0xFFFFFFFC, readMemory(arg1/4));
                 printAssembly(stdout, readMemory(arg1/4));
             }
             else if (Sscanf(input, "%50s %64u-%64u%20s", cmd, &arg1, &arg2, extra) == 3 ||
@@ -104,7 +104,7 @@ void displayUserInterface(bool *singleStep)
                 }
                 for (unsigned i = arg1/4; i <= arg2/4; i++)
                 {
-                    Printf("0x%08X : 0x%08X\t", i*4, readMemory(i));
+                    Printf("0x%08X : 0x%08X\t\t", i*4, readMemory(i));
                     printAssembly(stdout, readMemory(i));
                 }
             }
