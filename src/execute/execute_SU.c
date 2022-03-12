@@ -91,7 +91,7 @@ void swInstruction(instruction_t decInstruction)
 
 	writeMemoryMasked(address/4, wordToStore<<(byteOffset*8), 0xFFFFFFFF<<(byteOffset*8)); //Write word to memory
 	if (byteOffset) //If word is not word aligned...
-		writeMemoryMasked(address/4 + 1, wordToStore >> (byteOffset * 8), 0xFFFFFFFF >> (byteOffset * 8)); //Write MSBs into next word
+		writeMemoryMasked(address/4 + 1, wordToStore >> (32 - byteOffset * 8), 0xFFFFFFFF >> (32 - byteOffset * 8)); //Write MSBs into next word
 }
 // END S Type Instructions
 
