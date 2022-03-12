@@ -646,6 +646,15 @@ void ecallInstruction(instruction_t decInstruction);
  */
 void ebreakInstruction(instruction_t decInstruction);
 
+/**
+ * @fn      signExtend
+ * @brief   Sign extends a value to 32 bits
+ *
+ * @param   value   Value to sign extend
+ * @param   msb     Position of the MSB, starting at bit 0
+ * @returns 32-bit sign extended number
+ */
+int32_t signExtend(int32_t value, uint8_t msb);
 
 /**
  * @fn      TODO
