@@ -201,7 +201,7 @@ void mulhInstruction(instruction_t decInstruction)
 		Printf("MULH Instruction, rd (higher) = rs1 * rs2 = %d * %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], result);
 	#endif
 	
-	// lower half of result stored in rd, rd = rs1 * rs2;
+	// upper half of result stored in rd, rd = rs1 * rs2;
 	registers_write(decInstruction.rd, result);
 }
 
@@ -224,10 +224,10 @@ void mulhuInstruction(instruction_t decInstruction)
 	result = (int32_t)result; 
 	
 	#ifdef DEBUG
-		Printf("MULHU Instruction, rd (higher) = (unsigned)rs1 * (unsigned)rs2 = %d * %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], result);
+		Printf("MULHU Instruction, rd (higher) = (unsigned)rs1 * (unsigned)rs2 = %u * %u = %u\n", (uint32_t) REG[decInstruction.rs1], (uint32_t) REG[decInstruction.rs2], (uint32_t) result);
 	#endif
 	
-	// lower half of result stored in rd, rd = rs1 * rs2;
+	// upper half of result stored in rd, rd = (unsigned)rs1 * (unsigned)rs2;
 	registers_write(decInstruction.rd, result);
 }
 
@@ -248,7 +248,7 @@ void mulhsuInstruction(instruction_t decInstruction)
 	result = (int32_t)result; 
 	
 	#ifdef DEBUG
-		Printf("MULHSU, rd (higher) = (signed)rs1 * (unsigned)rs2 = %d * %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], result);
+		Printf("MULHSU, rd (higher) = (signed)rs1 * (unsigned)rs2 = %d * %u = %d\n", REG[decInstruction.rs1], (uint32_t) REG[decInstruction.rs2], result);
 	#endif
 	
 	// upper half of result stored in rd, rd = (signed)rs1 * (unsigned)rs2;
@@ -266,14 +266,32 @@ void divInstruction(instruction_t decInstruction)
 	*/
 
 	extern int32_t *REG;
+	int32_t result;
 
-	int32_t result = REG[decInstruction.rs1] / REG[decInstruction.rs2]; 
+	// Divide by 0, Table 7.1 Implementation 
+	if (REG[decInstruction.rs2] == 0)
+	{
+		result = -1;
+		#ifdef DEBUG
+			Printf("DIV Instruction (DIVIDE BY 0), rd = rs1 / rs2 = %d / %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], result);
+		#endif
+	}
+	// Overflow, Table 7.1 Implementation
+	else if ((REG[decInstruction.rs1] == 0x80000000) && (REG[decInstruction.rs2] == -1))
+	{
+		result = 0x80000000; //(-2)^31 = -2,147,483,648 The maximum negative number
+		#ifdef DEBUG
+			Printf("DIV Instruction (OVERFLOW), rd = rs1 / rs2 = %d / %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], result);
+		#endif
+	}
+	else
+	{
+		result = REG[decInstruction.rs1] / REG[decInstruction.rs2]; 
+		#ifdef DEBUG
+			Printf("DIV Instruction, rd = rs1 / rs2 = %d / %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], result);
+		#endif
+	}
 	
-	#ifdef DEBUG
-		Printf("DIV Instruction, rd = rs1 / rs2 = %d / %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], result);
-	#endif
-	
-	// lower half of result stored in rd, rd = rs1 * rs2;
 	registers_write(decInstruction.rd, result);
 }
 
@@ -289,15 +307,25 @@ void divuInstruction(instruction_t decInstruction)
 	*/
 
 	extern int32_t *REG;
+	uint32_t result;
 
-	int32_t result = (uint32_t)REG[decInstruction.rs1] / REG[decInstruction.rs2]; 
-	
-	#ifdef DEBUG
-		Printf("DIVU Instruction, rd = (unsigned)rs1 / rs2 = %d / %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], result);
-	#endif
-	
-	// lower half of result stored in rd, rd = rs1 * rs2;
-	registers_write(decInstruction.rd, result);
+	// Divide by 0/Overflow Table 7.1 Implementation 
+	if (REG[decInstruction.rs2] == 0)
+	{
+		result = 0xFFFFFFFF; // Divide by 0, results in 2^32 - 1 = 4,294,967,295 if unsigned
+		#ifdef DEBUG
+			Printf("DIVU Instruction (DIVIDE BY 0), rd = (unsigned) rs1 / (unsigned) rs2 = %u / %u = %u\n", (uint32_t) REG[decInstruction.rs1], (uint32_t) REG[decInstruction.rs2], result);
+		#endif
+	}
+	else
+	{
+		result = (uint32_t) ((uint32_t)REG[decInstruction.rs1] / (uint32_t) REG[decInstruction.rs2]); 
+		#ifdef DEBUG
+			Printf("DIVU Instruction, rd = (unsigned)rs1 / (unsigned)rs2 = %u / %u = %u\n", (uint32_t) REG[decInstruction.rs1], (uint32_t) REG[decInstruction.rs2], (uint32_t) result);
+		#endif
+	}
+
+	registers_write(decInstruction.rd, (int32_t) result);
 }
 
 void remInstruction(instruction_t decInstruction)
@@ -312,15 +340,33 @@ void remInstruction(instruction_t decInstruction)
 	*/
 
 	extern int32_t *REG;
-
-	int32_t result = REG[decInstruction.rs1] % REG[decInstruction.rs2]; 
+	int32_t remainder;
 	
-	#ifdef DEBUG
-		Printf("REM Instruction, rd = rs1 % rs2 = %d % %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], result);
-	#endif
+	// Divide by 0, Table 7.1 Implementation 
+	if (REG[decInstruction.rs2] == 0)
+	{
+		remainder = REG[decInstruction.rs1];
+		#ifdef DEBUG
+			Printf("REM Instruction (DIVIDE BY 0), rd = rs1 % rs2 = %d % %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], remainder);
+		#endif
+	}
+	// Overflow, Table 7.1 Implementation
+	else if ((REG[decInstruction.rs1] == 0x80000000) && (REG[decInstruction.rs2] == -1))
+	{
+		remainder = 0; 
+		#ifdef DEBUG
+			Printf("REM Instruction (Overflow), rd = rs1 % rs2 = %d % %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], remainder);
+		#endif
+	}
+	else
+	{
+		remainder = REG[decInstruction.rs1] % REG[decInstruction.rs2]; 
+		#ifdef DEBUG
+			Printf("REM Instruction, rd = rs1 % rs2 = %d % %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], remainder);
+		#endif
+	}
 	
-	// lower half of result stored in rd, rd = rs1 * rs2;
-	registers_write(decInstruction.rd, result);
+	registers_write(decInstruction.rd, remainder);
 }
 
 void remuInstruction(instruction_t decInstruction)
@@ -335,15 +381,25 @@ void remuInstruction(instruction_t decInstruction)
 	*/
 
 	extern int32_t *REG;
-
-	int32_t result = (uint32_t)REG[decInstruction.rs1] % REG[decInstruction.rs2]; 
+	uint32_t remainder;
 	
-	#ifdef DEBUG
-		Printf("REMU Instruction, rd = (unsigned)rs1 % rs2 = %d % %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], result);
-	#endif
+	// Divide by 0, Table 7.1 Implementation 
+	if (REG[decInstruction.rs2] == 0)
+	{
+		remainder = (uint32_t) REG[decInstruction.rs1];
+		#ifdef DEBUG
+			Printf("REMU Instruction (DIVIDE BY 0), rd = rs1 % rs2 = %u % %u = %u\n", (uint32_t) REG[decInstruction.rs1], (uint32_t) REG[decInstruction.rs2], remainder);
+		#endif
+	}
+	else
+	{
+		remainder = (uint32_t) ((uint32_t)REG[decInstruction.rs1]) % ((uint32_t) REG[decInstruction.rs2]); 
+		#ifdef DEBUG
+			Printf("REMU Instruction, rd = rs1 % rs2 = %u % %u = %u\n", (uint32_t) REG[decInstruction.rs1], (uint32_t) REG[decInstruction.rs2], remainder);
+		#endif
+	}
 	
-	// lower half of result stored in rd, rd = rs1 * rs2;
-	registers_write(decInstruction.rd, result);
+	registers_write(decInstruction.rd, remainder);
 }
 
 

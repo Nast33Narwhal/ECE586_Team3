@@ -8,6 +8,7 @@
 
 void displayUserInterface(bool *singleStep)
 {  
+    extern uint32_t PC;
     char *input = NULL;
     size_t inputSize = 0;
     char cmd[50];
@@ -15,6 +16,9 @@ void displayUserInterface(bool *singleStep)
     unsigned arg2;
     char extra[20];
     *singleStep = false;
+
+    Printf("PC = 0x%08X : ", PC);
+    printAssembly(stdout, readMemory((unsigned)PC/4));
 
     while (1)
     {
@@ -76,6 +80,35 @@ void displayUserInterface(bool *singleStep)
                 Printf("Format is \"break <address>\"\n");
             }
         }
+        //Set/clear watchpoints
+        else if ((strcmp(cmd, "w")==0) || (strcmp(cmd, "watch")==0))
+        {
+            if (Sscanf(input, "%50s %64u%20s", cmd, &arg1, extra) == 2 ||
+                Sscanf(input, "%50s %64x%20s", cmd, &arg1, extra) == 2)
+            {
+                if (arg1/4 > mem_getSize())
+                {
+                    Printf("Watchpoint too large! Maximum address is 0x%08X\n", mem_getSize()*4); 
+                    continue; 
+                }
+                else{
+                    if (isWatchpoint(arg1/4))
+                    {
+                        clrWatchpoint(arg1/4);
+                        Printf("Watchpoint cleared at 0x%08X\n", arg1 & 0xFFFFFFFC); //Force word alignment
+                    }
+                    else
+                    {
+                        setWatchpoint(arg1/4);
+                        Printf("Watchpoint set at 0x%08X\n", arg1 & 0xFFFFFFFC);
+                    } 
+                }
+            }
+            else
+            {
+                Printf("Format is \"watch <address>\"\n");
+            }
+        }
         //Display memory
         else if ((strcmp(cmd, "m")==0) || (strcmp(cmd, "mem")==0))
         {
@@ -87,7 +120,8 @@ void displayUserInterface(bool *singleStep)
                     Printf("Address too large! Maximum address is 0x%08X\n", mem_getSize()*4); 
                     continue; 
                 }
-                Printf("0x%08X : 0x%08X\n", arg1 & 0xFFFFFFFC, readMemory(arg1/4));
+                Printf("0x%08X : 0x%08X\t\t", arg1 & 0xFFFFFFFC, readMemory(arg1/4));
+                printAssembly(stdout, readMemory(arg1/4));
             }
             else if (Sscanf(input, "%50s %64u-%64u%20s", cmd, &arg1, &arg2, extra) == 3 ||
                         Sscanf(input, "%50s %64x-%64x%20s", cmd, &arg1, &arg2, extra) == 3)
@@ -99,7 +133,8 @@ void displayUserInterface(bool *singleStep)
                 }
                 for (unsigned i = arg1/4; i <= arg2/4; i++)
                 {
-                    Printf("0x%08X : 0x%08X\n", i*4, readMemory(i));
+                    Printf("0x%08X : 0x%08X\t\t", i*4, readMemory(i));
+                    printAssembly(stdout, readMemory(i));
                 }
             }
             else
@@ -118,5 +153,5 @@ void displayUserInterface(bool *singleStep)
 void displayHelp()
 {
     Printf("List of available commands:");
-    Printf("run, help, mem, reg, step, break\n");
+    Printf("run, help, mem, reg, step, break, watch\n");
 }

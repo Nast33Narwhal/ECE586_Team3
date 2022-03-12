@@ -24,7 +24,7 @@
 // encoding type enum for RV32I, can be expanded for Multiply and Floating Point
 #ifndef DECODE_T_
 #define DECODE_T_
-typedef enum _decode_e {R, I, S, U, B, J} decode_t;
+typedef enum _decode_e {R, I, S, U, B, J, NONE} decode_t;
 #endif
 
 // instruction enum for all of the possible instructions encoded in RV32I
@@ -45,7 +45,7 @@ typedef struct _instruction_s
 	uint8_t 	rs1;
 	uint8_t 	rs2;
 	uint8_t 	funct7;
-	 int32_t 	immediate; // Store shamt here, too
+	int32_t 	immediate; // Store shamt here, too
 
 } instruction_t, *instructionPtr_t;
 #endif
@@ -190,6 +190,15 @@ void printInstruction(instructionPtr_t decInstruction);
  *
  */
 void printInstructionSimple(instruction_t *decInstruction);
+
+/**
+ * @fn		printAssembly
+ * @brief 	Converts machine code into assembly and prints it to a file
+ * 
+ * @param 	fd		File descriptor to write to
+ * @param 	opcode	Machine code to translate
+ */
+void printAssembly(FILE *fd, int32_t opcode);
 
 /**
  * @fn instructionEnumToStr

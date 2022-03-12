@@ -90,6 +90,14 @@ int32_t* registers_init();
 void registers_write(uint8_t regNum, uint32_t data);
 
 /**
+ * @fn         regNumToStr
+ * 
+ * @param      regNum  Register number
+ * @return     String with the register's name 
+ */
+const char *regNumToStr(uint8_t regNum);
+
+/**
  * @fn         printRegisters
  * @brief      Prints out the registers and their values
  * 
