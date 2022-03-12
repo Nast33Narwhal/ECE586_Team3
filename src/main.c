@@ -73,12 +73,11 @@ int32_t main(int32_t argc, char **argv)
 
 		if (isBreakpoint(PC/4)) //Check if we're at a breakpoint
 		{
-			Fprintf(stdout, "Breakpoint at 0x%08X : 0x%08X\n", PC, nextInstruction);
+			Fprintf(stdout, "Breakpoint at 0x%08X\n", PC);
 			displayUserInterface(&singleStep);
 		}
 		else if (singleStep) //Check if we just stepped through a command
 		{
-			Fprintf(stdout, "PC at 0x%08X : 0x%08X\n", PC, nextInstruction);
 			displayUserInterface(&singleStep);
 		}
 		
