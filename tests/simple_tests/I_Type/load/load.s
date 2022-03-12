@@ -29,8 +29,8 @@ LW x5, 3(x6)        # should be 0x66778811
 
 #LHU / LBU
 ORI x5, x5, 0xFFF   
-LBU x5, 0(x6)       # should be 0x44000000
+LBU x5, 0(x6)       # should be 0x00000044
 ORI x5, x5, 0xFFF
-LHU x5, 0(x6)       # should be 0x33440000
+LHU x5, 0(x6)       # should be 0x00003344
 
 JR x1
