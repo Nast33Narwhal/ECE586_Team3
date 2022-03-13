@@ -10,9 +10,9 @@ int global = 0;
 int main(){
 
     
-    for(int i = -6; i <= 6; i++)
+    for(int i = 3; i <= 6; i++)
     {
-        for(int j = 0; j <= 6; i++)
+        for(int j = 0; j <= 6; j++)
         {
             if (i > j)
                 branch_greater(); 
@@ -22,15 +22,16 @@ int main(){
                 branch_less(); 
             else
             {
-                //nothing
+                continue; 
             }
         }
 
     }
 
-    for(unsigned int i = -6; i <= 6; i++)
+    // I am an idiot 
+    /*for(unsigned int i = -6; i <= 6; i++)
     {
-        for(int j = 0; j <= 6; i++)
+        for(int j = 0; j <= 6; j++)
         {
             if (i > j)
                 branch_greater(); 
@@ -40,29 +41,38 @@ int main(){
                 branch_less(); 
             else
             {
-                //nothing
+                continue; 
             }
         }
-
+        
     }
+    */
 
     return 0; 
 }
 
 void branch_greater(){
 
-    global = 1; //global gets 1 if greater than case 
-    
-}
+    /* asm("addi x8, x0, 1");     //x8 gets 1 if i is greater than j. others cleared
+     asm("addi x9, x0, 0x00000000");
+     asm("addi x10, x0, 0x00000000"); */
+     global = 1; 
+ }
 
-void branch_equal(){
+ void branch_equal(){
 
-    global = 2;     //global gets 2 if equal case
+    /* asm("addi x9, x0, 1");     //gets 1 if i is equal to j. others cleared
+     asm("addi x8, x0, 0x00000000");
+     asm("addi x10, x0, 0x00000000"); */
+     global = 2; 
 
-}
+ }
 
-void branch_less(){
+ void branch_less(){
 
-    global = 3;     //global gets 3 if less than case 
+     /*asm("addi x10, x0, 1");    //x10 gets 1  if i is less than j. others cleared
+     asm("addi x8, x0, 0x00000000");
+     asm("addi x9, x0, 0x00000000"); */
+     global = 3; 
 
-}
+ }
