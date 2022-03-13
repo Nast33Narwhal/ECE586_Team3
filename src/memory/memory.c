@@ -27,6 +27,9 @@
 #include "../execute/execute.h"
 #include "../decode/decode.h"
 
+#define RED   "\x1B[31m"
+#define DEFAULT "\x1B[0m"
+
 typedef struct {
 	int32_t data;
 	bool	watchpoint;
@@ -168,22 +171,40 @@ unsigned mem_getSize()
 	return memory.size;
 }
 
-void printMemory()
+void printMemory(uint32_t address, int8_t offset)
 {
+	char color[10]; 
 	uint32_t state = 0;
+	bool state_exception = false; //still print zeros if they were just written to the memory location
+
 	for(unsigned i = 0; i < memory.size; i++)
 	{
+		if (i == address){
+			strcpy(color, RED); 
+			state_exception = true; 
+		}
+		else if (i == address + 1 && offset > 0)
+		{
+			strcpy(color, RED); 
+			state_exception = true; 
+		}
+		else
+		{
+			strcpy(color, DEFAULT); 
+			state_exception = false; 
+		}
+
 		if (memory.address[i].data != 0)
 		{
-			Printf("memory[0x%08X] = 0x%08x\n", i*4, memory.address[i].data);
+			Printf("%smemory[0x%08X] = 0x%08x\n" DEFAULT, color, i*4, memory.address[i].data);
 			state = 0;
 		}
-		else if ((memory.address[i].data == 0) && (state == 0))
+		else if (((memory.address[i].data == 0) && (state == 0)) || ((memory.address[i].data == 0) && (state_exception == true)))
 		{
-			Printf("memory[0x%08X] = 0x%08x\n", i*4, memory.address[i].data);
+			Printf("%smemory[0x%08X] = 0x%08x\n" DEFAULT, color,  i*4, memory.address[i].data);
 			state = 1;
 		}
-		else if ((memory.address[i].data == 0) && (state == 1))
+		else if ((memory.address[i].data == 0) && (state == 1) && (state_exception == false))
 		{
 			Printf("...\n");
 			state = 2;
@@ -193,7 +214,7 @@ void printMemory()
 			// Do nothing unless we are at the end of the memory and last thing printed was ...
 			if(i == (memory.size-1))
 			{
-				Printf("memory[0x%08X] = 0x%08x\n", i*4, memory.address[i].data);
+				Printf("%smemory[0x%08X] = 0x%08x\n" DEFAULT, color, i*4, memory.address[i].data);
 			}
 		}
 	}

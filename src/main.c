@@ -45,7 +45,7 @@ int32_t main(int32_t argc, char **argv)
 		Printf("Filename: %s \nStarting Adress: %d \nStack Address: %d\n\n", fileName, PC, stackAddress);
 
 		printRegisters(); 
-		printMemory();
+		printMemory(-1,-1);		//-1 to denote no store operation for alterations in memory. no byte offset applicable
 	#endif
 	
 
@@ -104,7 +104,24 @@ int32_t main(int32_t argc, char **argv)
 		Printf("\nRegister States After Completion:\n"); 
 		printRegisters_Debug(decInstruction.rd); 
 		Printf("\nMemory States After Completion:\n"); 
-		printMemory(); 
+		uint32_t address = (unsigned)(REG[decInstruction.rs1] + signExtend(decInstruction.immediate,11));
+		uint8_t offset = address % 4;  
+		if(decInstruction.instruction == SB)
+		{
+			printMemory(address/4, -1); 					     //no offset needed for bytes
+		}
+		else if (decInstruction.instruction == SH)				
+		{
+			printMemory(address/4, (offset > 2) ? offset : - 1); 	//only give offset if greater than 2 for half word
+		}
+		else if (decInstruction.instruction == SW)
+		{
+			printMemory(address/4, offset); 					//if greater than zero next word will also be red
+		}
+		else
+		{ 
+		printMemory(-1,-1); //-1 to denote no store operation for alterations in memory. no byte offset applicable
+		} 
 		Printf("\n\n\n\n"); 
 		#endif
 		
@@ -123,7 +140,7 @@ int32_t main(int32_t argc, char **argv)
 	
 
 	#ifdef DEBUG
-	printMemory();
+	printMemory(-1, -1); //-1 to denote no store operation for alterations in memory. no byte offset applicable
 	#endif
 
 	//free(registers)

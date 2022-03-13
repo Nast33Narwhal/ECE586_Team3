@@ -118,7 +118,10 @@ unsigned mem_getSize(void);
 /**
  * @fn      printMemory
  * @brief   Prints entire memory contents to stdout
+ *          address and offset not needed. Specify printMemory(-1,-1) if just printing contents
+ *          Give address if you are printing memory in such a state where you want to denote 
+ *          in red a memory address that what just written to like so: printMemory(address, offset)
  */
-void printMemory(void);
+void printMemory(uint32_t address, int8_t offset);
 
 #endif

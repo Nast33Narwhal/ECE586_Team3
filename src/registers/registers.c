@@ -115,7 +115,7 @@ void printRegisters_Debug(uint8_t regNum)
 	int i; 
 	char color[32][10]; 
 
-	for (i = 0; i < 32; i++)
+	for (i = 1; i < 32; i++)
 	{
 		if(regNum == i)
 			strcpy(color[i], RED); 
@@ -125,7 +125,7 @@ void printRegisters_Debug(uint8_t regNum)
 	
 	Printf("\n");
 	Printf("      pc: 0x%08x\n", PC);
-	Printf("%s zero/x0: 0x%08x\n" DEFAULT, color[0], REG[0]);
+	Printf("%s zero/x0: 0x%08x\n" DEFAULT, DEFAULT, REG[0]);
 	Printf("%s   ra/x1: 0x%08x\n" DEFAULT, color[1], REG[1]);
 	Printf("%s   sp/x2: 0x%08x\n" DEFAULT, color[2], REG[2]);
 	Printf("%s   gp/x3: 0x%08x\n" DEFAULT, color[3], REG[3]);
