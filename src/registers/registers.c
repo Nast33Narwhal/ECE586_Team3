@@ -7,7 +7,8 @@
 
 #include "registers.h"
 #include "../wrappers/wrappers.h"
-
+#define RED   "\x1B[31m"
+#define DEFAULT "\x1B[0m"
 
 //TO DO, map registers to english names in enum, etc. 
 
@@ -68,6 +69,7 @@ void registers_write(uint8_t regNum, uint32_t data)
 void printRegisters(){
     extern int32_t *REG;
 	extern uint32_t PC; 
+
 	
 	Printf("\n");
 	Printf("      pc: 0x%08x\n", PC);
@@ -103,6 +105,58 @@ void printRegisters(){
 	Printf("  t4/x29: 0x%08x\n", REG[29]);
 	Printf("  t5/x30: 0x%08x\n", REG[30]);
 	Printf("  t6/x31: 0x%08x\n", REG[31]);
+	Printf("\n");
+}
+
+void printRegisters_Debug(uint8_t regNum)
+{
+    extern int32_t *REG;
+	extern uint32_t PC; 
+	int i; 
+	char color[32][10]; 
+
+	for (i = 0; i < 32; i++)
+	{
+		if(regNum == i)
+			strcpy(color[i], RED); 
+		else
+			strcpy(color[i], DEFAULT); 
+	}
+	
+	Printf("\n");
+	Printf("      pc: 0x%08x\n", PC);
+	Printf("%s zero/x0: 0x%08x\n" DEFAULT, color[0], REG[0]);
+	Printf("%s   ra/x1: 0x%08x\n" DEFAULT, color[1], REG[1]);
+	Printf("%s   sp/x2: 0x%08x\n" DEFAULT, color[2], REG[2]);
+	Printf("%s   gp/x3: 0x%08x\n" DEFAULT, color[3], REG[3]);
+	Printf("%s   tp/x4: 0x%08x\n" DEFAULT, color[4], REG[4]);
+	Printf("%s   t0/x5: 0x%08x\n" DEFAULT, color[5], REG[5]);
+	Printf("%s   t1/x6: 0x%08x\n" DEFAULT, color[6], REG[6]);
+	Printf("%s   t2/x7: 0x%08x\n" DEFAULT, color[7], REG[7]);
+	Printf("%ss0/fp/x8: 0x%08x\n" DEFAULT, color[8], REG[8]);
+	Printf("%s   s1/x9: 0x%08x\n" DEFAULT, color[9],  REG[9]);
+	Printf("%s  a0/x10: 0x%08x\n" DEFAULT, color[0], REG[10]);
+	Printf("%s  a1/x11: 0x%08x\n" DEFAULT, color[11], REG[11]);
+	Printf("%s  a2/x12: 0x%08x\n" DEFAULT, color[12], REG[12]);
+	Printf("%s  a3/x13: 0x%08x\n" DEFAULT, color[13], REG[13]);
+	Printf("%s  a4/x14: 0x%08x\n" DEFAULT, color[14], REG[14]);
+	Printf("%s  a5/x15: 0x%08x\n" DEFAULT, color[15], REG[15]);
+	Printf("%s  a6/x16: 0x%08x\n" DEFAULT, color[16], REG[16]);
+	Printf("%s  a7/x17: 0x%08x\n" DEFAULT, color[17], REG[17]);
+	Printf("%s  s2/x18: 0x%08x\n" DEFAULT, color[18], REG[18]);
+	Printf("%s  s3/x19: 0x%08x\n" DEFAULT, color[19], REG[19]);
+	Printf("%s  s4/x20: 0x%08x\n" DEFAULT, color[20], REG[20]);
+	Printf("%s  s5/x21: 0x%08x\n" DEFAULT, color[21], REG[21]);
+	Printf("%s  s6/x22: 0x%08x\n" DEFAULT, color[22], REG[22]);
+	Printf("%s  s7/x23: 0x%08x\n" DEFAULT, color[23], REG[23]);
+	Printf("%s  s8/x24: 0x%08x\n" DEFAULT, color[24], REG[24]);
+	Printf("%s  s9/x25: 0x%08x\n" DEFAULT, color[25], REG[25]);
+	Printf("%s s10/x26: 0x%08x\n" DEFAULT, color[26], REG[26]);
+	Printf("%s s11/x27: 0x%08x\n" DEFAULT, color[27], REG[27]);
+	Printf("%s  t3/x28: 0x%08x\n" DEFAULT, color[28], REG[28]);
+	Printf("%s  t4/x29: 0x%08x\n" DEFAULT, color[29], REG[29]);
+	Printf("%s  t5/x30: 0x%08x\n" DEFAULT, color[30], REG[30]);
+	Printf("%s  t6/x31: 0x%08x\n" DEFAULT, color[31], REG[31]);
 	Printf("\n");
 }
 

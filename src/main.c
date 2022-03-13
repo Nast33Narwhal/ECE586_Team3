@@ -102,7 +102,7 @@ int32_t main(int32_t argc, char **argv)
 
 		#ifdef REG_MEM
 		Printf("\nRegister States After Completion:\n"); 
-		printRegisters(); 
+		printRegisters_Debug(decInstruction.rd); 
 		Printf("\nMemory States After Completion:\n"); 
 		printMemory(); 
 		Printf("\n\n\n\n"); 

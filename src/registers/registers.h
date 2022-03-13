@@ -105,4 +105,13 @@ const char *regNumToStr(uint8_t regNum);
  *
  */
 void printRegisters();
+
+/**
+ * @fn         printRegisters_Debug shows
+ * @brief      Prints out the registers and their values. Red if the register value was just changed.
+ * 
+ * @details    Writes the registers and the values held to stdout
+ *
+ */
+void printRegisters_Debug(uint8_t regNum); 
 #endif
