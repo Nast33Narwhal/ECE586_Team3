@@ -1,14 +1,6 @@
 	.file	"branch2.c"
 	.option pic
 	.text
-	.globl	global
-	.bss
-	.align	2
-	.type	global, @object
-	.size	global, 4
-global:
-	.zero	4
-	.text
 	.align	2
 	.globl	main
 	.type	main, @function
@@ -69,45 +61,42 @@ main:
 	.globl	branch_greater
 	.type	branch_greater, @function
 branch_greater:
-	addi	sp,sp,-16
-	sw	s0,12(sp)
-	addi	s0,sp,16
-	la	a5,global
-	li	a4,1
-	sw	a4,0(a5)
+	addi	sp,sp,-32
+	sw	s0,28(sp)
+	addi	s0,sp,32
+	li	a5,1
+	sw	a5,-20(s0)
 	nop
-	lw	s0,12(sp)
-	addi	sp,sp,16
+	lw	s0,28(sp)
+	addi	sp,sp,32
 	jr	ra
 	.size	branch_greater, .-branch_greater
 	.align	2
 	.globl	branch_equal
 	.type	branch_equal, @function
 branch_equal:
-	addi	sp,sp,-16
-	sw	s0,12(sp)
-	addi	s0,sp,16
-	la	a5,global
-	li	a4,2
-	sw	a4,0(a5)
+	addi	sp,sp,-32
+	sw	s0,28(sp)
+	addi	s0,sp,32
+	li	a5,2
+	sw	a5,-20(s0)
 	nop
-	lw	s0,12(sp)
-	addi	sp,sp,16
+	lw	s0,28(sp)
+	addi	sp,sp,32
 	jr	ra
 	.size	branch_equal, .-branch_equal
 	.align	2
 	.globl	branch_less
 	.type	branch_less, @function
 branch_less:
-	addi	sp,sp,-16
-	sw	s0,12(sp)
-	addi	s0,sp,16
-	la	a5,global
-	li	a4,3
-	sw	a4,0(a5)
+	addi	sp,sp,-32
+	sw	s0,28(sp)
+	addi	s0,sp,32
+	li	a5,3
+	sw	a5,-20(s0)
 	nop
-	lw	s0,12(sp)
-	addi	sp,sp,16
+	lw	s0,28(sp)
+	addi	sp,sp,32
 	jr	ra
 	.size	branch_less, .-branch_less
 	.ident	"GCC: (GNU) 9.2.0"

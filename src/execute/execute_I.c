@@ -297,30 +297,6 @@ void sraiInstruction(instruction_t decInstruction)
 	}
 }
 
-void jalrInstruction(instruction_t decInstruction)
-{
-	extern int32_t *REG;
-	extern uint32_t PC;
-
-	int32_t extendedImmediate = decInstruction.immediate;
-	// Sign extend
-	int32_t msb = extendedImmediate &0x00000800;
-	if (msb > 0)
-	{
-		extendedImmediate = extendedImmediate | 0xFFFFF000;
-	}
-
-	// Set least significant bit to 0 per spec
-	extendedImmediate = extendedImmediate & 0xFFFFFFFE;
-
-	#ifdef DEBUG
-		Printf("JALR, rd = %d, rs1 = %d, PC = %u, signExtended(imm) & 0xFFFFFFFC = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], PC, extendedImmediate);
-	#endif
-	
-	// Store return address in rd
-	registers_write(decInstruction.rd, PC + 4);
-	PC = ((uint32_t) (REG[decInstruction.rs1] + extendedImmediate)) - 4;
-}
 
 void ecallInstruction(instruction_t decInstruction)
 {

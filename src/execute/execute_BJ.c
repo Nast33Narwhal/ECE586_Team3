@@ -168,27 +168,58 @@ void jalInstruction(instruction_t decInstruction)
 	
 	int32_t extendedImmediate = decInstruction.immediate;
 	// Sign extend
-	int32_t msb = extendedImmediate &0x00000800;
+	int32_t msb = extendedImmediate &0x00008000; //was 0x0000800, but is a 20 bit offset. 
 	if (msb > 0)
 	{
-		extendedImmediate = extendedImmediate | 0xFFFFF000;
+		extendedImmediate = extendedImmediate | 0xFFFF0000;
 	}
 	
 	// Set least significant bit to 0 per spec
 	extendedImmediate = extendedImmediate & 0xFFFFFFFE; 
 	
+	/*
 	// Check for 4 byte alignment
 	uint32_t destination = (uint32_t) (REG[decInstruction.rs1] + extendedImmediate);
 	if ((destination & 0x3) != 0)
 	{
 		Fprintf(stderr, "Error: jalInstruction has a destination for the PC which is not 4-byte aligned\n");
 	}
-	
+	*/
+
 	#ifdef DEBUG
 		Printf("JAL, rd = %d, signExtend(imm) = %d, PC = %u\n", REG[decInstruction.rd], extendedImmediate, PC);
 	#endif
 	
 	registers_write(decInstruction.rd, PC + 4);
+	 //no rs1 in JAL instructions?
+	//PC = ((uint32_t) (REG[decInstruction.rs1] + extendedImmediate)) - 4; 
+
+	PC = PC + extendedImmediate; 
+}
+
+void jalrInstruction(instruction_t decInstruction)
+{
+	extern int32_t *REG;
+	extern uint32_t PC;
+
+	int32_t extendedImmediate = decInstruction.immediate;
+	// Sign extend
+	int32_t msb = extendedImmediate &0x00000800;
+	if (msb > 0)
+	{
+		extendedImmediate = extendedImmediate | 0xFFFFF000;
+	}
+
+	// Set least significant bit to 0 per spec
+	extendedImmediate = extendedImmediate & 0xFFFFFFFE;
+
+	#ifdef DEBUG
+		Printf("JALR, rd = %d, rs1 = %d, PC = %u, signExtended(imm) & 0xFFFFFFFC = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], PC, extendedImmediate);
+	#endif
+	
+	// Store return address in rd
+	registers_write(decInstruction.rd, PC + 4);
 	PC = ((uint32_t) (REG[decInstruction.rs1] + extendedImmediate)) - 4;
 }
+
 // END J Type Instructions

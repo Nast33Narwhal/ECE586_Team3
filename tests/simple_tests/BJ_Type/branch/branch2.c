@@ -5,7 +5,7 @@ void branch_greater();
 void branch_equal(); 
 void branch_less(); 
 
-int global = 0; 
+//int global = 0; 
 
 int main(){
 
@@ -56,7 +56,7 @@ void branch_greater(){
     /* asm("addi x8, x0, 1");     //x8 gets 1 if i is greater than j. others cleared
      asm("addi x9, x0, 0x00000000");
      asm("addi x10, x0, 0x00000000"); */
-     global = 1; 
+     int local = 1;  
  }
 
  void branch_equal(){
@@ -64,7 +64,7 @@ void branch_greater(){
     /* asm("addi x9, x0, 1");     //gets 1 if i is equal to j. others cleared
      asm("addi x8, x0, 0x00000000");
      asm("addi x10, x0, 0x00000000"); */
-     global = 2; 
+     int local = 2; 
 
  }
 
@@ -73,6 +73,6 @@ void branch_greater(){
      /*asm("addi x10, x0, 1");    //x10 gets 1  if i is less than j. others cleared
      asm("addi x8, x0, 0x00000000");
      asm("addi x9, x0, 0x00000000"); */
-     global = 3; 
+     int local = 3; 
 
  }
