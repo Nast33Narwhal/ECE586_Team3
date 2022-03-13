@@ -135,7 +135,7 @@ void printRegisters_Debug(uint8_t regNum)
 	Printf("%s   t2/x7: 0x%08x\n" DEFAULT, color[7], REG[7]);
 	Printf("%ss0/fp/x8: 0x%08x\n" DEFAULT, color[8], REG[8]);
 	Printf("%s   s1/x9: 0x%08x\n" DEFAULT, color[9],  REG[9]);
-	Printf("%s  a0/x10: 0x%08x\n" DEFAULT, color[0], REG[10]);
+	Printf("%s  a0/x10: 0x%08x\n" DEFAULT, color[10], REG[10]);
 	Printf("%s  a1/x11: 0x%08x\n" DEFAULT, color[11], REG[11]);
 	Printf("%s  a2/x12: 0x%08x\n" DEFAULT, color[12], REG[12]);
 	Printf("%s  a3/x13: 0x%08x\n" DEFAULT, color[13], REG[13]);
