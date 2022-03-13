@@ -1,6 +1,14 @@
 	.file	"branch2.c"
 	.option pic
 	.text
+	.globl	global
+	.bss
+	.align	2
+	.type	global, @object
+	.size	global, 4
+global:
+	.zero	4
+	.text
 	.align	2
 	.globl	main
 	.type	main, @function
@@ -99,17 +107,9 @@ branch_greater:
 	addi	sp,sp,-16
 	sw	s0,12(sp)
 	addi	s0,sp,16
-#APP
-# 52 "branch2.c" 1
-	addi x8, x0, 1
-# 0 "" 2
-# 53 "branch2.c" 1
-	addi x9, x0, 0x00000000
-# 0 "" 2
-# 54 "branch2.c" 1
-	addi x10, x0, 0x00000000
-# 0 "" 2
-#NO_APP
+	la	a5,global
+	li	a4,1
+	sw	a4,0(a5)
 	nop
 	lw	s0,12(sp)
 	addi	sp,sp,16
@@ -122,17 +122,9 @@ branch_equal:
 	addi	sp,sp,-16
 	sw	s0,12(sp)
 	addi	s0,sp,16
-#APP
-# 59 "branch2.c" 1
-	addi x9, x0, 1
-# 0 "" 2
-# 60 "branch2.c" 1
-	addi x8, x0, 0x00000000
-# 0 "" 2
-# 61 "branch2.c" 1
-	addi x10, x0, 0x00000000
-# 0 "" 2
-#NO_APP
+	la	a5,global
+	li	a4,2
+	sw	a4,0(a5)
 	nop
 	lw	s0,12(sp)
 	addi	sp,sp,16
@@ -145,17 +137,9 @@ branch_less:
 	addi	sp,sp,-16
 	sw	s0,12(sp)
 	addi	s0,sp,16
-#APP
-# 67 "branch2.c" 1
-	addi x10, x0, 1
-# 0 "" 2
-# 68 "branch2.c" 1
-	addi x8, x0, 0x00000000
-# 0 "" 2
-# 69 "branch2.c" 1
-	addi x9, x0, 0x00000000
-# 0 "" 2
-#NO_APP
+	la	a5,global
+	li	a4,3
+	sw	a4,0(a5)
 	nop
 	lw	s0,12(sp)
 	addi	sp,sp,16
