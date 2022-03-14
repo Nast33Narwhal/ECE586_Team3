@@ -162,7 +162,7 @@ void executeInstruction(instruction_t decInstruction)
 			remuInstruction(decInstruction); 
 			break;
 		case ECALL:
-			Printf("ECALL instruction execution function not implemented yet\n");
+			 ecallInstruction(decInstruction); 
 			break;
 		case EBREAK:
 			Printf("EBREAK instruction execution function not implemented yet\n");

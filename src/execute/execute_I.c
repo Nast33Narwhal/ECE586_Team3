@@ -334,19 +334,20 @@ void ecallInstruction(instruction_t decInstruction)
 		if (REG[10] == 0)
 		{
 			i = address;
+			Printf("Enter String:"); 
 			do
 			{
 				byteRead = getchar();
 				writeMemoryMasked(address / 4, byteRead << (byteOffset * 8), 0xFF << (byteOffset * 8)); // Overwrite byte in memory
 				i--;
 				byteOffset = i % 4;
-			} while (byteRead != '\n' &&i >= REG[11]);
+			} while (byteRead != '\n' && i >= REG[11]);
 		}
 		else
 		{
 			Printf("Invalid File Descriptor. Write 0 to a0 for STDIN\n");
 		}
-		if (i == REG[11]) // add better method of checking completion
+		if (i == REG[11] || byteRead == '\n') // add better method of checking completion
 			REG[10] = REG[12];
 		else
 			REG[10] = -1;
