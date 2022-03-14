@@ -323,7 +323,44 @@ void jalrInstruction(instruction_t decInstruction)
 }
 void ecallInstruction(instruction_t decInstruction)
 {
-	Printf("ecall instruction not set up yet\n");
+	extern int32_t *REG; 
+	int i = 0;  
+
+	//all for writes
+	int32_t write_address = REG[11] + REG[12]; //address of buffer + string length
+	uint8_t byteOffset = write_address % 4;	//byte offset; 
+	uint8_t byteLoaded = 0; 
+
+
+	switch(REG[17])	//switch a7 for type system call
+	{
+	 case 63:
+
+		 break; 
+	 case 64: 
+	 	 if (REG[10] == 1)		//if a0 = 1, standard out. 
+		  {
+			for (i = write_address; i >= REG[11]; i--) 	//start at high address for little endian
+			{
+				byteLoaded = (readMemory(i/4)>>(byteOffset*8)) & 0xFF;
+				Fprintf(stdout, "%s", byteLoaded); 		//print hex as string (? test)
+				byteOffset = i % 4; //reset byte offset
+		  	}	
+				Printf("\n"); 
+		  }
+		  if (i == REG[11])						//add better method of checking completion
+		  	REG[10] = REG[12];  
+		  else
+		  	REG[10] = -1; 
+		 break; 
+	 case 94:
+	 	Printf("Exiting due to system call exit\n"); 
+		exit(0); 
+	 default:
+	 	Printf("Error, invalid system call type\n"); 
+		 exit(1); 	
+	}	
+	//Printf("ecall instruction not set up yet\n");
 }
 
 void ebreakInstruction(instruction_t decInstruction)
