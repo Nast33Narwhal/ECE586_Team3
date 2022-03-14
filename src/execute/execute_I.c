@@ -338,7 +338,7 @@ void ecallInstruction(instruction_t decInstruction)
 			do
 			{
 				byteRead = getchar();
-				writeMemoryMasked(address / 4, byteRead << (byteOffset * 8), 0xFF << (byteOffset * 8)); // Overwrite byte in memory
+				writeMemoryMasked(i / 4, byteRead << (byteOffset * 8), 0xFF << (byteOffset * 8)); // Overwrite byte in memory
 				i--;
 				byteOffset = i % 4;
 			} while (byteRead != '\n' && i >= REG[11]);
@@ -348,12 +348,15 @@ void ecallInstruction(instruction_t decInstruction)
 			Printf("Invalid File Descriptor. Write 0 to a0 for STDIN\n");
 		}
 		if (i == REG[11] || byteRead == '\n') // add better method of checking completion
-			REG[10] = REG[12];
+			registers_write(10, REG[12]); 
 		else
-			REG[10] = -1;
+			registers_write(10, -1);
 
 		break;
 	case 64:
+		#ifdef DEBUG
+		Printf("ECALL PRINT TO STDOUT MESSAGE:"); 
+		#endif
 		if (REG[10] == 1) // if a0 = 1, standard out.
 		{
 			for (i = address; i >= REG[11]; i--) // start at high address for little endian
@@ -368,10 +371,10 @@ void ecallInstruction(instruction_t decInstruction)
 		{
 			Printf("Invalid File Descriptor. Write 1 to a0 for STDOUT\n");
 		}
-		if (i == REG[11]) // add better method of checking completion
-			REG[10] = REG[12];
+		if (i == (REG[11] -1)) // add better method of checking completion
+			registers_write(10, REG[12]); 
 		else
-			REG[10] = -1;
+			registers_write(10, -1);
 		break;
 	case 94:
 		Printf("Exiting due to system call exit\n");

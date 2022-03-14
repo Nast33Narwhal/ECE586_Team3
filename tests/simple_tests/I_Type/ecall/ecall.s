@@ -9,15 +9,23 @@ ADD a1, sp, -32 # load address of word in a1
 ADDI a0, x0, 1 # specifies STDOUT
 ADDI a2, x0, 4 # length of string hey!
 ADDI a7, x0, 64 # system call for printing 
-ecall       # should print HEY! to STDOUT
+ecall       # should print "RISC" to STDOUT
 
+# now try to write to memory
 ADDI a1, sp, -128 # decrement stack to specify address of buffer
 ADDI a0, x0, 0 # specifies STDIN
 ADDI a2, x0, 20 # specifies length of input string
 ADDI a7, x0, 63 # system call for reading 
 ecall
 
+# now try to read what was written to memory
+ADDI a1, sp, -128 # decrement stack to specify address of buffer
+ADDI a0, x0, 1 # specifies STDOUT
+ADDI a2, x0, 20 # specifies length of input string
+ADDI a7, x0, 64 # system call for printing
+ecall
+
 ADDI a7, x0, 94 # should exit program
 ecall 
 
-jr ra
+jr ra   # should not be used
