@@ -53,8 +53,24 @@ reg_mem : $(OBJS)
 verbose : $(OBJS)
 	$(CC) $(CFLAGS) -DVERBOSE -o $(EXE) $(SRC)
 
-
-
+# helpful printout for makefile
+.PHONY: help
+help: 
+$(info )
+$(info The following options are available for make)
+$(info )
+$(info make debug)
+$(info Recompiles everything with DEBUG symbols enabled (debug messages))
+$(info )
+$(info make reg_mem)
+$(info Recompiles everything with DEBUG and DREG_MEM symbols enabled (register and memory contents for every command and debug messages))
+$(info )
+$(info make verbose)
+$(info Recompiles everything with REGISTERS symbols enabled (register contents for every command))
+$(info )
+$(info make clean)
+$(info Removes all object files associated with the simulator)
+$(info )
 
 #.PHONY to inform Make to not associate clean with a file named clean
 .PHONY: clean
