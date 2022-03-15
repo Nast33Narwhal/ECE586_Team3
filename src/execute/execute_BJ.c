@@ -9,6 +9,7 @@
  * @author Braden Harwood (bharwood@pdx.edu)
  * @author Drew Seidel (dseidel@pdx.edu)
  * @author Stephen Short (steshort@pdx.edu)
+ * @author Michael Weston (miweston@pdx.edu)
  *
  */
 
@@ -27,6 +28,7 @@ void beqInstruction(instruction_t decInstruction)
 	extern uint32_t PC;
 	
 	int32_t extendedOffset = decInstruction.immediate;
+
 	// Sign extend
 	int32_t msb = extendedOffset &0x00001000;
 	if (msb > 0)
