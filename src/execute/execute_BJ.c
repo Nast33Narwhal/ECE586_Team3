@@ -270,7 +270,7 @@ void jalInstruction(instruction_t decInstruction)
 	 //no rs1 in JAL instructions? Page 
 	//PC = ((uint32_t) (REG[decInstruction.rs1] + extendedImmediate)) - 4; 
 
-	PC = PC + extendedImmediate; 
+	PC = PC + extendedImmediate - 4; 
 }
 
 
