@@ -51,7 +51,7 @@ The purpose of this project is to simulate a 32-bit RISC-V machine. The program 
     ./sim.exe prog1.mem -pc 4 -sp 4096
    ```
  
-   - Will do all of the previous, with the user interface enabled. The user interface allows stepping, setting/clear breakpoints, watchpoints etc. 
+   - Will do all of the previous, with the user interface enabled. The user interface allows stepping, setting/clear breakpoints, watchpoints, printing register and memory contents etc. 
    ```sh
    ./sim.exe prog1.mem -pc 4 -sp 4096 -ui
    ```
