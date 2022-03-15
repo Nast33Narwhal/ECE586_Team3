@@ -323,7 +323,7 @@ void ecallInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	int i = 0;
 
-	int32_t address = REG[11] + REG[12]; // address of buffer + string length
+	int32_t address = REG[11] + REG[12] - 1; // address of buffer + string length
 	uint8_t byteOffset = address % 4;	 // byte offset;
 	int32_t byteLoaded = 0;
 	int32_t byteRead = 0;
@@ -333,7 +333,7 @@ void ecallInstruction(instruction_t decInstruction)
 	case 63:
 		if (REG[10] == 0)
 		{
-			i = address;
+			i = address; 
 			Printf("Enter String:"); 
 			do
 			{

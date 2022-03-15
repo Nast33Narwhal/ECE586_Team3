@@ -189,7 +189,7 @@ void printMemory(uint32_t address, int8_t offset)
 			strcpy(color, RED); 
 			state_exception = true; 
 		}
-		else if (offset > 4 && i <= ecall_address_end && i > address)
+		else if (offset > 4 && i < ecall_address_end && i > address)
 		{
 			strcpy(color, RED); 
 			state_exception = true; 
