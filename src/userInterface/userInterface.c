@@ -155,7 +155,7 @@ void displayHelp()
     Printf("List of available commands:");
     Printf("run, help, mem, reg, step, break, watch\n\n");
     Printf("run:\nRuns the simulator until a breakpoint is reached (if one is set).\n\n");
-    Printf("mem:\nPrints out a provided memory address (i.e. \"mem <address>\")\n\n");
+    Printf("mem:\nPrints out a provided memory address(es) (i.e. \"mem <address>\" or \"mem <start address>-<end address>\" for multiple addresses).\n\n");
     Printf("reg:\nPrints out current values of all registers.\n\n");
     Printf("step:\nExecutes the next decoded command in the simulation from the provided .mem file.\n\n");
     Printf("break:\nSets a breakpoint at a provided memory location (i.e. \"break <address>\").\n\n");
