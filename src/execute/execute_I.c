@@ -309,9 +309,16 @@ void jalrInstruction(instruction_t decInstruction)
 
 	// Set least significant bit to 0 per spec
 	extendedImmediate = extendedImmediate & 0xFFFFFFFE;
+	
+	// Check for unaligned offset
+	if ((extendedImmediate & 0x3) > 0)
+	{
+		Fprintf(stderr, "Error: JALR Instruction's offset is not 4-byte aligned. Correcting and continuing.\n");
+		extendedImmediate = extendedImmediate & 0xFFFFFFFC;
+	}
 
 #ifdef DEBUG
-	Printf("JALR, rd = %d, rs1 = %d, PC = %u, signExtended(imm) & 0xFFFFFFFC = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], PC, extendedImmediate);
+	Printf("JALR, rd = %d, rs1 = %d, PC = %u, signExtended(imm) = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], PC, extendedImmediate);
 #endif
 
 	// Store return address in rd
