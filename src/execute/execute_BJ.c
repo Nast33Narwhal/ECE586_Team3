@@ -36,6 +36,10 @@ void beqInstruction(instruction_t decInstruction)
 	
 	#ifdef DEBUG
 		Printf("beq Instruction, if (rs1 == rs2) PC = PC + signExtend(offset) - 4 = %u + %d - 4\n", PC, extendedOffset);
+        if (REG[decInstruction.rs1] == REG[decInstruction.rs2])
+            Printf("Branch Taken\n");
+        else
+            Printf("Branch Not Taken\n");
 	#endif
 	
 	if (REG[decInstruction.rs1] == REG[decInstruction.rs2])
@@ -59,6 +63,10 @@ void bneInstruction(instruction_t decInstruction)
 	
 	#ifdef DEBUG
 		Printf("bne Instruction, if (rs1 != rs2) PC = PC + signExtend(offset) - 4 = %u + %d - 4\n", PC, extendedOffset);
+        if (REG[decInstruction.rs1] != REG[decInstruction.rs2])
+            Printf("Branch Taken\n");
+        else
+            Printf("Branch Not Taken\n");
 	#endif
 	
 	if (REG[decInstruction.rs1] != REG[decInstruction.rs2])
@@ -82,6 +90,11 @@ void bltInstruction(instruction_t decInstruction)
 	
 	#ifdef DEBUG
 		Printf("blt Instruction, if (rs1 < rs2) PC = PC + signExtend(offset) - 4 = %u + %d - 4\n", PC, extendedOffset);
+        if (REG[decInstruction.rs1] < REG[decInstruction.rs2])
+            Printf("Branch Taken\n");
+        else
+            Printf("Branch Not Taken\n");
+
 	#endif
 	
 	if (REG[decInstruction.rs1] < REG[decInstruction.rs2])
@@ -105,6 +118,11 @@ void bgeInstruction(instruction_t decInstruction)
 	
 	#ifdef DEBUG
 		Printf("bge Instruction, if (rs1 >= rs2) PC = PC + signExtend(offset) - 4 = %u + %d - 4\n", PC, extendedOffset);
+        if (REG[decInstruction.rs1] >= REG[decInstruction.rs2])
+            Printf("Branch Taken\n");
+        else
+            Printf("Branch Not Taken\n");
+
 	#endif
 	
 	if (REG[decInstruction.rs1] >= REG[decInstruction.rs2])
@@ -128,6 +146,11 @@ void bltuInstruction(instruction_t decInstruction)
 	
 	#ifdef DEBUG
 		Printf("bltu Instruction, if (((unsigned) rs1) < ((unsigned) rs2)) PC = PC + signExtend(offset) - 4 = %u + %d - 4\n", PC, extendedOffset);
+        if ((unsigned)REG[decInstruction.rs1] < (unsigned)REG[decInstruction.rs2])
+            Printf("Branch Taken\n");
+        else
+            Printf("Branch Not Taken\n");
+
 	#endif
 	
 	if (((unsigned) REG[decInstruction.rs1]) < ((unsigned) REG[decInstruction.rs2]))
@@ -151,6 +174,11 @@ void bgeuInstruction(instruction_t decInstruction)
 	
 	#ifdef DEBUG
 		Printf("bgeu Instruction, if (((unsigned) rs1) >= ((unsigned) rs2)) PC = PC + signExtend(offset) - 4 = %u + %d - 4\n", PC, extendedOffset);
+        if ((unsigned)REG[decInstruction.rs1] >= (unsigned)REG[decInstruction.rs2])
+            Printf("Branch Taken\n");
+        else
+            Printf("Branch Not Taken\n");
+
 	#endif
 	
 	if (((unsigned) REG[decInstruction.rs1]) >= ((unsigned) REG[decInstruction.rs2]))
