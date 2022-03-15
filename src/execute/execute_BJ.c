@@ -28,7 +28,7 @@ void beqInstruction(instruction_t decInstruction)
 	
 	int32_t extendedOffset = decInstruction.immediate;
 	// Sign extend
-	int32_t msb = extendedOffset &0x00000800;
+	int32_t msb = extendedOffset &0x00001000;
 	if (msb > 0)
 	{
 		extendedOffset = extendedOffset | 0xFFFFF000;
@@ -55,7 +55,7 @@ void bneInstruction(instruction_t decInstruction)
 	
 	int32_t extendedOffset = decInstruction.immediate;
 	// Sign extend
-	int32_t msb = extendedOffset &0x00000800;
+	int32_t msb = extendedOffset &0x00001000;
 	if (msb > 0)
 	{
 		extendedOffset = extendedOffset | 0xFFFFF000;
@@ -82,7 +82,7 @@ void bltInstruction(instruction_t decInstruction)
 	
 	int32_t extendedOffset = decInstruction.immediate;
 	// Sign extend
-	int32_t msb = extendedOffset &0x00000800;
+	int32_t msb = extendedOffset &0x00001000;
 	if (msb > 0)
 	{
 		extendedOffset = extendedOffset | 0xFFFFF000;
@@ -110,7 +110,7 @@ void bgeInstruction(instruction_t decInstruction)
 	
 	int32_t extendedOffset = decInstruction.immediate;
 	// Sign extend
-	int32_t msb = extendedOffset &0x00000800;
+	int32_t msb = extendedOffset &0x00001000;
 	if (msb > 0)
 	{
 		extendedOffset = extendedOffset | 0xFFFFF000;
@@ -138,7 +138,7 @@ void bltuInstruction(instruction_t decInstruction)
 	
 	int32_t extendedOffset = decInstruction.immediate;
 	// Sign extend
-	int32_t msb = extendedOffset &0x00000800;
+	int32_t msb = extendedOffset &0x00001000;
 	if (msb > 0)
 	{
 		extendedOffset = extendedOffset | 0xFFFFF000;
@@ -166,7 +166,7 @@ void bgeuInstruction(instruction_t decInstruction)
 	
 	int32_t extendedOffset = decInstruction.immediate;
 	// Sign extend
-	int32_t msb = extendedOffset &0x00000800;
+	int32_t msb = extendedOffset &0x00001000;
 	if (msb > 0)
 	{
 		extendedOffset = extendedOffset | 0xFFFFF000;
