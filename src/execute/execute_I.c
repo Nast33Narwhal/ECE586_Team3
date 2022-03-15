@@ -318,7 +318,7 @@ void jalrInstruction(instruction_t decInstruction)
 	}
 
 #ifdef DEBUG
-	Printf("JALR, rd = %d, rs1 = %d, PC = %u, signExtended(imm) = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], PC, extendedImmediate);
+	Printf("JALR, rd = %d, rs1 = %d, PC = rs1 + signExtend(imm) - 4 = %d + %d - 4 = %u, signExtended(imm) = %d\n", REG[decInstruction.rd], REG[decInstruction.rs1], REG[decInstruction.rs1], extendedImmediate, (uint32_t) (REG[decInstruction.rs1] + extendedImmediate - 4));
 #endif
 
 	// Store return address in rd
