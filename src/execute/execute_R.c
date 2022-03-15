@@ -355,14 +355,14 @@ void remInstruction(instruction_t decInstruction)
 	{
 		remainder = 0; 
 		#ifdef DEBUG
-			Printf("REM Instruction (Overflow), rd = rs1 % rs2 = %d % %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], remainder);
+			Printf("REM Instruction (Overflow), rd = rs1 \% rs2 = %d \% %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], remainder);
 		#endif
 	}
 	else
 	{
 		remainder = REG[decInstruction.rs1] % REG[decInstruction.rs2]; 
 		#ifdef DEBUG
-			Printf("REM Instruction, rd = rs1 % rs2 = %d % %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], remainder);
+			Printf("REM Instruction, rd = rs1 \% rs2 = %d \% %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], remainder);
 		#endif
 	}
 	
