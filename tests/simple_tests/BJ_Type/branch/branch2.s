@@ -6,35 +6,58 @@
 	.type	main, @function
 main:
 	addi	sp,sp,-32
-	sw	ra,28(sp)
-	sw	s0,24(sp)
+	sw	s0,28(sp)
 	addi	s0,sp,32
 	li	a5,3
 	sw	a5,-20(s0)
 	j	.L2
-.L9:
+.L8:
 	sw	zero,-24(s0)
 	j	.L3
-.L8:
+.L7:
 	lw	a4,-20(s0)
 	lw	a5,-24(s0)
 	ble	a4,a5,.L4
-	call	branch_greater@plt
+#APP
+# 15 "branch2.c" 1
+	addi t4, x0, 1
+# 0 "" 2
+# 16 "branch2.c" 1
+	addi t5, x0, 0
+# 0 "" 2
+# 17 "branch2.c" 1
+	addi t6, x0, 0
+# 0 "" 2
+#NO_APP
 	j	.L5
 .L4:
 	lw	a4,-20(s0)
 	lw	a5,-24(s0)
 	bne	a4,a5,.L6
-	call	branch_equal@plt
+#APP
+# 23 "branch2.c" 1
+	addi t4, x0, 0
+# 0 "" 2
+# 24 "branch2.c" 1
+	addi t5, x0, 1
+# 0 "" 2
+# 25 "branch2.c" 1
+	addi t6, x0, 0
+# 0 "" 2
+#NO_APP
 	j	.L5
 .L6:
-	lw	a4,-20(s0)
-	lw	a5,-24(s0)
-	bge	a4,a5,.L11
-	call	branch_less@plt
-	j	.L5
-.L11:
-	nop
+#APP
+# 31 "branch2.c" 1
+	addi t4, x0, 0
+# 0 "" 2
+# 32 "branch2.c" 1
+	addi t5, x0, 0
+# 0 "" 2
+# 33 "branch2.c" 1
+	addi t6, x0, 1
+# 0 "" 2
+#NO_APP
 .L5:
 	lw	a5,-24(s0)
 	addi	a5,a5,1
@@ -42,62 +65,19 @@ main:
 .L3:
 	lw	a4,-24(s0)
 	li	a5,6
-	ble	a4,a5,.L8
+	ble	a4,a5,.L7
 	lw	a5,-20(s0)
 	addi	a5,a5,1
 	sw	a5,-20(s0)
 .L2:
 	lw	a4,-20(s0)
 	li	a5,6
-	ble	a4,a5,.L9
+	ble	a4,a5,.L8
 	li	a5,0
 	mv	a0,a5
-	lw	ra,28(sp)
-	lw	s0,24(sp)
+	lw	s0,28(sp)
 	addi	sp,sp,32
 	jr	ra
 	.size	main, .-main
-	.align	2
-	.globl	branch_greater
-	.type	branch_greater, @function
-branch_greater:
-	addi	sp,sp,-32
-	sw	s0,28(sp)
-	addi	s0,sp,32
-	li	a5,1
-	sw	a5,-20(s0)
-	nop
-	lw	s0,28(sp)
-	addi	sp,sp,32
-	jr	ra
-	.size	branch_greater, .-branch_greater
-	.align	2
-	.globl	branch_equal
-	.type	branch_equal, @function
-branch_equal:
-	addi	sp,sp,-32
-	sw	s0,28(sp)
-	addi	s0,sp,32
-	li	a5,2
-	sw	a5,-20(s0)
-	nop
-	lw	s0,28(sp)
-	addi	sp,sp,32
-	jr	ra
-	.size	branch_equal, .-branch_equal
-	.align	2
-	.globl	branch_less
-	.type	branch_less, @function
-branch_less:
-	addi	sp,sp,-32
-	sw	s0,28(sp)
-	addi	s0,sp,32
-	li	a5,3
-	sw	a5,-20(s0)
-	nop
-	lw	s0,28(sp)
-	addi	sp,sp,32
-	jr	ra
-	.size	branch_less, .-branch_less
 	.ident	"GCC: (GNU) 9.2.0"
 	.section	.note.GNU-stack,"",@progbits
