@@ -102,7 +102,14 @@ int32_t main(int32_t argc, char **argv)
 
 		#ifdef REG_MEM
 		Printf("\nRegister States After Completion:\n"); 
+		if (decInstruction.instruction == ECALL)
+		{
+		printRegisters_Debug(10);  //color a0 if the instruction was ecall
+		}
+		else
+		{
 		printRegisters_Debug(decInstruction.rd); 
+		}
 		Printf("\nMemory States After Completion:\n"); 
 		uint32_t address = (unsigned)(REG[decInstruction.rs1] + signExtend(decInstruction.immediate,11));
 		uint8_t offset = address % 4;  
@@ -117,6 +124,12 @@ int32_t main(int32_t argc, char **argv)
 		else if (decInstruction.instruction == SW)
 		{
 			printMemory(address/4, offset); 					//if greater than zero next word will also be red
+		}
+		else if (decInstruction.instruction == ECALL)
+		{
+			address = REG[11]; 
+			offset  = REG[12]/4; 
+			printMemory(address/4, (offset > 4) ? offset: -1); 	
 		}
 		else
 		{ 

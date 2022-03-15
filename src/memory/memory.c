@@ -176,6 +176,7 @@ void printMemory(uint32_t address, int8_t offset)
 	char color[10]; 
 	uint32_t state = 0;
 	bool state_exception = false; //still print zeros if they were just written to the memory location
+	uint32_t ecall_address_end = address + offset; 
 
 	for(unsigned i = 0; i < memory.size; i++)
 	{
@@ -183,11 +184,17 @@ void printMemory(uint32_t address, int8_t offset)
 			strcpy(color, RED); 
 			state_exception = true; 
 		}
-		else if (i == address + 1 && offset > 0)
+		else if (i == address + 1 && offset > 0 && offset < 4)
 		{
 			strcpy(color, RED); 
 			state_exception = true; 
 		}
+		else if (offset > 4 && i <= ecall_address_end && i > address)
+		{
+			strcpy(color, RED); 
+			state_exception = true; 
+		
+		}	
 		else
 		{
 			strcpy(color, DEFAULT); 
