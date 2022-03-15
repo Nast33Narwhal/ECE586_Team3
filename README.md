@@ -13,7 +13,7 @@ Braden Harwood, Stephen Short, Michael Weston, Drew Seidel
 - Test Plan
 
 ## Objective
-The purpose of this project is to simulate a 32-bit RISC-V machine. The program takes in a memory image file and alters the PC, registers, and memory based on instructions. We implemnted all of the standard instructions, the RV32M extension package, and ecall system calls. 
+The purpose of this project is to simulate a 32-bit RISC-V machine. The program takes in a memory image file and alters the PC, registers, and memory based on instructions. We implemnted all of the standard instructions, the RV32M extension package, ecall system calls, and a user interface command line option.
 
 ## Directory Organization
 - docs
