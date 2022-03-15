@@ -9,6 +9,7 @@
  * @author Braden Harwood (bharwood@pdx.edu)
  * @author Drew Seidel (dseidel@pdx.edu)
  * @author Stephen Short (steshort@pdx.edu)
+ * @author Michael Weston (miweston@pdx.edu)
  *
  */
 
@@ -34,7 +35,7 @@ void beqInstruction(instruction_t decInstruction)
 		Fprintf(stderr, "Error: BEQ Instruction's offset is not 4-byte aligned. Correcting and continuing.\n");
 		extendedOffset = extendedOffset & 0xFFFFFFFC;
 	}
-	
+
 	// Sign extend
 	int32_t msb = extendedOffset &0x00001000;
 	if (msb > 0)
