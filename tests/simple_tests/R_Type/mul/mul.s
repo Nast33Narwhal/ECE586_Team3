@@ -32,4 +32,17 @@ rem x22, x6, x5 #6%5 = 1r1 = 1
 # Remainder Unsigned
 remu x23, x7, x6 #0xFFFFFFFA % 0x6 = r4 = 4
 
+# Divide by 0 Checks, per Table 7.1
+divu x24, x5, x0 #5 / 0 = 2^32 - 1 = 4294967295 or signed = -1
+remu x25, x5, x0 #5 % 0 = 5
+div x26, x5, x0 #5 / 0 = -1
+rem x27, x6, x0 #6 % 0 = 6
+
+# Overflow Checks, per Table 7.1
+lui x28, 524288 #0x80000 becomes 0x80000000 = -(2^31), max negative number
+addi x29, x0, -1 #0xFFFFFFFF
+div x30, x28, x29 #-2147483648 / -1 =-2147483648
+rem x31, x28, x29 #-2147483648 % -1 = 0
+
+
 jr ra
