@@ -28,6 +28,13 @@ void beqInstruction(instruction_t decInstruction)
 	extern uint32_t PC;
 	
 	int32_t extendedOffset = decInstruction.immediate;
+	
+	// Check for unaligned offset
+	if ((extendedOffset & 0x3) > 0)
+	{
+		Fprintf(stderr, "Error: BEQ Instruction's offset is not 4-byte aligned. Correcting and continuing.\n");
+		extendedOffset = extendedOffset & 0xFFFFFFFC;
+	}
 
 	// Sign extend
 	int32_t msb = extendedOffset &0x00001000;
@@ -56,6 +63,14 @@ void bneInstruction(instruction_t decInstruction)
 	extern uint32_t PC;
 	
 	int32_t extendedOffset = decInstruction.immediate;
+	
+	// Check for unaligned offset
+	if ((extendedOffset & 0x3) > 0)
+	{
+		Fprintf(stderr, "Error: BNE Instruction's offset is not 4-byte aligned. Correcting and continuing.\n");
+		extendedOffset = extendedOffset & 0xFFFFFFFC;
+	}
+	
 	// Sign extend
 	int32_t msb = extendedOffset &0x00001000;
 	if (msb > 0)
@@ -83,6 +98,14 @@ void bltInstruction(instruction_t decInstruction)
 	extern uint32_t PC;
 	
 	int32_t extendedOffset = decInstruction.immediate;
+	
+	// Check for unaligned offset
+	if ((extendedOffset & 0x3) > 0)
+	{
+		Fprintf(stderr, "Error: BLT Instruction's offset is not 4-byte aligned. Correcting and continuing.\n");
+		extendedOffset = extendedOffset & 0xFFFFFFFC;
+	}
+	
 	// Sign extend
 	int32_t msb = extendedOffset &0x00001000;
 	if (msb > 0)
@@ -111,6 +134,14 @@ void bgeInstruction(instruction_t decInstruction)
 	extern uint32_t PC;
 	
 	int32_t extendedOffset = decInstruction.immediate;
+	
+	// Check for unaligned offset
+	if ((extendedOffset & 0x3) > 0)
+	{
+		Fprintf(stderr, "Error: BGE Instruction's offset is not 4-byte aligned. Correcting and continuing.\n");
+		extendedOffset = extendedOffset & 0xFFFFFFFC;
+	}
+	
 	// Sign extend
 	int32_t msb = extendedOffset &0x00001000;
 	if (msb > 0)
@@ -139,6 +170,14 @@ void bltuInstruction(instruction_t decInstruction)
 	extern uint32_t PC;
 	
 	int32_t extendedOffset = decInstruction.immediate;
+	
+	// Check for unaligned offset
+	if ((extendedOffset & 0x3) > 0)
+	{
+		Fprintf(stderr, "Error: BLTU Instruction's offset is not 4-byte aligned. Correcting and continuing.\n");
+		extendedOffset = extendedOffset & 0xFFFFFFFC;
+	}
+	
 	// Sign extend
 	int32_t msb = extendedOffset &0x00001000;
 	if (msb > 0)
@@ -167,6 +206,14 @@ void bgeuInstruction(instruction_t decInstruction)
 	extern uint32_t PC;
 	
 	int32_t extendedOffset = decInstruction.immediate;
+	
+	// Check for unaligned offset
+	if ((extendedOffset & 0x3) > 0)
+	{
+		Fprintf(stderr, "Error: BGEU Instruction's offset is not 4-byte aligned. Correcting and continuing.\n");
+		extendedOffset = extendedOffset & 0xFFFFFFFC;
+	}
+	
 	// Sign extend
 	int32_t msb = extendedOffset &0x00001000;
 	if (msb > 0)
@@ -207,24 +254,22 @@ void jalInstruction(instruction_t decInstruction)
 	// Set least significant bit to 0 per spec
 	extendedImmediate = extendedImmediate & 0xFFFFFFFE; 
 	
-	/*
-	// Check for 4 byte alignment
-	uint32_t destination = (uint32_t) (REG[decInstruction.rs1] + extendedImmediate);
-	if ((destination & 0x3) != 0)
+	// Check for unaligned offset
+	if ((extendedImmediate & 0x3) > 0)
 	{
-		Fprintf(stderr, "Error: jalInstruction has a destination for the PC which is not 4-byte aligned\n");
+		Fprintf(stderr, "Error: JAL Instruction's offset is not 4-byte aligned. Correcting and continuing.\n");
+		extendedImmediate = extendedImmediate & 0xFFFFFFFC;
 	}
-	*/
 
 	#ifdef DEBUG
-		Printf("JAL, rd = %d, signExtend(imm) = %d, PC = %u\n", REG[decInstruction.rd], extendedImmediate, PC);
+		Printf("JAL, rd = %d, signExtend(imm) = %d, PC = %u + %d - 4\n", REG[decInstruction.rd], extendedImmediate, PC, extendedImmediate);
 	#endif
 	
 	registers_write(decInstruction.rd, PC + 4);
 	 //no rs1 in JAL instructions? Page 
 	//PC = ((uint32_t) (REG[decInstruction.rs1] + extendedImmediate)) - 4; 
 
-	PC = PC + extendedImmediate; 
+	PC = PC + extendedImmediate - 4; 
 }
 
 
