@@ -253,17 +253,15 @@ void jalInstruction(instruction_t decInstruction)
 	// Set least significant bit to 0 per spec
 	extendedImmediate = extendedImmediate & 0xFFFFFFFE; 
 	
-	/*
-	// Check for 4 byte alignment
-	uint32_t destination = (uint32_t) (REG[decInstruction.rs1] + extendedImmediate);
-	if ((destination & 0x3) != 0)
+	// Check for unaligned offset
+	if ((extendedImmediate & 0x3) > 0)
 	{
-		Fprintf(stderr, "Error: jalInstruction has a destination for the PC which is not 4-byte aligned\n");
+		Fprintf(stderr, "Error: JAL Instruction's offset is not 4-byte aligned. Correcting and continuing.\n");
+		extendedImmediate = extendedImmediate & 0xFFFFFFFC;
 	}
-	*/
 
 	#ifdef DEBUG
-		Printf("JAL, rd = %d, signExtend(imm) = %d, PC = %u\n", REG[decInstruction.rd], extendedImmediate, PC);
+		Printf("JAL, rd = %d, signExtend(imm) = %d, PC = %u + %d - 4\n", REG[decInstruction.rd], extendedImmediate, PC, extendedImmediate);
 	#endif
 	
 	registers_write(decInstruction.rd, PC + 4);
