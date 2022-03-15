@@ -347,11 +347,19 @@ void ecallInstruction(instruction_t decInstruction)
 		{
 			Printf("Invalid File Descriptor. Write 0 to a0 for STDIN\n");
 		}
-		if (i == REG[11] || byteRead == '\n') // add better method of checking completion
+		if (i == REG[11]) // add better method of checking completion
+		{
 			registers_write(10, REG[12]); 
+			
+		}	 
+		else if (byteRead == '\n' && i != REG[11])
+		{
+			 registers_write(10, address - i); 
+		}	
 		else
+		{
 			registers_write(10, -1);
-
+		}
 		break;
 	case 64:
 		#ifdef DEBUG
@@ -378,6 +386,7 @@ void ecallInstruction(instruction_t decInstruction)
 		break;
 	case 94:
 		Printf("Exiting due to system call exit\n");
+		//printRegisters(); 
 		exit(0);
 	default:
 		Printf("Error, invalid system call type\n");
