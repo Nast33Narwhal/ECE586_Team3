@@ -19,7 +19,7 @@ The purpose of this project is to simulate a 32-bit RISC-V machine. The program 
 - docs
   - Contains documentation relating to the project including our specifications document, edge cases tracking, test plan, and table of timing constraints.
 - src
-  - Contains all of our source files including the main program (main.c (note could change to risc_sim.c etc.)) and all of the various supporting ADTs, wrappers, and functions.
+  - Contains all of our source files including the main program.
 - testing
   - The test plan includes testing every function, including bound cases, overflow, etc. See testplan.pdf for detail. 
 
