@@ -69,7 +69,7 @@ The simulation program sim.exe has the following flags: -pc to set pc (defaults 
 
 ### make
 make also has additional targets:
-- /<none>    : No target provided defaults to the basic compilation of all
+- \<none>    : No target provided defaults to the basic compilation of all
 - all        : Compiles the simulator sim.exe. Running this mode will print register contents at the end of execution.
 - verbose    : Compiles the simulator sim.exe, but prints register contents after each instruction. 
 - debug      : Compiles the simulator sim.exe and adds additional decoding text to the output for debugging purposes.
