@@ -330,7 +330,7 @@ void ecallInstruction(instruction_t decInstruction)
 	extern int32_t *REG;
 	int i = 0;
 
-	int32_t address = REG[11] + REG[12] - 1; // address of buffer + string length
+	int32_t address = REG[11]; // + REG[12] - 1; // address of buffer + string length
 	uint8_t byteOffset = address % 4;	 // byte offset;
 	int32_t byteLoaded = 0;
 	int32_t byteRead = 0;
@@ -346,9 +346,9 @@ void ecallInstruction(instruction_t decInstruction)
 			{
 				byteRead = getchar();
 				writeMemoryMasked(i / 4, byteRead << (byteOffset * 8), 0xFF << (byteOffset * 8)); // Overwrite byte in memory
-				i--;
+				i++;
 				byteOffset = i % 4;
-			} while (byteRead != '\n' && i >= REG[11]);
+			} while (byteRead != '\n' && byteRead != '\0' && i < REG[11] + REG[12]);
 		}
 		else
 		{
@@ -359,7 +359,7 @@ void ecallInstruction(instruction_t decInstruction)
 			registers_write(10, REG[12]); 
 			
 		}	 
-		else if (byteRead == '\n' && i != REG[11])
+		else if ((byteRead == '\n' || byteRead == '\0') && i != REG[11])
 		{
 			 registers_write(10, address - i); 
 		}	
@@ -374,7 +374,7 @@ void ecallInstruction(instruction_t decInstruction)
 		#endif
 		if (REG[10] == 1) // if a0 = 1, standard out.
 		{
-			for (i = address; i >= REG[11]; i--) // start at high address for little endian
+			for (i = address; i < REG[11] + REG[12]; i++) // start at high address for little endian
 			{
 				byteOffset = i % 4; // reset byte offset
 				byteLoaded = (readMemory(i / 4) >> (byteOffset * 8)) & 0xFF;
