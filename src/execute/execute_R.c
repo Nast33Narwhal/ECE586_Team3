@@ -355,14 +355,14 @@ void remInstruction(instruction_t decInstruction)
 	{
 		remainder = 0; 
 		#ifdef DEBUG
-			Printf("REM Instruction (Overflow), rd = rs1 \% rs2 = %d \% %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], remainder);
+			Printf("REM Instruction (Overflow), rd = rs1 %% rs2 = %d %% %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], remainder);
 		#endif
 	}
 	else
 	{
 		remainder = REG[decInstruction.rs1] % REG[decInstruction.rs2]; 
 		#ifdef DEBUG
-			Printf("REM Instruction, rd = rs1 \% rs2 = %d \% %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], remainder);
+			Printf("REM Instruction, rd = rs1 %% rs2 = %d %% %d = %d\n", REG[decInstruction.rs1], REG[decInstruction.rs2], remainder);
 		#endif
 	}
 	
@@ -388,14 +388,14 @@ void remuInstruction(instruction_t decInstruction)
 	{
 		remainder = (uint32_t) REG[decInstruction.rs1];
 		#ifdef DEBUG
-			Printf("REMU Instruction (DIVIDE BY 0), rd = rs1 % rs2 = %u % %u = %u\n", (uint32_t) REG[decInstruction.rs1], (uint32_t) REG[decInstruction.rs2], remainder);
+			Printf("REMU Instruction (DIVIDE BY 0), rd = rs1 %% rs2 = %u %% %u = %u\n", (uint32_t) REG[decInstruction.rs1], (uint32_t) REG[decInstruction.rs2], remainder);
 		#endif
 	}
 	else
 	{
 		remainder = (uint32_t) ((uint32_t)REG[decInstruction.rs1]) % ((uint32_t) REG[decInstruction.rs2]); 
 		#ifdef DEBUG
-			Printf("REMU Instruction, rd = rs1 % rs2 = %u % %u = %u\n", (uint32_t) REG[decInstruction.rs1], (uint32_t) REG[decInstruction.rs2], remainder);
+			Printf("REMU Instruction, rd = rs1 %% rs2 = %u %% %u = %u\n", (uint32_t) REG[decInstruction.rs1], (uint32_t) REG[decInstruction.rs2], remainder);
 		#endif
 	}
 	
