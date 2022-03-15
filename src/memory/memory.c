@@ -152,7 +152,7 @@ void clrWatchpoint(unsigned location)
 		return;		
 	}
 
-	memory.address[location].watchpoint = true;
+	memory.address[location].watchpoint = false;
 }
 
 bool isWatchpoint(unsigned location)
