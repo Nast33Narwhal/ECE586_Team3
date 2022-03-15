@@ -64,7 +64,7 @@ The purpose of this project is to simulate a 32-bit RISC-V machine. The program 
    
 ## Usage
 ### sim.exe
-The simulation program sim.exe has the following flags: -pc to set pc (defaults to 0). -sp to set stack pointer (defaults to 65536). -ui to enable user interface
+The simulation program sim.exe has the following flags: -pc to set pc (defaults to 0). -sp to set stack pointer (defaults to 65536). -ui to enable user interface.
 
 
 ### make
