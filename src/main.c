@@ -80,7 +80,7 @@ int32_t main(int32_t argc, char **argv)
 		}
 		
 		// Decoded end program condition
-		if ((nextInstruction == 0x8067) && (REG[1] == 0))
+		if (((nextInstruction == 0x8067) && (REG[1] == 0)) || (nextInstruction == 0))
 		{	
 			#if defined(DEBUG) || defined(VERBOSE)
 			Printf("JR RA, where value in RA = 0, meaning end program should be triggered.\n");

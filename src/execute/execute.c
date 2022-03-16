@@ -137,6 +137,7 @@ void executeInstruction(instruction_t decInstruction)
 			break;
 		case AND:
 			andInstruction(decInstruction);
+			break;
 		case MUL: 
 			 mulInstruction(decInstruction); 
 			break; 
